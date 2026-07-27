@@ -1,0 +1,28 @@
+{
+  "name": "dxrk",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Sistema de IA unificado con agente autónomo, TUI, memoria persistente y soporte multiplataforma",
+  "type": "module",
+  "bin": {
+    "dxrk": "./cli/index.py"
+  },
+  "packageManager": "pnpm@10.33.2",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dxrk777/Dxrk-Ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dxrk777/Dxrk-Ai/issues"
+  },
+  "homepage": "https://github.com/Dxrk777/Dxrk-Ai#readme"
+}

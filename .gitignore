@@ -1,0 +1,58 @@
+# Binaries
+/dxrk
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go
+/dist/
+/cmd/dxrk/main
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+dxrk.egg-info/
+.venv/
+venv/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+
+# Agent tooling metadata (generated per-user, not product code)
+.atl/
+.agents/
+.claude/
+.opencode/
+.windsurf/
+.engram/
+
+# Generated / large files
+sbom.spdx.json
+THIRD_PARTY_LICENSES
+mempalace.yaml
+entities.json

@@ -1,0 +1,16 @@
+{
+  "deny_by_default": true,
+  "rules": [
+    {"action": "read", "target": "*.env", "allow": false},
+    {"action": "read", "target": "*.env.*", "allow": false},
+    {"action": "read", "target": "**/secrets/**", "allow": false},
+    {"action": "read", "target": "**/credentials.json", "allow": false},
+    {"action": "read", "target": "**/.ssh/**", "allow": false},
+    {"action": "read", "target": "**/.config/opencode/keys.json", "allow": false},
+    {"action": "read", "target": "**/.config/opencode/auth.json", "allow": false},
+    {"action": "exec", "target": "rm -rf /*", "allow": false},
+    {"action": "exec", "target": "sudo rm -rf /*", "allow": false},
+    {"action": "edit", "target": "*.env", "allow": false},
+    {"action": "edit", "target": "*.env.*", "allow": false}
+  ]
+}

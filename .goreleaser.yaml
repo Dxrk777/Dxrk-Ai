@@ -1,0 +1,65 @@
+version: 2
+
+project_name: dxrk
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - main: ./cmd/dxrk
+    binary: dxrk
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+
+brews:
+  - repository:
+      owner: Dxrk777
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    directory: Formula
+    name: dxrk
+    homepage: "https://github.com/Dxrk777/Dxrk-Ai"
+    description: "Dxrk-Ai — Ecosystem, Frameworks, Workflows for AI coding agents."
+    license: "MIT"
+    commit_msg_template: "chore: update dxrk formula to {{ .Tag }}"
+
+scoops:
+  - repository:
+      owner: Dxrk777
+      name: scoop-bucket
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    name: dxrk
+    homepage: "https://github.com/Dxrk777/Dxrk-Ai"
+    description: "Dxrk-Ai — Ecosystem, Frameworks, Workflows for AI coding agents."
+    license: MIT
+    commit_msg_template: "chore: update dxrk to {{ .Tag }}"

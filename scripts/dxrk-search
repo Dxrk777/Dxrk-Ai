@@ -1,0 +1,300 @@
+#!/usr/bin/env python3
+"""
+Dxrk Search MCP Server — provides file search and read capabilities.
+
+Wraps ripgrep and glob for efficient project-wide searching, following patterns
+from Claude Code's GrepTool and GlobTool architecture.
+
+Usage:
+    python3 scripts/dxrk-search
+
+MCP client config (.opencode/mcp.json):
+    {
+        "mcpServers": {
+            "dxrk-search": {
+                "command": "python3",
+                "args": ["scripts/dxrk-search"]
+            }
+        }
+    }
+"""
+
+from __future__ import annotations
+
+import logging
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+logger = logging.getLogger("dxrk-search")
+
+_MCP_AVAILABLE = False
+try:
+    from mcp.server.fastmcp import FastMCP
+    _MCP_AVAILABLE = True
+except ImportError:
+    FastMCP = None
+
+MAX_RESULTS = 100
+MAX_FILE_SIZE = 1024 * 1024
+VCS_DIRS = {".git", ".svn", ".hg", ".bzr", ".jj", ".sl"}
+
+
+def _find_ripgrep() -> str:
+    for name in ("rg", "ripgrep"):
+        path = shutil_which(name)
+        if path:
+            return path
+    return ""
+
+
+def shutil_which(cmd: str) -> str | None:
+    try:
+        import shutil
+        return shutil.which(cmd)
+    except Exception:
+        return None
+
+
+def _is_binary(path: Path) -> bool:
+    try:
+        with open(path, "rb") as f:
+            chunk = f.read(8192)
+        return b"\x00" in chunk
+    except Exception:
+        return True
+
+
+def _search_files_glob(pattern: str, path: str = "", ignore_vcs: bool = True) -> list[dict]:
+    root = Path(path).resolve() if path else Path.cwd()
+    if not root.exists():
+        return [{"error": f"Path does not exist: {path}"}]
+
+    results: list[dict] = []
+    try:
+        for p in root.rglob(pattern):
+            if len(results) >= MAX_RESULTS:
+                break
+            if ignore_vcs and any(part in VCS_DIRS for part in p.relative_to(root).parts):
+                continue
+            try:
+                stat = p.stat()
+                results.append({
+                    "path": str(p),
+                    "size": stat.st_size,
+                    "modified": stat.st_mtime,
+                    "is_dir": p.is_dir(),
+                })
+            except OSError:
+                continue
+    except RecursionError:
+        pass
+
+    return sorted(results, key=lambda x: x.get("modified", 0), reverse=True)
+
+
+def _grep_search(
+    pattern: str,
+    path: str = "",
+    include: str = "",
+    exclude: str = "",
+    max_results: int = 100,
+) -> list[dict]:
+    root = Path(path).resolve() if path else Path.cwd()
+    if not root.exists():
+        return [{"error": f"Path does not exist: {path}"}]
+
+    rg = _find_ripgrep()
+    if rg:
+        return _grep_ripgrep(rg, pattern, root, include, exclude, max_results)
+    return _grep_fallback(pattern, root, include, exclude, max_results)
+
+
+def _grep_ripgrep(
+    rg: str,
+    pattern: str,
+    root: Path,
+    include: str,
+    exclude: str,
+    max_results: int,
+) -> list[dict]:
+    cmd = [rg, "--json", "-i", pattern]
+
+    if include:
+        cmd.extend(["-g", include])
+    if exclude:
+        cmd.extend(["-g", f"!{exclude}"])
+    cmd.append(str(root))
+
+    results: list[dict] = []
+    try:
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        for line in proc.stdout.splitlines():
+            if len(results) >= max_results:
+                break
+            try:
+                import json
+                obj = json.loads(line)
+                if obj.get("type") == "match":
+                    data = obj.get("data", {})
+                    results.append({
+                        "path": data.get("path", {}).get("text", ""),
+                        "line": data.get("line_number", 0),
+                        "column": data.get("column", 0),
+                        "content": data.get("lines", {}).get("text", "").strip(),
+                    })
+            except json.JSONDecodeError:
+                continue
+    except subprocess.TimeoutExpired:
+        results.append({"error": "Search timed out"})
+    except FileNotFoundError:
+        results.append({"error": "ripgrep not found"})
+
+    return results
+
+
+def _grep_fallback(
+    pattern: str,
+    root: Path,
+    include: str,
+    exclude: str,
+    max_results: int,
+) -> list[dict]:
+    results: list[dict] = []
+    try:
+        regex = re.compile(pattern, re.IGNORECASE)
+    except re.error:
+        return [{"error": f"Invalid regex: {pattern}"}]
+
+    for p in root.rglob("*"):
+        if len(results) >= max_results:
+            break
+        if p.is_dir():
+            continue
+        if p.name.startswith("."):
+            continue
+        if any(part in VCS_DIRS for part in p.relative_to(root).parts):
+            continue
+        if include and not p.match(include):
+            continue
+        if exclude and p.match(exclude):
+            continue
+        if _is_binary(p):
+            continue
+        try:
+            with open(p, "r", encoding="utf-8", errors="replace") as f:
+                for i, line in enumerate(f, 1):
+                    if regex.search(line):
+                        results.append({
+                            "path": str(p),
+                            "line": i,
+                            "content": line.rstrip("\n"),
+                        })
+                        if len(results) >= max_results:
+                            break
+        except (OSError, UnicodeDecodeError):
+            continue
+
+    return results
+
+
+def _read_file(path: str, offset: int = 0, limit: int = 200) -> dict:
+    p = Path(path).resolve()
+    if not p.exists():
+        return {"error": f"File not found: {path}"}
+    if p.is_dir():
+        return {"error": f"Path is a directory: {path}"}
+    try:
+        size = p.stat().st_size
+        if size > MAX_FILE_SIZE:
+            return {"error": f"File too large: {size} bytes (max {MAX_FILE_SIZE})"}
+
+        with open(p, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+
+        total = len(lines)
+        if offset >= total:
+            return {"path": str(path), "total_lines": total, "content": "", "truncated": False}
+
+        selected = lines[offset:offset + limit]
+        return {
+            "path": str(path),
+            "total_lines": total,
+            "offset": offset,
+            "content": "".join(selected),
+            "truncated": (offset + limit) < total,
+        }
+    except OSError as e:
+        return {"error": str(e)}
+
+
+def _file_info(path: str) -> dict:
+    p = Path(path).resolve()
+    if not p.exists():
+        return {"error": f"Path not found: {path}"}
+    try:
+        stat = p.stat()
+        return {
+            "path": str(p),
+            "exists": True,
+            "is_dir": p.is_dir(),
+            "is_file": p.is_file(),
+            "is_symlink": p.is_symlink(),
+            "size": stat.st_size,
+            "modified": stat.st_mtime,
+            "created": stat.st_ctime,
+        }
+    except OSError as e:
+        return {"error": str(e)}
+
+
+def create_server():
+    if not _MCP_AVAILABLE or FastMCP is None:
+        raise RuntimeError("mcp package not installed")
+    mcp = FastMCP("dxrk-search", log_level="WARNING")
+
+    @mcp.tool()
+    def grep_search(
+        pattern: str,
+        path: str = "",
+        include: str = "",
+        exclude: str = "",
+        max_results: int = 100,
+    ) -> list[dict]:
+        return _grep_search(pattern, path, include, exclude, min(max_results, MAX_RESULTS))
+
+    @mcp.tool()
+    def glob_search(pattern: str, path: str = "") -> list[dict]:
+        return _search_files_glob(pattern, path)
+
+    @mcp.tool()
+    def read_file(path: str, offset: int = 0, limit: int = 200) -> dict:
+        return _read_file(path, offset, limit)
+
+    @mcp.tool()
+    def file_info(path: str) -> dict:
+        return _file_info(path)
+
+    return mcp
+
+
+def main() -> None:
+    logging.basicConfig(level=logging.WARNING, format="%(levelname)s:%(name)s:%(message)s")
+
+    if not _MCP_AVAILABLE or FastMCP is None:
+        print("mcp package not installed. Run: pip install mcp", file=sys.stderr)
+        sys.exit(1)
+
+    server = create_server()
+    server.run()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,93 @@
+formatters:
+  enable:
+  - gofmt
+  - goimports
+  settings: {}
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+linters:
+  disable:
+  - exhaustruct
+  - varnamelen
+  - nlreturn
+  - wsl
+  enable:
+  - errcheck
+  - govet
+  - ineffassign
+  - staticcheck
+  - unused
+  - bodyclose
+  - goconst
+  - gocritic
+  - gosec
+  - misspell
+  - nakedret
+  - nilerr
+  - prealloc
+  - revive
+  - unconvert
+  - unparam
+  - whitespace
+  exclusions:
+    rules:
+    - path: '(.+_test\.go)'
+      linters:
+      - staticcheck
+      - errcheck
+      - gosec
+      - ineffassign
+      - unparam
+    - linters:
+      - staticcheck
+      text: ST1005
+      path: internal/installcmd/resolver\.go
+  settings:
+    goconst:
+      min-len: 5
+      min-occurrences: 3
+      ignore-tests: true
+    revive:
+      rules:
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: deep-exit
+      - name: defer
+      - name: dot-imports
+      - name: empty-block
+      - name: error-naming
+      - name: error-return
+      - name: error-strings
+      - name: errorf
+      - name: function-result-limit
+        arguments: [5]
+      - name: identical-branches
+      - name: if-return
+      - name: import-shadowing
+      - name: increment-decrement
+      - name: indent-error-flow
+      - name: modifies-parameter
+      - name: modifies-value-receiver
+      - name: range
+      - name: range-val-in-closure
+      - name: range-val-address
+      - name: receiver-naming
+      - name: redefines-builtin-id
+      - name: string-of-int
+      - name: struct-tag
+      - name: superfluous-else
+      - name: time-equal
+      - name: time-naming
+      - name: unconditional-recursion
+      - name: unexported-naming
+      - name: unexported-return
+      - name: unnecessary-stmt
+      - name: unreachable-code
+      - name: useless-break
+      - name: waitgroup-by-value
+run:
+  modules-download-mode: readonly
+  timeout: 5m
+version: '2'

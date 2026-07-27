@@ -1,0 +1,70 @@
+project:
+  name: my-project
+  root: .
+  default_provider: claude
+
+providers:
+  - name: claude
+    model: claude-sonnet-4-20250514
+    api_key_env: ANTHROPIC_API_KEY
+  - name: openai
+    model: gpt-4o
+    api_key_env: OPENAI_API_KEY
+  - name: gemini
+    model: gemini-2.0-flash
+    api_key_env: GEMINI_API_KEY
+  - name: ollama
+    model: llama3.1:8b
+    base_url: http://localhost:11434
+
+sandbox:
+  default_image: ubuntu:22.04
+  memory_limit: 4g
+  cpu_limit: "2"
+  timeout_sec: 120
+  max_containers: 5
+
+git:
+  auto_commit: true
+  auto_push: false
+  require_pr: true
+
+tui:
+  enabled: true
+  show_filenames: true
+
+web_ui:
+  enabled: false
+  port: 8080
+  host: 127.0.0.1
+
+rag:
+  enabled: false
+  embedding_model: text-embedding-3-small
+  chunk_size: 512
+  chunk_overlap: 64
+  max_results: 5
+
+autonomy:
+  enabled: true
+  interval_sec: 300
+  self_update: true
+  self_verify: true
+  self_learn: true
+  auto_fix: true
+  evolution: false
+  learn_dir: .dxrk/learn
+  memories_file: .dxrk/memories.json
+  max_memory_items: 1000
+  iq_metrics_file: .dxrk/iq.json
+  iq_report_every: 10
+  capabilities:
+    - fs.read
+    - fs.write
+    - git
+    - net.http
+  ask_before:
+    - fs.write
+    - sudo
+    - pkg.install
+    - docker

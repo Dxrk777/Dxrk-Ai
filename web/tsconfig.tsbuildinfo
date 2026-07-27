@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/ErrorBoundary.tsx","./src/components/Sidebar.tsx","./src/hooks/useWebSocket.ts","./src/pages/AgentsPage.tsx","./src/pages/Dashboard.tsx","./src/pages/LogsPage.tsx","./src/pages/SettingsPage.tsx"],"version":"5.9.3"}

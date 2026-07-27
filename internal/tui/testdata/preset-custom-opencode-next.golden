@@ -1,0 +1,29 @@
+Select Components
+
+Toggle components with enter or space.
+
+▸ [ ] engram
+    Persistent cross-session memory
+  [ ] sdd
+    Spec-driven development workflow
+  [ ] skills
+    Curated coding skill library
+  [ ] context7
+    Latest framework and library docs
+  [ ] persona
+    Dxrk, neutral or custom behavior
+  [ ] permissions
+    Security-first defaults and guardrails
+  [ ] gga
+    Dxrk Guardian Angel — AI provider switcher
+  [ ] theme
+    Dxrk Kanagawa theme overlay
+  [ ] claude-theme
+    Claude Code Dxrk custom theme
+  [ ] opencode-dxrk-logo
+    OpenCode home logo TUI plugin with Braille rose
+
+  Continue
+  Back
+
+j/k: navigate • space/enter: toggle • esc: back

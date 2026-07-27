@@ -1,0 +1,96 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    },
+    "playwright-puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-puppeteer"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-sequential-thinking"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/dxrk"]
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "slack-mcp-server"]
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/mcp-server"]
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@crystaldba/postgres-mcp-server"]
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["-y", "mcp-docker-server"]
+    },
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-memory"]
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "supabase-mcp"]
+    },
+    "stripe": {
+      "command": "npx",
+      "args": ["-y", "@stripe/mcp"]
+    },
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-mcp-server"]
+    },
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "linear-mcp-server"]
+    },
+    "obsidian": {
+      "command": "npx",
+      "args": ["-y", "obsidian-mcp-server"]
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@mokei/mcp-sqlite"]
+    },
+    "aws": {
+      "command": "npx",
+      "args": ["-y", "@yawlabs/aws-mcp"]
+    },
+    "vercel": {
+      "command": "npx",
+      "args": ["-y", "vercel-mcp"]
+    },
+    "cloudflare": {
+      "command": "npx",
+      "args": ["-y", "@cloudflare/mcp-server-cloudflare"]
+    },
+    "sentry": {
+      "command": "npx",
+      "args": ["-y", "@sentry/mcp-server"]
+    },
+    "mempalace": {
+      "command": "mempalace-mcp",
+      "args": ["--palace", "/home/dxrk/Proyectos/Dxrk/.mempalace"]
+    }
+  }
+}
