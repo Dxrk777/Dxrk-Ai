@@ -11,11 +11,11 @@ import (
 
 func TestTopologicalSortOrdersDependenciesFirst(t *testing.T) {
 	deps := map[model.ComponentID][]model.ComponentID{
-		model.ComponentSkills:   {model.ComponentSDD},
-		model.ComponentSDD:      {model.ComponentDxrkMemory},
-		model.ComponentDxrkMemory:   nil,
-		model.ComponentPersona:  nil,
-		model.ComponentContext7: nil,
+		model.ComponentSkills:     {model.ComponentSDD},
+		model.ComponentSDD:        {model.ComponentDxrkMemory},
+		model.ComponentDxrkMemory: nil,
+		model.ComponentPersona:    nil,
+		model.ComponentContext7:   nil,
 	}
 
 	ordered, err := TopologicalSort(deps)
@@ -138,7 +138,7 @@ func TestApplySoftOrderingBothMVPPairsWithFullSelection(t *testing.T) {
 func TestTopologicalSortDetectsCycles(t *testing.T) {
 	deps := map[model.ComponentID][]model.ComponentID{
 		model.ComponentDxrkMemory: {model.ComponentSDD},
-		model.ComponentSDD:    {model.ComponentDxrkMemory},
+		model.ComponentSDD:        {model.ComponentDxrkMemory},
 	}
 
 	_, err := TopologicalSort(deps)

@@ -97,5 +97,5 @@ func (m *Manager) ShowTip(ctx context.Context) string {
 	}
 
 	m.analytics.Increment(ctx, "tip_shown")
-	return tips[rand.IntN(len(tips))]
+	return tips[rand.IntN(len(tips))] //nolint:gosec // tips are not security-sensitive
 }

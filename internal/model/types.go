@@ -34,18 +34,18 @@ const (
 type ComponentID string
 
 const (
-	ComponentDxrkMemory             ComponentID = "dxrk-memory"
-	ComponentSDD                ComponentID = "sdd"
-	ComponentSkills             ComponentID = "skills"
-	ComponentContext7           ComponentID = "context7"
-	ComponentPersona            ComponentID = "persona"
-	ComponentPermission         ComponentID = "permissions"
-	ComponentDxrkGuardian                ComponentID = "dxrk-guardian"
-	ComponentTheme              ComponentID = "theme"
-	ComponentClaudeTheme        ComponentID = "claude-theme"
-	ComponentOpenCodeDxrkLogo ComponentID = "opencode-dxrk-logo"
-	ComponentChecker            ComponentID = "checker"
-	ComponentInternalMCPServer  ComponentID = "internal-mcp-server"
+	ComponentDxrkMemory        ComponentID = "dxrk-memory"
+	ComponentSDD               ComponentID = "sdd"
+	ComponentSkills            ComponentID = "skills"
+	ComponentContext7          ComponentID = "context7"
+	ComponentPersona           ComponentID = "persona"
+	ComponentPermission        ComponentID = "permissions"
+	ComponentDxrkGuardian      ComponentID = "dxrk-guardian"
+	ComponentTheme             ComponentID = "theme"
+	ComponentClaudeTheme       ComponentID = "claude-theme"
+	ComponentOpenCodeDxrkLogo  ComponentID = "opencode-dxrk-logo"
+	ComponentChecker           ComponentID = "checker"
+	ComponentInternalMCPServer ComponentID = "internal-mcp-server"
 )
 
 type UninstallMode string
@@ -92,9 +92,9 @@ const (
 type PersonaID string
 
 const (
-	PersonaDxrk PersonaID = "dxrk"
-	PersonaNeutral   PersonaID = "neutral"
-	PersonaCustom    PersonaID = "custom"
+	PersonaDxrk    PersonaID = "dxrk"
+	PersonaNeutral PersonaID = "neutral"
+	PersonaCustom  PersonaID = "custom"
 )
 
 // SystemPromptStrategy defines how an agent's system prompt file is managed.
@@ -136,7 +136,7 @@ const (
 type PresetID string
 
 const (
-	PresetFullDxrk PresetID = "full-dxrk"
+	PresetFullDxrk      PresetID = "full-dxrk"
 	PresetEcosystemOnly PresetID = "ecosystem-only"
 	PresetMinimal       PresetID = "minimal"
 	PresetCustom        PresetID = "custom"
@@ -166,9 +166,9 @@ const (
 type OpenCodeCommunityPluginID string
 
 const (
-	OpenCodePluginSubAgentStatusline OpenCodeCommunityPluginID = "sub-agent-statusline"
-	OpenCodePluginSDDDxrkMemoryManage    OpenCodeCommunityPluginID = "sdd-dxrk-memory-plugin"
-	OpenCodePluginDxrkLogo         OpenCodeCommunityPluginID = "dxrk-logo"
+	OpenCodePluginSubAgentStatusline  OpenCodeCommunityPluginID = "sub-agent-statusline"
+	OpenCodePluginSDDDxrkMemoryManage OpenCodeCommunityPluginID = "sdd-dxrk-memory-plugin"
+	OpenCodePluginDxrkLogo            OpenCodeCommunityPluginID = "dxrk-logo"
 )
 
 // Profile represents a named SDD orchestrator configuration with model assignments.

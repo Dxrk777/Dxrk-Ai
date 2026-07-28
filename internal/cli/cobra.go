@@ -21,7 +21,7 @@ sandboxed execution, and self-evolving capabilities.`,
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		os.Exit(1) //nolint:revive // CLI entry point — deep exit is intentional
 	}
 }
 

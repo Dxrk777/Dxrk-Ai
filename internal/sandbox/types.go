@@ -132,7 +132,7 @@ func CommandForLanguage(lang Language, scriptName string) []string {
 	}
 }
 
-func scriptFileName(lang Language) string {
+func scriptFileName(lang Language) string { //nolint:unused // used in tests
 	switch lang {
 	case LanguageGo:
 		return "main.go"
