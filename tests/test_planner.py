@@ -29,13 +29,13 @@ from dxrk.system import PlatformProfile
 
 
 def _all_components() -> list[ComponentID]:
-    e = ComponentID.ENGRAM
+    e = ComponentID.DXRK_MEMORY
     s = ComponentID.SDD
     sk = ComponentID.SKILLS
     c7 = ComponentID.CONTEXT7
     p = ComponentID.PERSONA
     perm = ComponentID.PERMISSIONS
-    g = ComponentID.GGA
+    g = ComponentID.DXRK_GUARDIAN
     t = ComponentID.THEME
     return [e, s, sk, c7, p, perm, g, t]
 
@@ -54,12 +54,12 @@ def test_graph_has_false():
 
 def test_graph_dependencies_of_engram():
     g = mvp_graph()
-    assert g.dependencies_of(ComponentID.ENGRAM) == []
+    assert g.dependencies_of(ComponentID.DXRK_MEMORY) == []
 
 
 def test_graph_dependencies_of_sdd():
     g = mvp_graph()
-    assert g.dependencies_of(ComponentID.SDD) == [ComponentID.ENGRAM]
+    assert g.dependencies_of(ComponentID.SDD) == [ComponentID.DXRK_MEMORY]
 
 
 def test_graph_dependencies_of_skills():
@@ -69,11 +69,11 @@ def test_graph_dependencies_of_skills():
 
 def test_topological_sort_basic():
     deps = {
-        ComponentID.SDD: [ComponentID.ENGRAM],
+        ComponentID.SDD: [ComponentID.DXRK_MEMORY],
         ComponentID.SKILLS: [ComponentID.SDD],
     }
     result = topological_sort(deps)
-    e = ComponentID.ENGRAM
+    e = ComponentID.DXRK_MEMORY
     s = ComponentID.SDD
     sk = ComponentID.SKILLS
 
@@ -86,7 +86,7 @@ def test_topological_sort_basic():
 
 def test_topological_sort_no_deps():
     deps = {
-        ComponentID.ENGRAM: [],
+        ComponentID.DXRK_MEMORY: [],
         ComponentID.PERSONA: [],
         ComponentID.THEME: [],
     }
@@ -95,7 +95,7 @@ def test_topological_sort_no_deps():
 
 
 def test_topological_sort_cycle_raises():
-    e = ComponentID.ENGRAM
+    e = ComponentID.DXRK_MEMORY
     s = ComponentID.SDD
     deps = {e: [s], s: [e]}
     with pytest.raises(DependencyCycleError):
@@ -103,7 +103,7 @@ def test_topological_sort_cycle_raises():
 
 
 def test_apply_soft_ordering_noop_when_already_correct():
-    e = ComponentID.ENGRAM
+    e = ComponentID.DXRK_MEMORY
     sk = ComponentID.SKILLS
     p = ComponentID.PERSONA
     ordered = [e, sk, p]
@@ -113,7 +113,7 @@ def test_apply_soft_ordering_noop_when_already_correct():
 
 
 def test_apply_soft_ordering_moves_persona_before():
-    e = ComponentID.ENGRAM
+    e = ComponentID.DXRK_MEMORY
     sk = ComponentID.SKILLS
     p = ComponentID.PERSONA
     ordered = [e, sk, p]
@@ -127,7 +127,7 @@ def test_soft_ordering_constraints():
     assert len(constraints) == 2
     first, second = constraints[0]
     assert first == ComponentID.PERSONA
-    assert second == ComponentID.ENGRAM
+    assert second == ComponentID.DXRK_MEMORY
 
 
 class TestDependencyResolver:
@@ -140,9 +140,9 @@ class TestDependencyResolver:
 
     def test_resolve_with_engram(self):
         resolver = new_resolver()
-        selection = Selection(components=[ComponentID.ENGRAM])
+        selection = Selection(components=[ComponentID.DXRK_MEMORY])
         result = resolver.resolve(selection)
-        assert ComponentID.ENGRAM in result.ordered_components
+        assert ComponentID.DXRK_MEMORY in result.ordered_components
         assert result.added_dependencies == []
 
     def test_resolve_with_sdd_adds_engram(self):
@@ -150,7 +150,7 @@ class TestDependencyResolver:
         selection = Selection(components=[ComponentID.SDD])
         result = resolver.resolve(selection)
         assert ComponentID.SDD in result.ordered_components
-        assert ComponentID.ENGRAM in result.added_dependencies
+        assert ComponentID.DXRK_MEMORY in result.added_dependencies
 
     def test_resolve_with_skills_adds_sdd_and_engram(self):
         resolver = new_resolver()
@@ -158,12 +158,12 @@ class TestDependencyResolver:
         result = resolver.resolve(selection)
         assert ComponentID.SKILLS in result.ordered_components
         assert ComponentID.SDD in result.added_dependencies
-        assert ComponentID.ENGRAM in result.added_dependencies
+        assert ComponentID.DXRK_MEMORY in result.added_dependencies
 
     def test_resolve_agents(self):
         resolver = new_resolver()
         selection = Selection(
-            components=[ComponentID.ENGRAM],
+            components=[ComponentID.DXRK_MEMORY],
             agents=[AgentID.CLAUDE_CODE, AgentID.OPENCODE],
         )
         result = resolver.resolve(selection)
@@ -185,7 +185,7 @@ class TestBuildReviewPayload:
 
         resolver = new_resolver()
         selection = Selection(
-            components=[ComponentID.ENGRAM, ComponentID.PERSONA],
+            components=[ComponentID.DXRK_MEMORY, ComponentID.PERSONA],
             agents=[AgentID.CLAUDE_CODE],
             persona=PersonaID.DXRK,
             preset=PresetID.FULL_DXRK,
@@ -210,7 +210,7 @@ class TestBuildReviewPayload:
 
     def test_review_no_sdd(self):
         resolver = new_resolver()
-        selection = Selection(components=[ComponentID.ENGRAM])
+        selection = Selection(components=[ComponentID.DXRK_MEMORY])
         resolved = resolver.resolve(selection)
         review = build_review_payload(selection, resolved)
         assert review.has_sdd is False
@@ -222,7 +222,7 @@ class TestBuildReviewPayload:
         review = build_review_payload(selection, resolved)
         actions = {ca.id: ca.action for ca in review.components}
         assert actions[ComponentID.SDD] == "selected"
-        assert actions[ComponentID.ENGRAM] == "auto-dependency"
+        assert actions[ComponentID.DXRK_MEMORY] == "auto-dependency"
 
 
 def test_platform_decision_from_profile():

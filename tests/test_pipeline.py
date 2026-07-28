@@ -3,14 +3,26 @@ from __future__ import annotations
 
 import pytest
 from dxrk.pipeline import (
-    Stage, StepStatus, FailurePolicy,
-    StagePlan, StepResult, StageResult, ExecutionResult,
-    RollbackPolicy, ProgressEvent,
-    Step, RollbackStep,
-    Runner, Orchestrator,
-    execute_rollback, execute_command, run_command_sequence,
-    default_rollback_policy, new_orchestrator,
-    with_failure_policy, with_progress_func,
+    Stage,
+    StepStatus,
+    FailurePolicy,
+    StagePlan,
+    StepResult,
+    StageResult,
+    ExecutionResult,
+    RollbackPolicy,
+    ProgressEvent,
+    Step,
+    RollbackStep,
+    Runner,
+    Orchestrator,
+    execute_rollback,
+    execute_command,
+    run_command_sequence,
+    default_rollback_policy,
+    new_orchestrator,
+    with_failure_policy,
+    with_progress_func,
     set_command_streaming,
     resolve_component_install,
 )
@@ -31,7 +43,12 @@ class FakeStep(Step):
 
 
 class FakeRollbackStep(RollbackStep):
-    def __init__(self, step_id: str, run_error: str | None = None, rollback_error: str | None = None):
+    def __init__(
+        self,
+        step_id: str,
+        run_error: str | None = None,
+        rollback_error: str | None = None,
+    ):
         self._id = step_id
         self._run_error = run_error
         self._rollback_error = rollback_error
@@ -138,7 +155,9 @@ class TestRunner:
 
     def test_emits_failure_event(self):
         events: list[ProgressEvent] = []
-        runner = Runner(failure_policy=FailurePolicy.STOP_ON_ERROR, on_progress=events.append)
+        runner = Runner(
+            failure_policy=FailurePolicy.STOP_ON_ERROR, on_progress=events.append
+        )
         steps = [FakeStep("s1", "fail")]
         runner.run(Stage.PREPARE, steps)
         assert len(events) == 2
@@ -297,17 +316,21 @@ class TestExecuteCommand:
 
 class TestRunCommandSequence:
     def test_all_succeed(self):
-        err = run_command_sequence([
-            ["python3", "-c", "pass"],
-            ["python3", "-c", "x=1"],
-        ])
+        err = run_command_sequence(
+            [
+                ["python3", "-c", "pass"],
+                ["python3", "-c", "x=1"],
+            ]
+        )
         assert err is None
 
     def test_first_fails(self):
-        err = run_command_sequence([
-            ["python3", "-c", "exit(1)"],
-            ["python3", "-c", "pass"],
-        ])
+        err = run_command_sequence(
+            [
+                ["python3", "-c", "exit(1)"],
+                ["python3", "-c", "pass"],
+            ]
+        )
         assert err is not None
         assert "exited with code" in err
 
@@ -325,17 +348,17 @@ class TestResolveComponentInstall:
         class BrewProfile:
             package_manager = "brew"
 
-        cmds = resolve_component_install(BrewProfile(), "engram")
+        cmds = resolve_component_install(BrewProfile(), "DXRK_MEMORY")
         assert len(cmds) == 2
         assert cmds[0] == ["brew", "tap", "dxrk-programming/tap"]
-        assert cmds[1] == ["brew", "install", "engram"]
+        assert cmds[1] == ["brew", "install", "DXRK_MEMORY"]
 
     def test_engram_go(self):
         class LinuxProfile:
             package_manager = "apt"
             os = "linux"
 
-        cmds = resolve_component_install(LinuxProfile(), "engram")
+        cmds = resolve_component_install(LinuxProfile(), "DXRK_MEMORY")
         assert len(cmds) == 1
         assert "go" in cmds[0][0]
 
@@ -343,14 +366,16 @@ class TestResolveComponentInstall:
         class BrewProfile:
             package_manager = "brew"
 
-        cmds = resolve_component_install(BrewProfile(), "gga")
+        cmds = resolve_component_install(BrewProfile(), "DXRK_GUARDIAN")
         assert len(cmds) == 1
-        assert cmds[0] == ["brew", "install", "gga"]
+        assert cmds[0] == ["brew", "install", "DXRK_GUARDIAN"]
 
     def test_unknown_component(self):
         class AnyProfile:
             package_manager = "brew"
+
         from dxrk.models import ComponentID
+
         cmds = resolve_component_install(AnyProfile(), ComponentID.SKILLS)
         assert cmds == []
 
@@ -360,7 +385,7 @@ class TestResolveComponentInstall:
         class BrewProfile:
             package_manager = "brew"
 
-        cmds = resolve_component_install(BrewProfile(), ComponentID.ENGRAM)
+        cmds = resolve_component_install(BrewProfile(), ComponentID.DXRK_MEMORY)
         assert len(cmds) == 2
 
 

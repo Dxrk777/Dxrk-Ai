@@ -5,13 +5,23 @@ from pathlib import Path
 
 from dxrk.cli.sync import ParseSyncFlags, RunSync, SyncResult, SyncFlags
 from dxrk.cli.restore import ParseRestoreFlags, RunRestore
-from dxrk.cli.uninstall import ParseUninstallFlags, RunUninstall, UninstallFlags, UninstallResult
+from dxrk.cli.uninstall import (
+    ParseUninstallFlags,
+    RunUninstall,
+    UninstallFlags,
+    UninstallResult,
+)
 from dxrk.cli.dryrun import DryRunMode, build_dryrun_report
 from dxrk.cli.run import (
-    InstallResult, run_install,
-    build_stage_plan, resolve_install_profile,
-    has_component, add_post_install_notes,
-    _verify_file_exists, _look_path, _resolve_adapters,
+    InstallResult,
+    run_install,
+    build_stage_plan,
+    resolve_install_profile,
+    has_component,
+    add_post_install_notes,
+    _verify_file_exists,
+    _look_path,
+    _resolve_adapters,
 )
 from dxrk.models import AgentID, ComponentID, Selection
 from dxrk.system import DetectionResult, SystemInfo
@@ -55,7 +65,9 @@ class TestSyncWrapper:
         assert r.files_changed == 0
 
     def test_sync_result_custom(self):
-        r = SyncResult(agents=[AgentID.OPENCODE], dry_run=True, no_op=True, files_changed=3)
+        r = SyncResult(
+            agents=[AgentID.OPENCODE], dry_run=True, no_op=True, files_changed=3
+        )
         assert r.agents == [AgentID.OPENCODE]
         assert r.dry_run is True
         assert r.no_op is True
@@ -181,15 +193,28 @@ class TestRunInstall:
 
         def fake_parse(args):
             from dxrk.cli.install import InstallFlags
+
             return InstallFlags(dry_run=True)
 
         def fake_normalize(flags, detection):
             from dxrk.cli.install import InstallInput
+
             return InstallInput(selection=Selection(), dry_run=True)
 
         monkeypatch.setattr("dxrk.cli.install.parse_install_flags", fake_parse)
         monkeypatch.setattr("dxrk.cli.install.normalize_install_flags", fake_normalize)
-        monkeypatch.setattr("dxrk.planner.new_resolver", lambda: type("R", (), {"resolve": lambda self, s: type("R", (), {"agents": [], "ordered_components": []})()})())
+        monkeypatch.setattr(
+            "dxrk.planner.new_resolver",
+            lambda: type(
+                "R",
+                (),
+                {
+                    "resolve": lambda self, s: type(
+                        "R", (), {"agents": [], "ordered_components": []}
+                    )()
+                },
+            )(),
+        )
         monkeypatch.setattr("dxrk.planner.build_review_payload", lambda s, r: {})
         monkeypatch.setattr("dxrk.planner.platform_decision_from_profile", lambda p: {})
 
@@ -202,15 +227,35 @@ class TestRunInstall:
 
         def fake_parse(args):
             from dxrk.cli.install import InstallFlags
+
             return InstallFlags(dry_run=True, preset="minimal")
 
         def fake_normalize(flags, detection):
             from dxrk.cli.install import InstallInput
-            return InstallInput(selection=Selection(agents=[AgentID.OPENCODE]), dry_run=True)
+
+            return InstallInput(
+                selection=Selection(agents=[AgentID.OPENCODE]), dry_run=True
+            )
 
         monkeypatch.setattr("dxrk.cli.install.parse_install_flags", fake_parse)
         monkeypatch.setattr("dxrk.cli.install.normalize_install_flags", fake_normalize)
-        monkeypatch.setattr("dxrk.planner.new_resolver", lambda: type("R", (), {"resolve": lambda self, s: type("R", (), {"agents": [AgentID.OPENCODE], "ordered_components": [ComponentID.ENGRAM]})()})())
+        monkeypatch.setattr(
+            "dxrk.planner.new_resolver",
+            lambda: type(
+                "R",
+                (),
+                {
+                    "resolve": lambda self, s: type(
+                        "R",
+                        (),
+                        {
+                            "agents": [AgentID.OPENCODE],
+                            "ordered_components": [ComponentID.DXRK_MEMORY],
+                        },
+                    )()
+                },
+            )(),
+        )
         monkeypatch.setattr("dxrk.planner.build_review_payload", lambda s, r: {})
         monkeypatch.setattr("dxrk.planner.platform_decision_from_profile", lambda p: {})
 
@@ -220,7 +265,14 @@ class TestRunInstall:
 
     def test_build_stage_plan_with_agents(self):
         selection = Selection(agents=[AgentID.OPENCODE])
-        resolved = type("R", (), {"agents": [AgentID.OPENCODE], "ordered_components": [ComponentID.ENGRAM]})()
+        resolved = type(
+            "R",
+            (),
+            {
+                "agents": [AgentID.OPENCODE],
+                "ordered_components": [ComponentID.DXRK_MEMORY],
+            },
+        )()
         plan = build_stage_plan(selection, resolved)
         assert isinstance(plan, StagePlan)
         assert len(plan.prepare) == 2
@@ -239,14 +291,19 @@ class TestRunInstall:
         assert profile.os == "darwin"
 
     def test_has_component(self):
-        assert has_component([ComponentID.ENGRAM, ComponentID.SDD], ComponentID.ENGRAM) is True
-        assert has_component([ComponentID.SDD], ComponentID.ENGRAM) is False
+        assert (
+            has_component(
+                [ComponentID.DXRK_MEMORY, ComponentID.SDD], ComponentID.DXRK_MEMORY
+            )
+            is True
+        )
+        assert has_component([ComponentID.SDD], ComponentID.DXRK_MEMORY) is False
 
     def test_add_post_install_notes(self):
         report = type("R", (), {"ready": True, "final_note": ""})()
-        resolved = type("R", (), {"ordered_components": [ComponentID.GGA]})()
+        resolved = type("R", (), {"ordered_components": [ComponentID.DXRK_GUARDIAN]})()
         add_post_install_notes(report, resolved)
-        assert "GGA" in report.final_note
+        assert "DXRK_GUARDIAN" in report.final_note
 
     def test_verify_file_exists_missing(self, tmp_path):
         check = _verify_file_exists(str(tmp_path / "nonexistent"))
@@ -275,7 +332,15 @@ class TestRunInstall:
 
     def test_resolve_adapters_with_agent(self, monkeypatch):
         fake_adapter = type("A", (), {"agent": AgentID.OPENCODE})()
-        fake_reg = type("R", (), {"get": lambda self, aid: fake_adapter if aid == AgentID.OPENCODE else None})()
+        fake_reg = type(
+            "R",
+            (),
+            {
+                "get": lambda self, aid: (
+                    fake_adapter if aid == AgentID.OPENCODE else None
+                )
+            },
+        )()
         monkeypatch.setattr("dxrk.agents.registry.Registry", lambda: fake_reg)
         adapters = _resolve_adapters([AgentID.OPENCODE])
         assert len(adapters) == 1

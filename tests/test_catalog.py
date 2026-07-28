@@ -59,7 +59,7 @@ def test_is_supported_agent():
 
 
 def test_component_repr():
-    c = Component(id=ComponentID.ENGRAM, name="Engram")
+    c = Component(id=ComponentID.DXRK_MEMORY, name="Engram")
     r = repr(c)
     assert "Component" in r
     assert "Engram" in r
@@ -72,11 +72,11 @@ def test_mvp_components_count():
 
 def test_mvp_components_all_present():
     ids = [c.id for c in mvp_components()]
-    assert ComponentID.ENGRAM in ids
+    assert ComponentID.DXRK_MEMORY in ids
     assert ComponentID.SDD in ids
     assert ComponentID.PERSONA in ids
     assert ComponentID.PERMISSIONS in ids
-    assert ComponentID.GGA in ids
+    assert ComponentID.DXRK_GUARDIAN in ids
     assert ComponentID.THEME in ids
     assert ComponentID.SKILLS in ids
     assert ComponentID.CONTEXT7 in ids

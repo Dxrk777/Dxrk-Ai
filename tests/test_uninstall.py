@@ -41,7 +41,7 @@ from dxrk.components.uninstall import (
     Service,
 )
 
-from dxrk.models import AgentID, ComponentID, EngramUninstallScope
+from dxrk.models import AgentID, ComponentID, DxrkMemoryUninstallScope
 
 import pytest
 
@@ -243,7 +243,7 @@ class TestRemoveTopLevelTomlKeys:
 
 class TestCodexTomlClean:
     def test_cleans(self):
-        content = '[commands]\ncodex = true\n[key]\nvalue = 1'
+        content = "[commands]\ncodex = true\n[key]\nvalue = 1"
         result, changed = _clean_codex_toml(content)
         assert changed is True
 
@@ -341,6 +341,7 @@ class TestRewriteMarkdownFile:
         # _rewrite_markdown_file takes path + mutate callable
         def mutate(content: str) -> tuple[str, bool]:
             return content.replace("old", "new"), True
+
         f = tmp_path / "test.md"
         f.write_text("before old after")
         op = _rewrite_markdown_file(str(f), mutate)
@@ -351,6 +352,7 @@ class TestRewriteMarkdownFile:
     def test_no_change(self, tmp_path):
         def mutate(content: str) -> tuple[str, bool]:
             return content, False
+
         f = tmp_path / "test.md"
         f.write_text("unchanged")
         op = _rewrite_markdown_file(str(f), mutate)
@@ -373,6 +375,7 @@ class TestRewriteTomlFile:
     def test_rewrites(self, tmp_path):
         def mutate(content: str) -> tuple[str, bool]:
             return content.replace("[tool.dxrk]", ""), True
+
         f = tmp_path / "test.toml"
         f.write_text("[tool.dxrk]\nkey = 1\n[other]\nkey = 2")
         op = _rewrite_toml_file(str(f), mutate)
@@ -385,8 +388,10 @@ class TestMergeRewriteOps:
     def test_merges_and_type_is_rewrite(self, tmp_path):
         def m1(c):
             return c.replace("a", "x"), True
+
         def m2(c):
             return c.replace("b", "y"), True
+
         f = tmp_path / "test.md"
         f.write_text("a b c")
         a = _rewrite_markdown_file(str(f), m1)
@@ -466,15 +471,19 @@ class TestServicePartialUninstall:
         monkeypatch.setattr(Service, "_execute_plan", fake_execute)
 
         svc = Service(home_dir=str(tmp_path))
-        result = svc.partial_uninstall([AgentID.OPENCODE], [ComponentID.ENGRAM])
+        result = svc.partial_uninstall([AgentID.OPENCODE], [ComponentID.DXRK_MEMORY])
         assert isinstance(result, Result)
         assert len(calls) == 1
 
 
 class TestServiceCompleteUninstall:
     def test_adds_manual_action(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(Service, "_build_plan", lambda self_svc, agents, comps: ([], []))
-        monkeypatch.setattr(Service, "_execute_plan", lambda self_svc, plan, state: Result())
+        monkeypatch.setattr(
+            Service, "_build_plan", lambda self_svc, agents, comps: ([], [])
+        )
+        monkeypatch.setattr(
+            Service, "_execute_plan", lambda self_svc, plan, state: Result()
+        )
 
         svc = Service(home_dir=str(tmp_path))
         result = svc.complete_uninstall()
@@ -500,11 +509,13 @@ class TestServiceBuildPlan:
         fa = FakeAdapter()
         fa._agent = AgentID.OPENCODE
         monkeypatch.setattr(
-            Service, "_get_adapter", lambda self, aid: fa,
+            Service,
+            "_get_adapter",
+            lambda self, aid: fa,
         )
 
         svc = Service(home_dir=str(tmp_path))
-        targets, ops = svc._build_plan([AgentID.OPENCODE], [ComponentID.ENGRAM])
+        targets, ops = svc._build_plan([AgentID.OPENCODE], [ComponentID.DXRK_MEMORY])
         assert isinstance(targets, list)
         assert isinstance(ops, list)
 
@@ -523,7 +534,11 @@ class TestServiceExecutePlan:
         remove_op = _remove_file(str(f))
         svc = Service(home_dir=str(tmp_path), app_version="test")
         result = svc._execute_plan(([str(f)], [remove_op]), [])
-        assert str(f) in result.ChangedFiles or str(f) in result.RemovedFiles or not f.exists()
+        assert (
+            str(f) in result.ChangedFiles
+            or str(f) in result.RemovedFiles
+            or not f.exists()
+        )
 
 
 class TestServiceGetAdapter:
@@ -531,6 +546,7 @@ class TestServiceGetAdapter:
         class FakeReg:
             def resolve(self, aid):
                 return FakeAdapter()
+
         monkeypatch.setattr("dxrk.agents.registry.Registry", lambda: FakeReg())
         svc = Service(home_dir="/tmp")
         adapter = svc._get_adapter(AgentID.OPENCODE)
@@ -547,5 +563,5 @@ class TestServiceSetProfileNames:
 class TestServiceSetEngramScope:
     def test_sets_scope(self):
         svc = Service(home_dir="/tmp")
-        svc.set_engram_uninstall_scope(EngramUninstallScope.PROJECT)
-        assert svc.engram_uninstall_scope == EngramUninstallScope.PROJECT
+        svc.set_DXRK_MEMORY_uninstall_scope(DxrkMemoryUninstallScope.PROJECT)
+        assert svc.DXRK_MEMORY_uninstall_scope == DxrkMemoryUninstallScope.PROJECT

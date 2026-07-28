@@ -105,8 +105,10 @@ class TestRunCli:
     def test_no_args_tui_not_available(self, capsys, monkeypatch):
         class FakeSystem:
             supported = True
+
             class Profile:
                 os = "darwin"
+
             profile = Profile()
 
         class FakeDetection:
@@ -122,8 +124,10 @@ class TestRunCli:
     def test_sync_command(self, capsys, monkeypatch):
         class FakeSystem:
             supported = True
+
             class Profile:
                 os = "darwin"
+
             profile = Profile()
 
         class FakeDetection:
@@ -138,14 +142,19 @@ class TestRunCli:
         assert "Sync completed" in out
 
     def test_unsupported_os(self, capsys, monkeypatch):
-        monkeypatch.setattr("dxrk.app.ensure_supported_os", lambda _: (_ for _ in ()).throw(OSError("bad os")))
+        monkeypatch.setattr(
+            "dxrk.app.ensure_supported_os",
+            lambda _: (_ for _ in ()).throw(OSError("bad os")),
+        )
         rc = run_cli(["install"])
         assert rc == 1
         err = capsys.readouterr().err
         assert "Error" in err
 
     def test_detect_failure(self, capsys, monkeypatch):
-        monkeypatch.setattr("dxrk.app.detect", lambda: (_ for _ in ()).throw(Exception("boom")))
+        monkeypatch.setattr(
+            "dxrk.app.detect", lambda: (_ for _ in ()).throw(Exception("boom"))
+        )
 
         class FakeResult:
             system = PlatformProfile(os="darwin", supported=True)
@@ -235,11 +244,13 @@ class TestRunChecks:
         assert results[0].status == CheckStatus.WARNING
 
     def test_multiple_checks(self):
-        results = run_checks([
-            Check(id="a", run=lambda: None),
-            Check(id="b", run=lambda: "fail"),
-            Check(id="c"),
-        ])
+        results = run_checks(
+            [
+                Check(id="a", run=lambda: None),
+                Check(id="b", run=lambda: "fail"),
+                Check(id="c"),
+            ]
+        )
         assert len(results) == 3
         assert results[0].status == CheckStatus.PASSED
         assert results[1].status == CheckStatus.FAILED
@@ -283,7 +294,9 @@ class TestBuildReport:
 class TestRenderReport:
     def test_output_format(self):
         results = [
-            CheckResult(id="git", description="Git installed", status=CheckStatus.PASSED),
+            CheckResult(
+                id="git", description="Git installed", status=CheckStatus.PASSED
+            ),
             CheckResult(id="node", status=CheckStatus.FAILED, error="not found"),
         ]
         report = build_report(results)
@@ -330,7 +343,9 @@ class TestPostInstallVerifier:
 class TestProfileResolverAgentInstall:
     def test_claude_code_default(self):
         resolver = ProfileResolver()
-        profile = PlatformProfile(os="darwin", package_manager="brew", npm_writable=True)
+        profile = PlatformProfile(
+            os="darwin", package_manager="brew", npm_writable=True
+        )
         cmds = resolver.resolve_agent_install(profile, AgentID.CLAUDE_CODE)
         assert cmds == [["npm", "install", "-g", "@anthropic-ai/claude-code"]]
 
@@ -387,22 +402,22 @@ class TestProfileResolverComponentInstall:
     def test_engram_brew(self):
         resolver = ProfileResolver()
         profile = PlatformProfile(os="darwin", package_manager="brew")
-        cmds = resolver.resolve_component_install(profile, ComponentID.ENGRAM)
+        cmds = resolver.resolve_component_install(profile, ComponentID.DXRK_MEMORY)
         assert len(cmds) == 2
         assert ["brew", "tap", "Dxrk777/homebrew-tap"] in cmds
-        assert ["brew", "install", "engram"] in cmds
+        assert ["brew", "install", "DXRK_MEMORY"] in cmds
 
     def test_engram_not_brew_raises(self):
         resolver = ProfileResolver()
         profile = PlatformProfile(os="linux", package_manager="apt")
-        with pytest.raises(InstallError, match="engram on"):
-            resolver.resolve_component_install(profile, ComponentID.ENGRAM)
+        with pytest.raises(InstallError, match="DXRK_MEMORY on"):
+            resolver.resolve_component_install(profile, ComponentID.DXRK_MEMORY)
 
     def test_gga_brew(self):
         resolver = ProfileResolver()
         profile = PlatformProfile(os="darwin", package_manager="brew")
-        cmds = resolver.resolve_component_install(profile, ComponentID.GGA)
-        assert ["brew", "reinstall", "gga"] in cmds
+        cmds = resolver.resolve_component_install(profile, ComponentID.DXRK_GUARDIAN)
+        assert ["brew", "reinstall", "DXRK_GUARDIAN"] in cmds
 
     def test_unknown_component_raises(self):
         resolver = ProfileResolver()
@@ -482,12 +497,15 @@ class TestValidateGoForModuleInstall:
     def test_go_not_found(self, monkeypatch):
         monkeypatch.setattr("dxrk.installcmd._cmd_look_path", lambda _: None)
         profile = PlatformProfile(os="linux", package_manager="apt")
-        with pytest.raises(InstallError, match="required to install Engram"):
+        with pytest.raises(InstallError, match="required to install Dxrk Memory"):
             validate_go_for_module_install(profile)
 
     def test_go_version_ok(self, monkeypatch):
         monkeypatch.setattr("dxrk.installcmd._cmd_look_path", lambda _: "/usr/bin/go")
-        monkeypatch.setattr("dxrk.installcmd._get_go_version_output", lambda: "go version go1.24.0 linux/amd64")
+        monkeypatch.setattr(
+            "dxrk.installcmd._get_go_version_output",
+            lambda: "go version go1.24.0 linux/amd64",
+        )
         monkeypatch.setattr("dxrk.installcmd._os_getenv", lambda k: None)
         profile = PlatformProfile(os="linux", package_manager="apt")
 
@@ -495,7 +513,10 @@ class TestValidateGoForModuleInstall:
 
     def test_go_version_too_low(self, monkeypatch):
         monkeypatch.setattr("dxrk.installcmd._cmd_look_path", lambda _: "/usr/bin/go")
-        monkeypatch.setattr("dxrk.installcmd._get_go_version_output", lambda: "go version go1.23.0 linux/amd64")
+        monkeypatch.setattr(
+            "dxrk.installcmd._get_go_version_output",
+            lambda: "go version go1.23.0 linux/amd64",
+        )
         monkeypatch.setattr("dxrk.installcmd._os_getenv", lambda k: None)
         profile = PlatformProfile(os="linux", package_manager="apt")
         with pytest.raises(InstallError, match="found go1.23"):
@@ -503,7 +524,10 @@ class TestValidateGoForModuleInstall:
 
     def test_go_module_off(self, monkeypatch):
         monkeypatch.setattr("dxrk.installcmd._cmd_look_path", lambda _: "/usr/bin/go")
-        monkeypatch.setattr("dxrk.installcmd._get_go_version_output", lambda: "go version go1.24.0 linux/amd64")
+        monkeypatch.setattr(
+            "dxrk.installcmd._get_go_version_output",
+            lambda: "go version go1.24.0 linux/amd64",
+        )
         monkeypatch.setattr("dxrk.installcmd._os_getenv", lambda k: "off")
         profile = PlatformProfile(os="linux", package_manager="apt")
         with pytest.raises(InstallError, match="Go modules are disabled"):
@@ -519,6 +543,9 @@ class TestGitBashPath:
 
     def test_uses_candidate_path(self, monkeypatch):
         monkeypatch.setattr("dxrk.installcmd._cmd_look_path", lambda _: "/usr/bin/git")
-        monkeypatch.setattr("dxrk.installcmd._file_exists", lambda p: "/usr/bin/bash.exe" in p or "/usr/bin/bash" in p)
+        monkeypatch.setattr(
+            "dxrk.installcmd._file_exists",
+            lambda p: "/usr/bin/bash.exe" in p or "/usr/bin/bash" in p,
+        )
         path = git_bash_path()
         assert path != ""

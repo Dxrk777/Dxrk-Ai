@@ -53,42 +53,52 @@ class TestSetupMode:
 
     def test_should_attempt_setup_unsupported_agent(self):
         from dxrk.models import AgentID as A
+
         assert engram.should_attempt_setup("supported", A.KIRO_IDE) is False
 
 
 class TestCommandResolution:
     def test_is_engram_command(self):
-        from dxrk.components.engram import _is_engram_command
-        assert _is_engram_command("engram") is True
-        assert _is_engram_command("/usr/local/bin/engram") is True
-        assert _is_engram_command("node") is False
+        from dxrk.components.engram import _is_DXRK_MEMORY_command
+
+        assert _is_DXRK_MEMORY_command("DXRK_MEMORY") is True
+        assert _is_DXRK_MEMORY_command("/usr/local/bin/DXRK_MEMORY") is True
+        assert _is_DXRK_MEMORY_command("node") is False
 
     def test_is_absolute_engram_path(self):
-        from dxrk.components.engram import _is_absolute_engram_path
-        assert _is_absolute_engram_path("/usr/local/bin/engram") is True
-        assert _is_absolute_engram_path("engram") is False
+        from dxrk.components.engram import _is_absolute_DXRK_MEMORY_path
+
+        assert _is_absolute_DXRK_MEMORY_path("/usr/local/bin/DXRK_MEMORY") is True
+        assert _is_absolute_DXRK_MEMORY_path("DXRK_MEMORY") is False
 
     def test_is_versioned_homebrew_cellar_path(self):
         from dxrk.components.engram import _is_versioned_homebrew_cellar_path
-        assert _is_versioned_homebrew_cellar_path(
-            "/opt/homebrew/Cellar/engram/1.2.3/bin/engram"
-        ) is True
-        assert _is_versioned_homebrew_cellar_path(
-            "/opt/homebrew/bin/engram"
-        ) is False
+
+        assert (
+            _is_versioned_homebrew_cellar_path(
+                "/opt/homebrew/Cellar/DXRK_MEMORY/1.2.3/bin/DXRK_MEMORY"
+            )
+            is True
+        )
+        assert (
+            _is_versioned_homebrew_cellar_path("/opt/homebrew/bin/DXRK_MEMORY") is False
+        )
 
     def test_is_stable_homebrew_engram_path(self):
-        from dxrk.components.engram import _is_stable_homebrew_engram_path
-        assert _is_stable_homebrew_engram_path(
-            "/opt/homebrew/bin/engram"
-        ) is True
+        from dxrk.components.engram import _is_stable_homebrew_DXRK_MEMORY_path
+
+        assert (
+            _is_stable_homebrew_DXRK_MEMORY_path("/opt/homebrew/bin/DXRK_MEMORY")
+            is True
+        )
         # Both Apple Silicon and Intel Homebrew prefixes are stable
-        assert _is_stable_homebrew_engram_path(
-            "/usr/local/bin/engram"
-        ) is True
+        assert (
+            _is_stable_homebrew_DXRK_MEMORY_path("/usr/local/bin/DXRK_MEMORY") is True
+        )
 
     def test_executable_from_command_value(self):
         from dxrk.components.engram import _executable_from_command_value
+
         cmd, ok = _executable_from_command_value("engram")
         assert ok is True
         assert cmd == "engram"
@@ -102,6 +112,7 @@ class TestCommandResolution:
 
     def test_is_standard_agent(self):
         from dxrk.components.engram import _is_standard_agent
+
         assert _is_standard_agent(AgentID.CLAUDE_CODE) is True
         assert _is_standard_agent(AgentID.OPENCODE) is True
         assert _is_standard_agent(AgentID.PI) is False
@@ -109,30 +120,34 @@ class TestCommandResolution:
 
 class TestEngramServerJson:
     def test_engram_server_json(self):
-        data = json.loads(engram._engram_server_json_with_cmd("engram"))
-        assert data["command"] == "engram"
+        data = json.loads(engram._DXRK_MEMORY_server_json_with_cmd("DXRK_MEMORY"))
+        assert data["command"] == "DXRK_MEMORY"
         assert data["args"] == ["mcp", "--tools=agent"]
 
     def test_engram_server_json_with_cmd(self):
-        data = json.loads(engram._engram_server_json_with_cmd("/custom/path/engram"))
-        assert data["command"] == "/custom/path/engram"
+        data = json.loads(
+            engram._DXRK_MEMORY_server_json_with_cmd("/custom/path/DXRK_MEMORY")
+        )
+        assert data["command"] == "/custom/path/DXRK_MEMORY"
 
 
 class TestInject:
     def test_inject_separate_mcp_claude(self, tmp_path):
         from dxrk.agents.claude.adapter import ClaudeAdapter
+
         adapter = ClaudeAdapter()
         result = engram.inject(str(tmp_path), adapter)
         assert result.Changed is True
         mcp_dir = tmp_path / ".claude" / "mcp"
         assert mcp_dir.exists()
-        mcp_file = mcp_dir / "engram.json"
+        mcp_file = mcp_dir / "DXRK_MEMORY.json"
         assert mcp_file.exists()
         data = json.loads(mcp_file.read_text())
-        assert data["command"] == "engram"
+        assert data["command"] == "DXRK_MEMORY"
 
     def test_inject_opencode(self, tmp_path):
         from dxrk.agents.opencode.adapter import OpenCodeAdapter
+
         adapter = OpenCodeAdapter()
         result = engram.inject(str(tmp_path), adapter)
         assert result.Changed is True
@@ -140,12 +155,14 @@ class TestInject:
         assert settings.exists()
         data = json.loads(settings.read_text())
         assert "mcp" in data
-        assert "engram" in data["mcp"]
+        assert "DXRK_MEMORY" in data["mcp"]
 
 
 class TestLookPath:
     def test_set_look_path_for_test(self, tmp_path):
-        mock = lambda x: str(tmp_path / "bin" / "engram") if x == "engram" else None
+        mock = lambda x: (
+            str(tmp_path / "bin" / "DXRK_MEMORY") if x == "DXRK_MEMORY" else None
+        )
         orig = engram.set_look_path_for_test(mock)
         assert callable(orig)
         engram.set_look_path_for_test(orig)
