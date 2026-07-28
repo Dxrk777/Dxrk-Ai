@@ -2,7 +2,7 @@ Select Components
 
 Toggle components with enter or space.
 
-▸ [ ] engram
+▸ [ ] dxrk-memory
     Persistent cross-session memory
   [ ] sdd
     Spec-driven development workflow
@@ -14,7 +14,7 @@ Toggle components with enter or space.
     Dxrk, neutral or custom behavior
   [ ] permissions
     Security-first defaults and guardrails
-  [ ] gga
+  [ ] dxrk-guardian
     Dxrk Guardian Angel — AI provider switcher
   [ ] theme
     Dxrk Kanagawa theme overlay

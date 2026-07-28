@@ -652,7 +652,7 @@ func TestConfigPathsForBackup_CoversManagedAgentPaths(t *testing.T) {
 		".config/opencode/AGENTS.md":     "# OpenCode",
 		".config/opencode/opencode.json": `{"model":"claude"}`,
 		".gemini/GEMINI.md":              "# Gemini",
-		".cursor/rules/dxrk.mdc":    "# Cursor rules",
+		".cursor/rules/dxrk.mdc":         "# Cursor rules",
 	}
 	unmanagedFile := filepath.Join(homeDir, ".claude", "conversation-transcript.md")
 

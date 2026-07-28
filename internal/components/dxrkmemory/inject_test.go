@@ -1356,13 +1356,13 @@ func TestInjectOpenClawMergesEngramIntoMCPServersPreservingStdioAndRemoteFields(
 		t.Fatalf("linear.unknownRemoteField = %v, want preserve-me", got)
 	}
 
-	dxrk-memory := objectAtForTest(t, servers, "dxrk-memory")
-	if got := dxrk-memory["command"]; got != "dxrk-memory" {
+	dxrkMem := objectAtForTest(t, servers, "dxrk-memory")
+	if got := dxrkMem["command"]; got != "dxrk-memory" {
 		t.Fatalf("dxrk-memory.command = %v, want dxrk-memory", got)
 	}
-	dxrkMemoryArgs, ok := dxrk-memory["args"].([]any)
+	dxrkMemoryArgs, ok := dxrkMem["args"].([]any)
 	if !ok || len(dxrkMemoryArgs) != 2 || dxrkMemoryArgs[0] != "mcp" || dxrkMemoryArgs[1] != "--tools=agent" {
-		t.Fatalf("dxrk-memory.args = %#v, want [mcp --tools=agent]", dxrk-memory["args"])
+		t.Fatalf("dxrk-memory.args = %#v, want [mcp --tools=agent]", dxrkMem["args"])
 	}
 	if _, hasMCPServers := root["mcpServers"]; hasMCPServers {
 		t.Fatal("OpenClaw config must use mcp.servers, not top-level mcpServers")

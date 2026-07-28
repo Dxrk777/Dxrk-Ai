@@ -1,0 +1,12 @@
+{
+  "mcp": {
+    "dxrk-memory": {
+      "command": [
+        "/opt/homebrew/bin/dxrk-memory",
+        "mcp",
+        "--tools=agent"
+      ],
+      "type": "local"
+    }
+  }
+}

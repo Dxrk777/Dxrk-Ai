@@ -25,7 +25,7 @@ const (
 )
 
 const (
-	goosWindows    = "windows"
+	goosWindows        = "windows"
 	dxrkMemoryCmdKey   = "command"
 	dxrkMemoryToolsArg = "--tools=agent"
 	dxrkMemoryMCPServe = "mcp"

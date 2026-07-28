@@ -79,7 +79,7 @@ func resolveDxrkMemoryCommand() (string, bool) {
 func dxrkMemoryServerJSONWithCmd(cmd string) []byte {
 	cfg := map[string]any{
 		dxrkMemoryCmdKey: cmd,
-		"args":       []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
+		"args":           []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
 	}
 	b, _ := json.MarshalIndent(cfg, "", "  ")
 	return append(b, '\n')
@@ -105,7 +105,7 @@ func dxrkMemoryOverlayJSON(agentID model.AgentID, cmd string) []byte {
 				dxrkMemoryServer: map[string]any{
 					"__replace__": map[string]any{
 						dxrkMemoryCmdKey: []string{cmd, dxrkMemoryMCPServe, dxrkMemoryToolsArg},
-						"type":       "local",
+						"type":           "local",
 					},
 				},
 			},
@@ -117,7 +117,7 @@ func dxrkMemoryOverlayJSON(agentID model.AgentID, cmd string) []byte {
 					dxrkMemoryRepo: map[string]any{
 						"__replace__": map[string]any{
 							dxrkMemoryCmdKey: cmd,
-							"args":       []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
+							"args":           []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
 						},
 					},
 				},
@@ -128,7 +128,7 @@ func dxrkMemoryOverlayJSON(agentID model.AgentID, cmd string) []byte {
 			"mcpServers": map[string]any{
 				dxrkMemoryRepo: map[string]any{
 					dxrkMemoryCmdKey: cmd,
-					"args":       []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
+					"args":           []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
 				},
 			},
 		}
@@ -146,7 +146,7 @@ func vsCodeEngramOverlayJSON(cmd string) []byte {
 		"servers": map[string]any{
 			"dxrk-memory": map[string]any{
 				dxrkMemoryCmdKey: cmd,
-				"args":       []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
+				"args":           []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
 			},
 		},
 	}
@@ -605,7 +605,7 @@ func buildSeparateMCPContent(mcpPath string, defaultContent []byte) []byte {
 	// Rebuild with the preserved command and the canonical args (["mcp", dxrkMemoryToolsArg]).
 	rebuilt := map[string]any{
 		dxrkMemoryCmdKey: cmd,
-		"args":       []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
+		"args":           []string{dxrkMemoryMCPServe, dxrkMemoryToolsArg},
 	}
 	encoded, err := json.MarshalIndent(rebuilt, "", "  ")
 	if err != nil {
