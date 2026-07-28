@@ -402,8 +402,6 @@ func TestCheckAll(t *testing.T) {
 		path := r.URL.Path
 		var release githubRelease
 		switch {
-		case contains(path, "dxrk"):
-			release = githubRelease{TagName: "v1.5.0", HTMLURL: "https://github.com/Dxrk777/Dxrk-Ai/releases/tag/v1.5.0"}
 		case contains(path, "dxrk-guardian-angel"):
 			release = githubRelease{TagName: "v2.0.0", HTMLURL: "https://github.com/Dxrk777/dxrk-guardian-angel/releases/tag/v2.0.0"}
 		case contains(path, "sub-agent-statusline"):
@@ -412,6 +410,8 @@ func TestCheckAll(t *testing.T) {
 			release = githubRelease{TagName: "v1.1.7", HTMLURL: "https://github.com/j0k3r-dev-rgl/sdd-dxrk-memory-plugin/releases/tag/v1.1.7"}
 		case contains(path, "dxrk-memory"):
 			release = githubRelease{TagName: "v0.4.0", HTMLURL: "https://github.com/Dxrk777/dxrk-memory/releases/tag/v0.4.0"}
+		case contains(path, "dxrk"):
+			release = githubRelease{TagName: "v1.5.0", HTMLURL: "https://github.com/Dxrk777/Dxrk-Ai/releases/tag/v1.5.0"}
 		}
 		_ = json.NewEncoder(w).Encode(release)
 	}))
@@ -502,6 +502,10 @@ func TestCheckAll_NetworkError(t *testing.T) {
 	profile := system.PlatformProfile{OS: "linux", LinuxDistro: "ubuntu", PackageManager: "apt", Supported: true}
 	results := CheckAll(context.Background(), "1.0.0", profile)
 
+	if len(results) != 5 {
+		t.Fatalf("len(results) = %d, want 5", len(results))
+	}
+
 	// dxrk has no DetectCmd, so it gets currentBuildVersion "1.0.0" as local
 	// but fetch fails → CheckFailed (it has a local version).
 	if results[0].Status != CheckFailed {
@@ -511,11 +515,11 @@ func TestCheckAll_NetworkError(t *testing.T) {
 		t.Fatalf("dxrk expected error, got nil")
 	}
 
-	if results[1].Status != CheckFailed {
-		t.Fatalf("dxrk-memory status = %q, want %q", results[1].Status, CheckFailed)
-	}
-	if results[2].Status != CheckFailed {
-		t.Fatalf("dxrk-guardian status = %q, want %q", results[2].Status, CheckFailed)
+	// All other tools should also have CheckFailed since the server closes connections.
+	for i, name := range []string{"dxrk-memory", "dxrk-guardian", "opencode-subagent-statusline", "opencode-sdd-dxrk-memory-manage"} {
+		if results[i+1].Status != CheckFailed {
+			t.Fatalf("%s status = %q, want %q", name, results[i+1].Status, CheckFailed)
+		}
 	}
 }
 
@@ -768,11 +772,11 @@ func TestRegistryContents(t *testing.T) {
 		owner string
 		repo  string
 	}{
-		"dxrk":                    {owner: "Dxrk777", repo: "dxrk"},
-		"dxrk-memory":                       {owner: "Dxrk777", repo: "dxrk-memory"},
-		"dxrk-guardian":                          {owner: "Dxrk777", repo: "dxrk-guardian-angel"},
-		"opencode-subagent-statusline": {owner: "Joaquinvesapa", repo: "sub-agent-statusline"},
-		"opencode-sdd-dxrk-memory-manage":   {owner: "j0k3r-dev-rgl", repo: "sdd-dxrk-memory-plugin"},
+		"dxrk":                            {owner: "Dxrk777", repo: "dxrk"},
+		"dxrk-memory":                     {owner: "Dxrk777", repo: "dxrk-memory"},
+		"dxrk-guardian":                   {owner: "Dxrk777", repo: "dxrk-guardian-angel"},
+		"opencode-subagent-statusline":    {owner: "Joaquinvesapa", repo: "sub-agent-statusline"},
+		"opencode-sdd-dxrk-memory-manage": {owner: "j0k3r-dev-rgl", repo: "sdd-dxrk-memory-plugin"},
 	}
 
 	for _, tool := range Tools {

@@ -18,6 +18,10 @@ func updateHint(tool ToolInfo, profile system.PlatformProfile) string {
 	switch tool.Name {
 	case dxrkName:
 		return dxrkHint(profile)
+	case "dxrk-memory":
+		return dxrkMemoryHint(profile)
+	case "dxrk-guardian":
+		return dxrkGuardianHint(profile)
 	default:
 		return ""
 	}
@@ -36,9 +40,29 @@ func dxrkHint(profile system.PlatformProfile) string {
 	case "darwin":
 		return "brew upgrade dxrk"
 	case "linux":
-		return "curl -fsSL https://raw.githubusercontent.com/Dxrk777/Dxrk-Ai/main/scripts/install.sh | bash"
+		return "curl -fsSL https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.sh | bash"
 	case "windows":
-		return "irm https://raw.githubusercontent.com/Dxrk777/Dxrk-Ai/main/scripts/install.ps1 | iex"
+		return "irm https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.ps1 | iex"
+	default:
+		return ""
+	}
+}
+
+func dxrkMemoryHint(profile system.PlatformProfile) string {
+	switch profile.OS {
+	case "darwin":
+		return "brew upgrade dxrk-memory"
+	default:
+		return "dxrk upgrade (downloads pre-built binary)"
+	}
+}
+
+func dxrkGuardianHint(profile system.PlatformProfile) string {
+	switch profile.OS {
+	case "darwin":
+		return "brew upgrade dxrk-guardian"
+	case "linux":
+		return "See https://github.com/Dxrk777/dxrk-guardian-angel"
 	default:
 		return ""
 	}

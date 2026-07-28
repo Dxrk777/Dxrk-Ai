@@ -1,6 +1,6 @@
 module github.com/Dxrk777/Dxrk-Ai
 
-go 1.21
+go 1.25.0
 
 require (
 	github.com/charmbracelet/bubbles v1.0.0
