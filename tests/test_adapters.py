@@ -23,7 +23,13 @@ from dxrk.agents.windsurf.adapter import WindsurfAdapter
 from dxrk.models import AgentID, MCPStrategy, SupportTier, SystemPromptStrategy
 
 _ADAPTER_RECORDS = [
-    (AntigravityAdapter, "antigravity", AgentID.ANTIGRAVITY, None, pytest.mark.antigravity),
+    (
+        AntigravityAdapter,
+        "antigravity",
+        AgentID.ANTIGRAVITY,
+        None,
+        pytest.mark.antigravity,
+    ),
     (ClaudeAdapter, "claude", AgentID.CLAUDE_CODE, "claude", pytest.mark.claude),
     (CodexAdapter, "codex", AgentID.CODEX, "codex", pytest.mark.codex),
     (CursorAdapter, "cursor", AgentID.CURSOR, None, pytest.mark.cursor),
@@ -48,7 +54,9 @@ INSTALL_ADAPTERS = [
     pytest.param(ClaudeAdapter, "claude", marks=pytest.mark.claude, id="claude"),
     pytest.param(CodexAdapter, "codex", marks=pytest.mark.codex, id="codex"),
     pytest.param(GeminiCLIAdapter, "gemini", marks=pytest.mark.gemini, id="gemini"),
-    pytest.param(KiloCodeAdapter, "kilocode", marks=pytest.mark.kilocode, id="kilocode"),
+    pytest.param(
+        KiloCodeAdapter, "kilocode", marks=pytest.mark.kilocode, id="kilocode"
+    ),
     pytest.param(KimiAdapter, "kimi", marks=pytest.mark.kimi, id="kimi"),
     pytest.param(PiAdapter, "pi", marks=pytest.mark.pi, id="pi"),
     pytest.param(QwenCodeAdapter, "qwen", marks=pytest.mark.qwen, id="qwen"),
@@ -67,20 +75,26 @@ class TestAdapterProperties:
         assert adapter.tier == SupportTier.FULL
 
     @pytest.mark.parametrize("adapter_class,name,agent_id,binary_name", ALL_ADAPTERS)
-    def test_global_config_dir(self, adapter_class, name, agent_id, binary_name, tmp_path):
+    def test_global_config_dir(
+        self, adapter_class, name, agent_id, binary_name, tmp_path
+    ):
         adapter = adapter_class()
         result = adapter.global_config_dir(str(tmp_path))
         assert isinstance(result, str)
         assert len(result) > 0
 
     @pytest.mark.parametrize("adapter_class,name,agent_id,binary_name", ALL_ADAPTERS)
-    def test_system_prompt_dir(self, adapter_class, name, agent_id, binary_name, tmp_path):
+    def test_system_prompt_dir(
+        self, adapter_class, name, agent_id, binary_name, tmp_path
+    ):
         adapter = adapter_class()
         result = adapter.system_prompt_dir(str(tmp_path))
         assert isinstance(result, str)
 
     @pytest.mark.parametrize("adapter_class,name,agent_id,binary_name", ALL_ADAPTERS)
-    def test_system_prompt_file(self, adapter_class, name, agent_id, binary_name, tmp_path):
+    def test_system_prompt_file(
+        self, adapter_class, name, agent_id, binary_name, tmp_path
+    ):
         adapter = adapter_class()
         result = adapter.system_prompt_file(str(tmp_path))
         assert isinstance(result, str)
@@ -98,7 +112,9 @@ class TestAdapterProperties:
         assert isinstance(result, str)
 
     @pytest.mark.parametrize("adapter_class,name,agent_id,binary_name", ALL_ADAPTERS)
-    def test_mcp_config_path(self, adapter_class, name, agent_id, binary_name, tmp_path):
+    def test_mcp_config_path(
+        self, adapter_class, name, agent_id, binary_name, tmp_path
+    ):
         adapter = adapter_class()
         result = adapter.mcp_config_path(str(tmp_path), server_name="test-server")
         assert isinstance(result, str)
@@ -128,7 +144,9 @@ class TestAdapterProperties:
 
 class TestAdapterDetect:
     @pytest.mark.parametrize("adapter_class,name,agent_id,binary_name", ALL_ADAPTERS)
-    def test_detect(self, adapter_class, name, agent_id, binary_name, tmp_path, monkeypatch):
+    def test_detect(
+        self, adapter_class, name, agent_id, binary_name, tmp_path, monkeypatch
+    ):
         monkeypatch.setattr("shutil.which", lambda x: "/usr/bin/" + x)
         adapter = adapter_class()
         home = str(tmp_path)
@@ -147,7 +165,10 @@ class TestAdapterDetect:
 
 class TestAdapterDetectConfigNotFound:
     @pytest.mark.parametrize("adapter_class,name,agent_id,binary_name", ALL_ADAPTERS)
-    def test_detect_config_not_found(self, adapter_class, name, agent_id, binary_name, tmp_path, monkeypatch):
+    def test_detect_config_not_found(
+        self, adapter_class, name, agent_id, binary_name, tmp_path, monkeypatch
+    ):
+        monkeypatch.delenv("XDG_CONFIG_HOME", raising=False)
         monkeypatch.setattr("shutil.which", lambda x: "/usr/bin/" + x)
         adapter = adapter_class()
         home = str(tmp_path)

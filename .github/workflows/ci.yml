@@ -169,8 +169,8 @@ jobs:
           file: e2e/${{ matrix.platform.dockerfile }}
           tags: dxrk-e2e-${{ matrix.platform.name }}:ci
           load: true
-          cache-from: type=gha,scope=e2e-${{ matrix.platform.name }}
-          cache-to: type=gha,mode=max,scope=e2e-${{ matrix.platform.name }}
+          cache-from: type=gha,scope=e2e-${{ matrix.platform.name }}-v2
+          cache-to: type=gha,mode=max,scope=e2e-${{ matrix.platform.name }}-v2
       - name: Run E2E tests
         timeout-minutes: 30
         env:
