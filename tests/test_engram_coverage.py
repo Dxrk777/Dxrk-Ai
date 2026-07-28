@@ -20,8 +20,8 @@ import pytest
 from dxrk.components import engram
 from dxrk.models import AgentID, MCPStrategy, SystemPromptStrategy
 
-# Source bug: line 434 calls _DXRK_MEMORY_install_dir_fn but only _DXRK_MEMORY_install_dir exists.
-# Create the alias so monkeypatch can target it.
+# Source bug fixed: line 434 now calls _DXRK_MEMORY_install_dir directly.
+# Create the alias so monkeypatch can still target _DXRK_MEMORY_install_dir_fn.
 if not hasattr(engram, "_DXRK_MEMORY_install_dir_fn"):
     engram._DXRK_MEMORY_install_dir_fn = engram._DXRK_MEMORY_install_dir
 
