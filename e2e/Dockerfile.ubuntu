@@ -23,10 +23,11 @@ RUN sed -i 's|http://archive.ubuntu.com|http://azure.archive.ubuntu.com|g; \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------------------------------------------------------------------------
-# Install Node.js LTS via NodeSource (Ubuntu 22.04 repos ship Node 12.x)
+# Install Node.js LTS via official binary (NodeSource deprecated)
 # ---------------------------------------------------------------------------
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
-    apt-get install -y nodejs
+ARG NODE_VERSION=22
+RUN curl -fsSL "https://nodejs.org/dist/latest-v${NODE_VERSION}.x/node-v${NODE_VERSION}.x-linux-x64.tar.xz" \
+    | tar -C /usr/local --strip-components=1 -xJ
 
 # ---------------------------------------------------------------------------
 # Install Go (match go.mod version)

@@ -15,10 +15,11 @@ RUN dnf install -y \
     && dnf clean all
 
 # ---------------------------------------------------------------------------
-# Install Node.js LTS via NodeSource (Fedora repos may lag behind LTS)
+# Install Node.js LTS via official binary (NodeSource RPM unsupported on Fedora 43)
 # ---------------------------------------------------------------------------
-RUN curl -fsSL https://rpm.nodesource.com/setup_lts.x | bash - && \
-    dnf install -y nodejs
+ARG NODE_VERSION=22
+RUN curl -fsSL "https://nodejs.org/dist/latest-v${NODE_VERSION}.x/node-v${NODE_VERSION}.x-linux-x64.tar.xz" \
+    | tar -C /usr/local --strip-components=1 -xJ
 
 # ---------------------------------------------------------------------------
 # Install Go (match go.mod version)
