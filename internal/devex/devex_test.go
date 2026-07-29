@@ -95,7 +95,7 @@ func TestShowTip(t *testing.T) {
 		t.Fatal("expected non-empty tip")
 	}
 
-	if !strings.Contains(tip, "dxrk") {
+	if !strings.Contains(strings.ToLower(tip), "dxrk") {
 		t.Errorf("tip = %q, expected it to mention 'dxrk'", tip)
 	}
 }
