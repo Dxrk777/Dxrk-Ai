@@ -77,7 +77,7 @@ func (m *Manager) ShowTip(ctx context.Context) string {
 		"Run `dxrk sdd init` to bootstrap Spec-Driven Development in any project",
 		"Use `dxrk agent install --all` to install agents across all supported IDEs",
 		"Dxrk Memory persists across sessions — run `dxrk dxrk-memory sync` to refresh",
-		"SDD workflow: propose → spec → design → tasks → apply → verify → archive",
+		"Use `dxrk sdd` for the full SDD workflow: propose → spec → design → tasks → apply → verify → archive",
 		"`dxrk query \"your question\"` asks all installed agents in parallel",
 		"Enable telemetry with `dxrk telemetry enable` to track usage locally",
 		"Backup agent configs with `dxrk backup create` before major upgrades",
@@ -91,7 +91,7 @@ func (m *Manager) ShowTip(ctx context.Context) string {
 		"Use `dxrk provider list` to see all configured LLM providers",
 		"`dxrk sync` propagates agent configs across all installed IDEs",
 		"Check version with `dxrk version` and update with `dxrk upgrade`",
-		"MCP servers enable tool use — configure them in your agent config",
+		"Use `dxrk mcp` to configure MCP servers and extend agent tool use",
 		"`dxrk validate` checks your project for compatibility issues",
 		"Run `dxrk dryrun` before any destructive operation to preview changes",
 	}
