@@ -43,20 +43,34 @@ func TestDefaultRegistrySupportedAgentsMatchesFactoryAgents(t *testing.T) {
 	}
 
 	want := []model.AgentID{
+		model.AgentAider,
+		model.AgentAmazonQ,
 		model.AgentAntigravity,
 		model.AgentClaudeCode,
+		model.AgentCline,
 		model.AgentCodex,
+		model.AgentCody,
+		model.AgentContinue,
 		model.AgentCursor,
+		model.AgentDevin,
 		model.AgentGeminiCLI,
+		model.AgentCopilot,
+		model.AgentJunie,
 		model.AgentKilocode,
 		model.AgentKimi,
 		model.AgentKiroIDE,
 		model.AgentOpenClaw,
 		model.AgentOpenCode,
+		model.AgentOpenHands,
 		model.AgentPi,
 		model.AgentQwenCode,
+		model.AgentReplit,
+		model.AgentRooCode,
+		model.AgentTabnine,
+		model.AgentVoid,
 		model.AgentVSCodeCopilot,
 		model.AgentWindsurf,
+		model.AgentZedAI,
 	}
 
 	if got := registry.SupportedAgents(); !reflect.DeepEqual(got, want) {

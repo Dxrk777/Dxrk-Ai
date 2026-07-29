@@ -24,7 +24,7 @@ Dxrk potencia cualquier agente de IA con memoria persistente, workflows de Spec-
 
 **Despues**: Tu agente tiene memoria, skills, workflow, herramientas MCP y una persona configurada.
 
-### 13 Agentes Soportados
+### 28 Agentes Soportados
 
 | Agente               | Modelo de Delegacion         | Caracteristica Principal                                    |
 | -------------------- | :--------------------------: | ---------------------------------------------------------- |
@@ -41,6 +41,21 @@ Dxrk potencia cualquier agente de IA con memoria persistente, workflows de Spec-
 | **Kiro IDE**         | Completo (subagentes nativos)| `~/.kiro/agents/` + orquestacion                           |
 | **Qwen Code**        | Completo (sub-agentes)       | Comandos slash, `~/.qwen/commands/`                        |
 | **Pi**               | Completo (subagentes)        | `dxrk-pi` con persona/modelo + memoria Dxrk-Memory         |
+| **OpenClaw**         | Solo-agente                  | Config en `~/.openclaw`                                    |
+| **Aider**            | Solo-agente (CLI)            | Git-aware pair programmer, `pip install aider-chat`        |
+| **Cline**            | Completo (VS Code ext)       | Agente autonomo con terminal + browser                     |
+| **Roo Code**         | Completo (VS Code ext)       | Multi-modo Code/Architect/Ask/Debug                        |
+| **Continue**         | Completo (multi-IDE)         | BYO models, VS Code + JetBrains + Neovim                   |
+| **Junie**            | Completo (JetBrains)         | Agente JetBrains con debugger nativo                       |
+| **Amazon Q**         | Completo (AWS ext)           | Integracion profunda con servicios AWS                     |
+| **OpenHands**        | Solo-agente (Docker)         | Sandbox completo, SWE-Bench Pro 38.4%                      |
+| **Zed AI**           | Completo (editor)            | Editor Rust, multi-provider LLM                            |
+| **GitHub Copilot**   | Completo (VS Code ext)       | ~20M usuarios, agent mode + PR reviews                     |
+| **Devin**            | Solo-agente (web)            | Ingeniero autonomo con IDE propio                          |
+| **Cody**             | Completo (VS Code ext)       | Code graph para contexto de large codebases                |
+| **Tabnine**          | Solo-agente (VS Code ext)    | Privacy-first code completion, self-hosting                |
+| **Replit**           | Solo-agente (browser)        | Full-stack app builder desde prompts                       |
+| **Void**             | Completo (VS Code fork)      | Editor open-source, BYO models                             |
 
 ---
 
@@ -131,7 +146,7 @@ Dxrk configura automaticamente servidores MCP para Context7, Kubernetes, Redis, 
 
 | Version | Estado | Description |
 |---------|--------|-------------|
-| v4.0.0 | **Actual** | Go CLI, 13 agentes, 2242 skills, 39 MCP servers, 6 GitHub Actions |
+| v4.0.0 | **Actual** | Go CLI, 28 agentes, 2242 skills, 39 MCP servers, 6 GitHub Actions |
 | v4.1.0 | Planeado | Homebrew tap + Scoop bucket publishing |
 | v4.2.0 | Planeado | Plugin marketplace para skills de la comunidad |
 | v5.0.0 | Vision | Multi-tenant support, team collaboration features |

@@ -22,6 +22,20 @@
 | Kiro IDE        | `kiro-ide`       | Yes          | Yes | Full (native subagents)          | No            | No             | `~/.kiro`                           |
 | OpenClaw        | `openclaw`       | Yes          | Yes | Solo-agent                       | No            | No             | `~/.openclaw`                       |
 | Pi              | `pi`             | Yes          | Yes | Full (package-managed subagents) | No            | Yes            | `~/.pi`                             |
+| Aider           | `aider`          | Yes          | Yes | Solo-agent (CLI)                 | No            | No             | `~/.aider.conf.yml`                 |
+| Cline           | `cline`          | Yes          | Yes | Full (VS Code ext)               | No            | No             | `~/.cline`                          |
+| Roo Code        | `roo-code`       | Yes          | Yes | Full (VS Code ext)               | No            | No             | `~/.roo`                            |
+| Continue        | `continue`       | Yes          | Yes | Full (multi-IDE)                 | No            | No             | `~/.continue`                       |
+| Junie           | `junie`          | Yes          | Yes | Full (JetBrains)                 | No            | No             | `~/.junie`                          |
+| Amazon Q        | `amazon-q`       | Yes          | Yes | Full (AWS ext)                   | No            | No             | `~/.aws/q`                          |
+| OpenHands       | `openhands`      | Yes          | Yes | Solo-agent (Docker)              | No            | No             | `~/.openhands`                      |
+| Zed AI          | `zed-ai`         | Yes          | Yes | Full (editor)                    | No            | No             | `~/.config/zed`                     |
+| GitHub Copilot  | `github-copilot` | Yes          | Yes | Full (VS Code ext)               | No            | No             | `~/.config/github-copilot`          |
+| Devin           | `devin`          | Yes          | Yes | Solo-agent (web)                 | No            | No             | `~/.devin`                          |
+| Cody            | `cody`           | Yes          | Yes | Full (VS Code ext)               | No            | No             | `~/.sourcegraph`                    |
+| Tabnine         | `tabnine`        | Yes          | Yes | Solo-agent (VS Code ext)         | No            | No             | `~/.tabnine`                        |
+| Replit          | `replit`         | Yes          | Yes | Solo-agent (browser)             | No            | No             | `~/.replit`                         |
+| Void            | `void`           | Yes          | Yes | Full (VS Code fork)              | No            | No             | `~/.void`                           |
 
 Most agents receive the **full SDD orchestrator** policy, plus skill files written to their skills directory. Most receive it through their system prompt; OpenCode and Kilo Code receive it through the OpenCode-compatible `opencode.json` agent overlay. Pi is the exception: Dxrk AI installs Pi packages, and `dxrk-pi` owns Pi skills, prompts, SDD agents, and chains at runtime. The agent handles SDD automatically when the task is large enough, or when the user explicitly asks for it — no manual setup required.
 
@@ -31,8 +45,8 @@ Most agents receive the **full SDD orchestrator** policy, plus skill files writt
 
 | Model                 | How It Works                                                                                                                                                                                       | Agents                                                                                                    |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| **Full (sub-agents)** | Each SDD phase runs in an isolated context window via native sub-agent delegation, package-managed subagents, or an OpenCode-compatible overlay. The orchestrator coordinates; sub-agents execute. | Claude Code, OpenCode, Kilo Code, Gemini CLI, Cursor, VS Code Copilot, Kimi Code, Kiro IDE, Qwen Code, Pi |
-| **Solo-agent**        | All SDD phases run inline in the same conversation. The orchestrator IS the executor. Dxrk-Memory provides cross-phase persistence.                                                                     | Codex, Windsurf, Antigravity, OpenClaw                                                                    |
+| **Full (sub-agents)** | Each SDD phase runs in an isolated context window via native sub-agent delegation, package-managed subagents, or an OpenCode-compatible overlay. The orchestrator coordinates; sub-agents execute. | Claude Code, OpenCode, Kilo Code, Gemini CLI, Cursor, VS Code Copilot, Kimi Code, Kiro IDE, Qwen Code, Pi, Cline, Roo Code, Continue, Junie, Amazon Q, Zed AI, GitHub Copilot, Cody, Void |
+| **Solo-agent**        | All SDD phases run inline in the same conversation. The orchestrator IS the executor. Dxrk-Memory provides cross-phase persistence.                                                                     | Codex, Windsurf, Antigravity, OpenClaw, Aider, OpenHands, Devin, Tabnine, Replit |
 
 ### Cursor Native Subagents
 
@@ -188,6 +202,132 @@ Kiro uses native custom agents in `~/.kiro/agents/`. `dxrk` writes 10 phase agen
 - **Instructions**: Dxrk-Memory and SDD protocols are injected into workspace `AGENTS.md`; persona is injected into workspace `SOUL.md`.
 - **MCP config**: Dxrk-Memory and Context7 are merged into global `~/.openclaw/openclaw.json` under `mcp.servers`; legacy root `mcpServers` entries are migrated.
 - **Skills**: SDD phase skills are workspace-scoped at `<workspace>/.openclaw/skills/sdd-*`; portable skills remain global at `~/.openclaw/skills/`.
+
+### Aider
+
+- **Detection**: dxrk detects Aider from the `aider` binary on `PATH` (installed via `pip install aider-chat`).
+- **Install**: `pip install aider-chat` (auto-installable).
+- **Config**: `~/.aider.conf.yml` (YAML configuration).
+- **System prompt**: Appended to `~/.aider.conf.yml` via `StrategyAppendToFile`.
+- **MCP config**: Merged into settings via `StrategyMergeIntoSettings`.
+- **Note**: Aider is a git-aware pair programmer that auto-commits changes.
+
+### Cline
+
+- **Detection**: dxrk detects Cline from the VS Code extension directory.
+- **Install**: manual — install Cline extension from VS Code marketplace.
+- **Config**: `~/.cline/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Written to `~/.cline/mcp_config.json` via `StrategyMCPConfigFile`.
+- **Note**: Autonomous multi-step coding agent with terminal and browser automation.
+
+### Roo Code
+
+- **Detection**: dxrk detects Roo Code from the VS Code extension directory.
+- **Install**: manual — install Roo Code extension from VS Code marketplace.
+- **Config**: `~/.roo/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Written to `~/.roo/mcp_config.json` via `StrategyMCPConfigFile`.
+- **Note**: Cline fork with multi-mode agents (Code, Architect, Ask, Debug).
+
+### Continue
+
+- **Detection**: dxrk detects Continue from the IDE extension directory.
+- **Install**: manual — install Continue extension (VS Code, JetBrains, or Neovim).
+- **Config**: `~/.continue/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Written to `~/.continue/mcp_config.json` via `StrategyMCPConfigFile`.
+- **Note**: Multi-IDE open-source AI assistant with BYO model support.
+
+### Junie
+
+- **Detection**: dxrk detects Junie from the JetBrains plugin directory.
+- **Install**: manual — install Junie plugin from JetBrains Marketplace.
+- **Config**: `~/.junie/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Merged into settings via `StrategyMergeIntoSettings`.
+- **Note**: JetBrains-native AI agent with debugger and semantic index access.
+
+### Amazon Q
+
+- **Detection**: dxrk detects Amazon Q from the VS Code extension directory.
+- **Install**: manual — install Amazon Q extension from VS Code marketplace.
+- **Config**: `~/.aws/q/`.
+- **System prompt**: Appended via `StrategyAppendToFile`.
+- **MCP config**: Written via `StrategyMCPConfigFile`.
+- **Note**: Deep AWS integration with security scanning and .NET migration support.
+
+### OpenHands
+
+- **Detection**: dxrk detects OpenHands from the `openhands` binary on `PATH` (installed via `pip install openhands-ai`).
+- **Install**: `pip install openhands-ai` (auto-installable).
+- **Config**: `~/.openhands/`.
+- **System prompt**: Appended via `StrategyAppendToFile`.
+- **MCP config**: Merged into settings via `StrategyMergeIntoSettings`.
+- **Note**: Docker-based autonomous coding agent with browser and terminal sandbox.
+
+### Zed AI
+
+- **Detection**: dxrk detects Zed from the `zed` binary on `PATH`.
+- **Install**: manual — download from [zed.dev](https://zed.dev).
+- **Config**: `~/.config/zed/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Written via `StrategyMCPConfigFile`.
+- **Note**: High-performance Rust editor with multi-provider LLM support.
+
+### GitHub Copilot
+
+- **Detection**: dxrk detects Copilot from the VS Code extension directory.
+- **Install**: manual — install GitHub Copilot extension from VS Code marketplace.
+- **Config**: `~/.config/github-copilot/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Written via `StrategyMCPConfigFile`.
+- **Note**: ~20M users, agent mode, PR reviews, broadest IDE support.
+
+### Devin
+
+- **Detection**: dxrk detects Devin from the `~/.devin` config directory.
+- **Install**: manual — sign up at [devin.ai](https://devin.ai).
+- **Config**: `~/.devin/`.
+- **System prompt**: Appended via `StrategyAppendToFile`.
+- **MCP config**: Merged into settings via `StrategyMergeIntoSettings`.
+- **Note**: Fully autonomous software engineer with own IDE, browser, and terminal.
+
+### Cody
+
+- **Detection**: dxrk detects Cody from the VS Code extension directory.
+- **Install**: manual — install Sourcegraph Cody extension from VS Code marketplace.
+- **Config**: `~/.sourcegraph/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Written via `StrategyMCPConfigFile`.
+- **Note**: Code graph for large codebase context, enterprise focus.
+
+### Tabnine
+
+- **Detection**: dxrk detects Tabnine from the VS Code extension directory.
+- **Install**: manual — install Tabnine extension from VS Code marketplace.
+- **Config**: `~/.tabnine/`.
+- **System prompt**: Appended via `StrategyAppendToFile`.
+- **MCP config**: Written via `StrategyMCPConfigFile`.
+- **Note**: Privacy-first code completion with enterprise self-hosting.
+
+### Replit
+
+- **Detection**: dxrk detects Replit from the `~/.replit` config directory.
+- **Install**: manual — sign up at [replit.com](https://replit.com).
+- **Config**: `~/.replit/`.
+- **System prompt**: Appended via `StrategyAppendToFile`.
+- **MCP config**: Merged into settings via `StrategyMergeIntoSettings`.
+- **Note**: Browser-based full-stack app builder from prompts.
+
+### Void
+
+- **Detection**: dxrk detects Void from the editor directory.
+- **Install**: manual — download from [voideditor.com](https://voideditor.com).
+- **Config**: `~/.void/`.
+- **System prompt**: Markdown sections via `StrategyMarkdownSections`.
+- **MCP config**: Written via `StrategyMCPConfigFile`.
+- **Note**: Open-source AI editor (VS Code fork) with BYO models.
 
 ### Pi
 

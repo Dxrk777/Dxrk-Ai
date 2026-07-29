@@ -18,6 +18,20 @@ const (
 	AgentKiroIDE       AgentID = "kiro-ide"
 	AgentOpenClaw      AgentID = "openclaw"
 	AgentPi            AgentID = "pi"
+	AgentAider         AgentID = "aider"
+	AgentCline         AgentID = "cline"
+	AgentRooCode       AgentID = "roo-code"
+	AgentContinue      AgentID = "continue"
+	AgentJunie         AgentID = "junie"
+	AgentAmazonQ       AgentID = "amazon-q"
+	AgentOpenHands     AgentID = "openhands"
+	AgentZedAI         AgentID = "zed-ai"
+	AgentCopilot       AgentID = "github-copilot"
+	AgentDevin         AgentID = "devin"
+	AgentCody          AgentID = "cody"
+	AgentTabnine       AgentID = "tabnine"
+	AgentReplit        AgentID = "replit"
+	AgentVoid          AgentID = "void"
 )
 
 // SupportTier indicates how fully an agent supports the Dxrk AI ecosystem.

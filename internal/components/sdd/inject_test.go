@@ -3234,6 +3234,20 @@ func TestSDDOrchestratorAssetSelection(t *testing.T) {
 		{agent: model.AgentClaudeCode, want: "generic/sdd-orchestrator.md"},
 		{agent: model.AgentOpenCode, want: "opencode/sdd-orchestrator.md"},
 		{agent: model.AgentVSCodeCopilot, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentAider, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentCline, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentRooCode, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentContinue, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentJunie, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentAmazonQ, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentOpenHands, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentZedAI, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentCopilot, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentDevin, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentCody, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentTabnine, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentReplit, want: "generic/sdd-orchestrator.md"},
+		{agent: model.AgentVoid, want: "generic/sdd-orchestrator.md"},
 	}
 
 	for _, tt := range tests {

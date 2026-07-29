@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- 14 new agent adapters: Aider, Cline, Roo Code, Continue, Junie, Amazon Q, OpenHands, Zed AI, GitHub Copilot, Devin, Cody, Tabnine, Replit, Void (28 total)
 - ESLint + Prettier for web UI (`web/`)
 - ErrorBoundary component for React crash handling
 - SettingsPage write support (POST /api/settings)
