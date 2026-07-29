@@ -96,10 +96,10 @@ setup_fake_dxrk-memory_binary() {
     fi
 
     local fake_bin_dir="$HOME/.dxrk-e2e/bin"
-    local fake_dxrk-memory="$fake_bin_dir/dxrk-memory"
+    local fake_dxrk_memory="$fake_bin_dir/dxrk-memory"
 
     mkdir -p "$fake_bin_dir"
-    cat > "$fake_dxrk-memory" <<'EOF'
+    cat > "$fake_dxrk_memory" <<'EOF'
 #!/usr/bin/env sh
 set -eu
 
@@ -121,14 +121,14 @@ case "${1:-}" in
     ;;
 esac
 EOF
-    chmod +x "$fake_dxrk-memory"
+    chmod +x "$fake_dxrk_memory"
 
     case ":$PATH:" in
         *":$fake_bin_dir:"*) ;;
         *) export PATH="$fake_bin_dir:$PATH" ;;
     esac
 
-    log_info "Using deterministic Dxrk-Memory E2E shim: $fake_dxrk-memory"
+    log_info "Using deterministic Dxrk-Memory E2E shim: $fake_dxrk_memory"
 }
 
 # setup_fake_configs — seed fake config files so backup tests have something
