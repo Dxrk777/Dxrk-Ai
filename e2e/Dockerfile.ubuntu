@@ -42,7 +42,7 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
 # ---------------------------------------------------------------------------
 # Install Go (match go.mod version)
 # ---------------------------------------------------------------------------
-ARG GO_VERSION=1.25.0
+ARG GO_VERSION=1.25.11
 RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" \
     | tar -C /usr/local -xz
 ENV PATH="/usr/local/go/bin:${PATH}"
