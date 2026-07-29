@@ -91,6 +91,46 @@
     "mempalace": {
       "command": "mempalace-mcp",
       "args": ["--palace", "/home/dxrk/Proyectos/Dxrk/.mempalace"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "kubernetes": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-kubernetes"]
+    },
+    "redis": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-redis"]
+    },
+    "mongodb": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-mongodb"]
+    },
+    "elasticsearch": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-elasticsearch"]
+    },
+    "jira": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-jira"]
+    },
+    "grafana": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-grafana"]
+    },
+    "prometheus": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-prometheus"]
+    },
+    "openai": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-openai"]
+    },
+    "confluence": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-confluence"]
     }
   }
 }
