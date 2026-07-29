@@ -32,6 +32,20 @@ const (
 	AgentTabnine       AgentID = "tabnine"
 	AgentReplit        AgentID = "replit"
 	AgentVoid          AgentID = "void"
+	AgentHermes        AgentID = "hermes"
+	AgentAmp           AgentID = "amp"
+	AgentTrae          AgentID = "trae"
+	AgentConductor     AgentID = "conductor"
+	AgentRunCell       AgentID = "runcell"
+	AgentLoopoperators AgentID = "looperators"
+	AgentPearAI        AgentID = "pearai"
+	AgentBolt          AgentID = "bolt"
+	AgentLovable       AgentID = "lovable"
+	AgentV0            AgentID = "v0"
+	AgentBlackbox      AgentID = "blackbox"
+	AgentQodo          AgentID = "qodo"
+	AgentJetBrains     AgentID = "jetbrains"
+	AgentZCode         AgentID = "zcode"
 )
 
 // SupportTier indicates how fully an agent supports the Dxrk AI ecosystem.
