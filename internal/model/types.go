@@ -116,6 +116,201 @@ const (
 	SkillCommentWriter   SkillID = "comment-writer"
 	SkillWorkUnitCommits SkillID = "work-unit-commits"
 	SkillLLMCouncil      SkillID = "llm-council"
+
+	// ── Programming Languages ──────────────────────────────────────
+	SkillPythonPro             SkillID = "python-pro"
+	SkillPythonPatterns        SkillID = "python-patterns"
+	SkillAsyncPythonPatterns   SkillID = "async-python-patterns"
+	SkillPythonFastapi         SkillID = "python-fastapi-development"
+	SkillPythonPackaging       SkillID = "python-packaging"
+	SkillPythonPerformance     SkillID = "python-performance-optimization"
+	SkillPytestSkill           SkillID = "pytest-skill"
+	SkillPydanticAI            SkillID = "pydantic-ai"
+	SkillJavaScriptPro         SkillID = "javascript-pro"
+	SkillJavaScriptMastery     SkillID = "javascript-mastery"
+	SkillJavaScriptDesign      SkillID = "javascript-design-patterns"
+	SkillNodejsPro             SkillID = "nodejs-pro"
+	SkillTypeScriptPro         SkillID = "typescript-pro"
+	SkillNextjsPro             SkillID = "nextjs-pro"
+	SkillRustPro               SkillID = "rust-pro"
+	SkillRustAsync             SkillID = "rust-async-patterns"
+	SkillMemorySafetyPatterns  SkillID = "memory-safety-patterns"
+	SkillGolangPro             SkillID = "golang-pro"
+	SkillGoConcurrencyPatterns SkillID = "go-concurrency-patterns"
+	SkillGoInDepth             SkillID = "go-in-depth"
+	SkillGoPlaywright          SkillID = "go-playwright"
+	SkillGoRodMaster           SkillID = "go-rod-master"
+	SkillGrpcGolang            SkillID = "grpc-golang"
+	SkillTemporalGolangPro     SkillID = "temporal-golang-pro"
+	SkillJavaPro               SkillID = "java-pro"
+	SkillSpringbootPro         SkillID = "springboot-pro"
+	SkillJavaPerformanceTuning SkillID = "java-performance-tuning"
+	SkillCppPro                SkillID = "cpp-pro"
+	SkillCppLowLatency         SkillID = "cpp-low-latency"
+	SkillSwiftPro              SkillID = "swift-pro"
+	SkillSwiftConcurrency      SkillID = "swift-concurrency-expert"
+	SkillSwiftuiExpert         SkillID = "swiftui-expert"
+	SkillKotlinPro             SkillID = "kotlin-pro"
+	SkillKotlinMultiplatform   SkillID = "kotlin-multiplatform"
+	SkillAndroidCompose        SkillID = "android-jetpack-compose-expert"
+	SkillRubyRailsPro          SkillID = "ruby-rails-pro"
+	SkillPhpPro                SkillID = "php-pro"
+	SkillPhpLaravelPro         SkillID = "php-laravel-pro"
+
+	// ── Web / Frontend ─────────────────────────────────────────────
+	SkillReactBestPractices SkillID = "react-best-practices"
+	SkillReactPatterns      SkillID = "react-patterns"
+	SkillAngularPro         SkillID = "angular-pro"
+	SkillSveltePro          SkillID = "svelte-pro"
+	SkillVuePro             SkillID = "vue-pro"
+	SkillTailwindPro        SkillID = "tailwind-pro"
+	SkillCssPro             SkillID = "css-pro"
+	SkillHtmlPro            SkillID = "html-pro"
+	SkillFrontendArch       SkillID = "frontend-architecture"
+	SkillReactCompPerf      SkillID = "react-component-performance"
+
+	// ── DevOps / Cloud ─────────────────────────────────────────────
+	SkillDockerExpert          SkillID = "docker-expert"
+	SkillKubernetesArchitect   SkillID = "kubernetes-architect"
+	SkillTerraformPatterns     SkillID = "terraform-patterns"
+	SkillAWSArchitect          SkillID = "aws-architect"
+	SkillCloudArchitect        SkillID = "cloud-architect"
+	SkillGitHubActionsAdvanced SkillID = "github-actions-advanced"
+	SkillCICDPipelineBuilder   SkillID = "ci-cd-pipeline-builder"
+	SkillGitopsWorkflow        SkillID = "gitops-workflow"
+	SkillArgoCDPro             SkillID = "argocd-pro"
+	SkillHelmChartBuilder      SkillID = "helm-chart-builder"
+	SkillAWSLambdaPro          SkillID = "aws-lambda-pro"
+
+	// ── AI / ML ────────────────────────────────────────────────────
+	SkillPromptEngineering    SkillID = "prompt-engineering-patterns"
+	SkillAgentDesigner        SkillID = "agent-designer"
+	SkillMemorySystems        SkillID = "memory-systems"
+	SkillLLMAppPatterns       SkillID = "llm-app-patterns"
+	SkillLLMEvaluation        SkillID = "llm-evaluation"
+	SkillRAGArchitect         SkillID = "rag-architect"
+	SkillRAGEngineer          SkillID = "rag-engineer"
+	SkillAIEngineeringToolkit SkillID = "ai-engineering-toolkit"
+	SkillFineTuningPro        SkillID = "fine-tuning-pro"
+	SkillLangChainPro         SkillID = "langchain-pro"
+	SkillEmbeddingPro         SkillID = "embedding-pro"
+	SkillVectorDBPro          SkillID = "vector-db-pro"
+	SkillMLOpsPro             SkillID = "ml-ops-pro"
+	SkillComputerVisionPro    SkillID = "computer-vision-pro"
+	SkillNLPPro               SkillID = "nlp-pro"
+	SkillHuggingFaceCLI       SkillID = "hugging-face-cli"
+	SkillLangGraph            SkillID = "langgraph"
+
+	// ── Data ───────────────────────────────────────────────────────
+	SkillDataEngineer          SkillID = "data-engineer"
+	SkillDataPipeline          SkillID = "data-engineering-data-pipeline"
+	SkillPostgresBestPractices SkillID = "postgres-best-practices"
+	SkillRedisPro              SkillID = "redis-pro"
+	SkillMongoDBPro            SkillID = "mongodb-pro"
+	SkillDataVisualization     SkillID = "data-visualization"
+	SkillDBQuery               SkillID = "db-query"
+	SkillMigration             SkillID = "migration"
+
+	// ── Mobile ─────────────────────────────────────────────────────
+	SkillReactNative   SkillID = "react-native"
+	SkillAndroidDev    SkillID = "android-dev"
+	SkillFlutterPro    SkillID = "flutter-pro"
+	SkillIOSPro        SkillID = "ios-pro"
+	SkillMobileTesting SkillID = "mobile-app-testing"
+
+	// ── Security ───────────────────────────────────────────────────
+	SkillSecuritySAST         SkillID = "security-scanning-security-sast"
+	SkillSecurityHardening    SkillID = "security-scanning-security-hardening"
+	SkillSecurityDependencies SkillID = "security-scanning-security-dependencies"
+	SkillAPISecurity          SkillID = "api-security-best-practices"
+	SkillContainerSecurity    SkillID = "container-security-hardening"
+	SkillCloudSecurity        SkillID = "cloud-security"
+	SkillPenetrationTesting   SkillID = "penetration-testing"
+
+	// ── Testing ────────────────────────────────────────────────────
+	SkillTDDGuide        SkillID = "tdd-guide"
+	SkillE2ETesting      SkillID = "e2e-testing"
+	SkillK6LoadTesting   SkillID = "k6-load-testing"
+	SkillTestingPatterns SkillID = "testing-patterns"
+	SkillTestAutomator   SkillID = "test-automator"
+	SkillPlaywrightPro   SkillID = "playwright-pro"
+	SkillCypressPro      SkillID = "cypress-pro"
+
+	// ── Architecture ───────────────────────────────────────────────
+	SkillSoftwareArchitecture   SkillID = "software-architecture"
+	SkillMicroservicesPatterns  SkillID = "microservices-patterns"
+	SkillEventSourcingArchitect SkillID = "event-sourcing-architect"
+	SkillDDDPro                 SkillID = "ddd-pro"
+	SkillSagaOrchestration      SkillID = "saga-orchestration"
+
+	// ── CLI / Terminal ─────────────────────────────────────────────
+	SkillBashPro       SkillID = "bash-pro"
+	SkillBashScripting SkillID = "bash-scripting"
+	SkillPosixShellPro SkillID = "posix-shell-pro"
+	SkillAiNativeCLI   SkillID = "ai-native-cli"
+	SkillJq            SkillID = "jq"
+
+	// ── Documentation ──────────────────────────────────────────────
+	SkillAPIDocs       SkillID = "api-docs"
+	SkillDocGeneration SkillID = "documentation-generation"
+	SkillChangelogPro  SkillID = "changelog-pro"
+	SkillReadmePro     SkillID = "readme-pro"
+
+	// ── Images / Media ─────────────────────────────────────────────
+	SkillImageGeneration SkillID = "image-generation"
+	SkillVideoEditing    SkillID = "video-editing"
+	SkillAudioProcessing SkillID = "audio-processing"
+	Skill3DModeling      SkillID = "3d-modeling"
+	SkillAlgorithmicArt  SkillID = "algorithmic-art"
+
+	// ── PDF / Documents ────────────────────────────────────────────
+	SkillPDFGeneration SkillID = "pdf-generation"
+	SkillWordDocx      SkillID = "word-docx"
+	SkillExcelXlsx     SkillID = "excel-xlsx"
+	SkillPPTXDeck      SkillID = "pptx-deck-creation"
+
+	// ── Business ───────────────────────────────────────────────────
+	SkillProductManagement SkillID = "product-management"
+	SkillAgileScrum        SkillID = "agile-scrum"
+	SkillOKRTracking       SkillID = "okr-tracking"
+
+	// ── Writing ────────────────────────────────────────────────────
+	SkillTechnicalWriting SkillID = "technical-writing"
+	SkillCopywriting      SkillID = "copywriting"
+	SkillSEOWriting       SkillID = "seo-writing"
+	SkillBlogWriting      SkillID = "blog-writing"
+
+	// ── Code Quality ───────────────────────────────────────────────
+	SkillCodeReviewChecklist   SkillID = "code-review-checklist"
+	SkillRefactoringPatterns   SkillID = "refactoring-patterns"
+	SkillErrorHandlingPatterns SkillID = "error-handling-patterns"
+	SkillSystematicDebugging   SkillID = "systematic-debugging"
+	SkillCodeSimplification    SkillID = "code-simplification"
+
+	// ── Observability ──────────────────────────────────────────────
+	SkillObservability     SkillID = "observability-and-instrumentation"
+	SkillIncidentResponder SkillID = "incident-responder"
+	SkillPostmortem        SkillID = "postmortem"
+	SkillChaosEngineering  SkillID = "chaos-engineering"
+
+	// ── Workflow extras ────────────────────────────────────────────
+	SkillAccessiblity    SkillID = "accessibility"
+	SkillArchDecision    SkillID = "arch-decision"
+	SkillCICD            SkillID = "ci-cd"
+	SkillCodeReview      SkillID = "code-review"
+	SkillCommitMessage   SkillID = "commit-message"
+	SkillDebugging       SkillID = "debugging"
+	SkillDependency      SkillID = "dependency"
+	SkillDockerMgmt      SkillID = "docker-mgmt"
+	SkillEnvSetup        SkillID = "env-setup"
+	SkillErrorHandling   SkillID = "error-handling"
+	SkillGitRelease      SkillID = "git-release"
+	SkillLoggingPatterns SkillID = "logging-patterns"
+	SkillPerformance     SkillID = "performance"
+	SkillPRDescription   SkillID = "pr-description"
+	SkillRefactoringPR   SkillID = "refactoring-pr"
+	SkillSecurityAudit   SkillID = "security-audit"
+	SkillTestWriter      SkillID = "test-writer"
 )
 
 type PersonaID string
