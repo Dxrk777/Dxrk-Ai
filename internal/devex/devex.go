@@ -87,7 +87,7 @@ func (m *Manager) ShowTip(ctx context.Context) string {
 		"Set DXRK_DEFAULT_PROVIDER env to override the default LLM provider",
 		"Run `dxrk chat` to enter interactive conversation mode",
 		"Skills extend agent capabilities — browse them with `dxrk catalog skills`",
-		"Dxrk supports Claude, GPT, Gemini, Ollama, and more providers",
+		"dxrk supports Claude, GPT, Gemini, Ollama, and more providers",
 		"Use `dxrk provider list` to see all configured LLM providers",
 		"`dxrk sync` propagates agent configs across all installed IDEs",
 		"Check version with `dxrk version` and update with `dxrk upgrade`",
