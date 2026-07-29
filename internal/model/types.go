@@ -115,6 +115,7 @@ const (
 	SkillCognitiveDoc    SkillID = "cognitive-doc-design"
 	SkillCommentWriter   SkillID = "comment-writer"
 	SkillWorkUnitCommits SkillID = "work-unit-commits"
+	SkillLLMCouncil      SkillID = "llm-council"
 )
 
 type PersonaID string

@@ -37,6 +37,8 @@ var mvpSkills = []Skill{
 	{ID: model.SkillCognitiveDoc, Name: "cognitive-doc-design", Category: catWorkflow, Priority: "p0"},
 	{ID: model.SkillCommentWriter, Name: "comment-writer", Category: catWorkflow, Priority: "p0"},
 	{ID: model.SkillWorkUnitCommits, Name: "work-unit-commits", Category: catWorkflow, Priority: "p0"},
+	// Decision & analysis skills
+	{ID: model.SkillLLMCouncil, Name: "llm-council", Category: "analysis", Priority: "p0"},
 }
 
 func MVPSkills() []Skill {

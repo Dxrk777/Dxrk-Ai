@@ -1,4 +1,4 @@
-# Dxrk Curated Skill Pack — Top 66 of 2,242
+# Dxrk Curated Skill Pack — Top 67 of 2,242
 
 Curated skills organized by relevance to the Dxrk codebase (Go CLI + Python sandbox + React dashboard + CI/CD).
 
@@ -107,11 +107,16 @@ Curated skills organized by relevance to the Dxrk codebase (Go CLI + Python sand
 | documentation-generation-doc-generate | Auto-generate docs from code |
 | sdk-dx | Developer experience for SDKs |
 
+### 11. Decision & Analysis
+| Skill | Description |
+|-------|-------------|
+| llm-council | 5 AI advisors with peer review for tough decisions (Karpathy method) |
+
 ## Installation Priority
 
 **Must-have (install first):** golang-pro, go-concurrency-patterns, python-pro, python-testing-patterns, react-best-practices, typescript-pro, github-actions-advanced, docker-expert, security-scanning-security-sast, systematic-debugging
 
-**High value:** grpc-golang, kubernetes-architect, observability-and-instrumentation, tdd-guide, agent-designer, prompt-engineering-patterns, memory-systems
+**High value:** grpc-golang, kubernetes-architect, observability-and-instrumentation, tdd-guide, agent-designer, prompt-engineering-patterns, memory-systems, llm-council
 
 **Good additions:** go-playwright, k6-load-testing, chaos-engineering, incident-responder, postmortem, secrets-management
 
