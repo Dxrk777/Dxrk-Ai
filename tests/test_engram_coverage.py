@@ -20,8 +20,14 @@ import pytest
 from dxrk.components import engram
 from dxrk.models import AgentID, MCPStrategy, SystemPromptStrategy
 
+# Source bug fixed: line 434 now calls _DXRK_MEMORY_install_dir directly.
+# Create the alias so monkeypatch can still target _DXRK_MEMORY_install_dir_fn.
+if not hasattr(engram, "_DXRK_MEMORY_install_dir_fn"):
+    engram._DXRK_MEMORY_install_dir_fn = engram._DXRK_MEMORY_install_dir
+
 
 # ─── Fake adapter for inject tests ──────────────────────────────────────────
+
 
 class FakeAdapter:
     def __init__(
@@ -87,6 +93,7 @@ class FakeAdapter:
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. Config / Setup
 # ═══════════════════════════════════════════════════════════════════════════
+
 
 class TestParseSetupMode:
     @pytest.mark.parametrize(
@@ -163,37 +170,38 @@ class TestShouldAttemptSetup:
 # 2. Injection — uncovered code paths
 # ═══════════════════════════════════════════════════════════════════════════
 
+
 class TestEngramServerJson:
-    def test_engram_server_json_with_mock_look_path(self):
-        mock = lambda x: "/mock/bin/engram" if x == "engram" else None
+    def test_DXRK_MEMORY_server_json_with_mock_look_path(self):
+        mock = lambda x: "/mock/bin/DXRK_MEMORY" if x == "DXRK_MEMORY" else None
         orig = engram.set_look_path_for_test(mock)
         try:
-            result = engram._engram_server_json()
+            result = engram._DXRK_MEMORY_server_json()
             data = json.loads(result)
-            assert data["command"] == "/mock/bin/engram"
+            assert data["command"] == "/mock/bin/DXRK_MEMORY"
             assert data["args"] == ["mcp", "--tools=agent"]
         finally:
             engram.set_look_path_for_test(orig)
 
-    def test_engram_server_json_fallback(self):
+    def test_DXRK_MEMORY_server_json_fallback(self):
         mock = lambda x: None
         orig = engram.set_look_path_for_test(mock)
         try:
-            result = engram._engram_server_json()
+            result = engram._DXRK_MEMORY_server_json()
             data = json.loads(result)
-            assert data["command"] == "engram"
+            assert data["command"] == "DXRK_MEMORY"
         finally:
             engram.set_look_path_for_test(orig)
 
 
 class TestVSCodeEngramOverlayJson:
-    def test_vs_code_engram_overlay_json(self):
-        result = engram._vs_code_engram_overlay_json("/usr/bin/engram")
+    def test_vs_code_DXRK_MEMORY_overlay_json(self):
+        result = engram._vs_code_DXRK_MEMORY_overlay_json("/usr/bin/DXRK_MEMORY")
         data = json.loads(result)
         assert "servers" in data
-        assert "engram" in data["servers"]
-        assert data["servers"]["engram"]["command"] == "/usr/bin/engram"
-        assert data["servers"]["engram"]["args"] == ["mcp", "--tools=agent"]
+        assert "DXRK_MEMORY" in data["servers"]
+        assert data["servers"]["DXRK_MEMORY"]["command"] == "/usr/bin/DXRK_MEMORY"
+        assert data["servers"]["DXRK_MEMORY"]["args"] == ["mcp", "--tools=agent"]
 
 
 class TestInjectMCPConfigFile:
@@ -209,7 +217,7 @@ class TestInjectMCPConfigFile:
         assert result.Changed is True
         data = json.loads(mcp_file.read_text())
         assert "servers" in data
-        assert "engram" in data["servers"]
+        assert "DXRK_MEMORY" in data["servers"]
 
     def test_antigravity_bootstrap(self, tmp_path):
         gemini_dir = tmp_path / ".gemini"
@@ -265,7 +273,7 @@ class TestInjectTOMLFile:
         result = engram.inject(str(tmp_path), adapter)
         assert result.Changed is True
         text = config_path.read_text()
-        assert "engram" in text
+        assert "DXRK_MEMORY" in text
 
 
 class TestInjectSystemPrompt:
@@ -282,7 +290,7 @@ class TestInjectSystemPrompt:
         )
         result = engram.inject(str(tmp_path), adapter)
         assert result.Changed is True
-        module_path = tmp_path / ".config" / "opencode" / "engram-protocol.md"
+        module_path = tmp_path / ".config" / "opencode" / "DXRK_MEMORY-protocol.md"
         assert module_path.exists()
 
     def test_jinja_modules_with_bootstrap(self, monkeypatch, tmp_path):
@@ -366,13 +374,13 @@ class TestEnsureAntigravitySettings:
 class TestWriteCodexInstructionFiles:
     def test_writes_files(self, monkeypatch, tmp_path):
         monkeypatch.setattr(
-            "dxrk.components.assets.must_read",
+            "dxrk.components.engram.must_read",
             lambda path: f"# content of {path}",
         )
         instr, compact, err = engram._write_codex_instruction_files(str(tmp_path))
         assert err is None
-        assert "engram-instructions.md" in instr
-        assert "engram-compact-prompt.md" in compact
+        assert "DXRK_MEMORY-instructions.md" in instr
+        assert "DXRK_MEMORY-compact-prompt.md" in compact
         assert Path(instr).exists()
         assert Path(compact).exists()
 
@@ -431,28 +439,34 @@ class TestReadFileOrEmpty:
 class TestStableEngramCommandForMergedConfig:
     def test_file_exists_with_cmd(self, tmp_path):
         f = tmp_path / "config.json"
-        f.write_text(json.dumps({"mcp": {"engram": {"command": "engram"}}}))
-        result = engram._stable_engram_command_for_merged_config(str(f), AgentID.OPENCODE)
-        assert result == "engram"
+        f.write_text(json.dumps({"mcp": {"DXRK_MEMORY": {"command": "DXRK_MEMORY"}}}))
+        result = engram._stable_DXRK_MEMORY_command_for_merged_config(
+            str(f), AgentID.OPENCODE
+        )
+        assert result == "DXRK_MEMORY"
 
     def test_file_exists_no_cmd(self, tmp_path):
         f = tmp_path / "config.json"
         f.write_text(json.dumps({"mcp": {}}))
-        result = engram._stable_engram_command_for_merged_config(str(f), AgentID.OPENCODE)
-        assert result in ("engram",)
+        result = engram._stable_DXRK_MEMORY_command_for_merged_config(
+            str(f), AgentID.OPENCODE
+        )
+        assert result in ("DXRK_MEMORY",)
 
     def test_file_not_exists_standard_agent(self, monkeypatch, tmp_path):
         monkeypatch.setattr(
-            engram, "_preferred_stable_engram_command", lambda: "/custom/engram"
+            engram, "_preferred_stable_DXRK_MEMORY_command", lambda: "/custom/engram"
         )
-        result = engram._stable_engram_command_for_merged_config(
+        result = engram._stable_DXRK_MEMORY_command_for_merged_config(
             str(tmp_path / "nonexistent"), AgentID.OPENCODE
         )
         assert result == "/custom/engram"
 
     def test_file_not_exists_nonstandard_agent(self, monkeypatch, tmp_path):
-        monkeypatch.setattr(engram, "_resolve_engram_command", lambda: ("/some/engram", True))
-        result = engram._stable_engram_command_for_merged_config(
+        monkeypatch.setattr(
+            engram, "_resolve_DXRK_MEMORY_command", lambda: ("/some/engram", True)
+        )
+        result = engram._stable_DXRK_MEMORY_command_for_merged_config(
             str(tmp_path / "nonexistent"), AgentID.PI
         )
         assert result == "/some/engram"
@@ -461,79 +475,91 @@ class TestStableEngramCommandForMergedConfig:
 class TestStableEngramCommandForExisting:
     def test_cellar_path_returns_preferred(self, monkeypatch):
         monkeypatch.setattr(
-            engram, "_preferred_stable_engram_command", lambda: "/opt/homebrew/bin/engram"
+            engram,
+            "_preferred_stable_DXRK_MEMORY_command",
+            lambda: "/opt/homebrew/bin/DXRK_MEMORY",
         )
-        result = engram._stable_engram_command_for_existing(
-            "/opt/homebrew/Cellar/engram/1.2.3/bin/engram", AgentID.OPENCODE
+        result = engram._stable_DXRK_MEMORY_command_for_existing(
+            "/opt/homebrew/Cellar/DXRK_MEMORY/1.2.3/bin/DXRK_MEMORY", AgentID.OPENCODE
         )
-        assert result == "/opt/homebrew/bin/engram"
+        assert result == "/opt/homebrew/bin/DXRK_MEMORY"
 
     def test_non_cellar_path_returns_as_is(self):
-        result = engram._stable_engram_command_for_existing(
-            "/usr/local/bin/engram", AgentID.OPENCODE
+        result = engram._stable_DXRK_MEMORY_command_for_existing(
+            "/usr/local/bin/DXRK_MEMORY", AgentID.OPENCODE
         )
-        assert result == "/usr/local/bin/engram"
+        assert result == "/usr/local/bin/DXRK_MEMORY"
 
 
 class TestPreferredStableEngramCommand:
     def test_stable_path(self):
-        mock = lambda x: "/opt/homebrew/bin/engram" if x == "engram" else None
+        mock = lambda x: "/opt/homebrew/bin/DXRK_MEMORY" if x == "DXRK_MEMORY" else None
         orig = engram.set_look_path_for_test(mock)
         try:
-            result = engram._preferred_stable_engram_command()
-            assert result == "/opt/homebrew/bin/engram"
+            result = engram._preferred_stable_DXRK_MEMORY_command()
+            assert result == "/opt/homebrew/bin/DXRK_MEMORY"
         finally:
             engram.set_look_path_for_test(orig)
 
     def test_non_stable_path(self):
-        mock = lambda x: "/tmp/bin/engram" if x == "engram" else None
+        mock = lambda x: "/tmp/bin/DXRK_MEMORY" if x == "DXRK_MEMORY" else None
         orig = engram.set_look_path_for_test(mock)
         try:
-            result = engram._preferred_stable_engram_command()
-            assert result == "engram"
+            result = engram._preferred_stable_DXRK_MEMORY_command()
+            assert result == "DXRK_MEMORY"
         finally:
             engram.set_look_path_for_test(orig)
 
 
 class TestExistingMergedEngramCommand:
     def test_empty_bytes(self):
-        cmd, ok = engram._existing_merged_engram_command(b"", AgentID.OPENCODE)
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(b"", AgentID.OPENCODE)
         assert cmd == ""
         assert ok is False
 
     def test_invalid_json(self):
-        cmd, ok = engram._existing_merged_engram_command(b"not json", AgentID.OPENCODE)
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(
+            b"not json", AgentID.OPENCODE
+        )
         assert cmd == ""
         assert ok is False
 
     def test_no_server_entries(self):
         raw = json.dumps({"some": "thing"}).encode()
-        cmd, ok = engram._existing_merged_engram_command(raw, AgentID.OPENCODE)
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(raw, AgentID.OPENCODE)
         assert cmd == ""
         assert ok is False
 
     def test_opencode_with_mcp_engram(self):
-        raw = json.dumps({"mcp": {"engram": {"command": "engram"}}}).encode()
-        cmd, ok = engram._existing_merged_engram_command(raw, AgentID.OPENCODE)
-        assert cmd == "engram"
+        raw = json.dumps({"mcp": {"DXRK_MEMORY": {"command": "DXRK_MEMORY"}}}).encode()
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(raw, AgentID.OPENCODE)
+        assert cmd == "DXRK_MEMORY"
         assert ok is True
 
     def test_opencode_with_command_list(self):
-        raw = json.dumps({"mcp": {"engram": {"command": ["npx", "-y", "engram"]}}}).encode()
-        cmd, ok = engram._existing_merged_engram_command(raw, AgentID.OPENCODE)
+        raw = json.dumps(
+            {"mcp": {"DXRK_MEMORY": {"command": ["npx", "-y", "DXRK_MEMORY"]}}}
+        ).encode()
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(raw, AgentID.OPENCODE)
         assert cmd == "npx"
         assert ok is True
 
     def test_vscode_copilot(self):
-        raw = json.dumps({"servers": {"engram": {"command": "engram"}}}).encode()
-        cmd, ok = engram._existing_merged_engram_command(raw, AgentID.VSCODE_COPILOT)
-        assert cmd == "engram"
+        raw = json.dumps(
+            {"servers": {"DXRK_MEMORY": {"command": "DXRK_MEMORY"}}}
+        ).encode()
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(
+            raw, AgentID.VSCODE_COPILOT
+        )
+        assert cmd == "DXRK_MEMORY"
         assert ok is True
 
     def test_other_agent(self):
-        raw = json.dumps({"mcpServers": {"engram": {"command": "engram"}}}).encode()
-        cmd, ok = engram._existing_merged_engram_command(raw, AgentID.CLAUDE_CODE)
-        assert cmd == "engram"
+        raw = json.dumps(
+            {"mcpServers": {"DXRK_MEMORY": {"command": "DXRK_MEMORY"}}}
+        ).encode()
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(raw, AgentID.CLAUDE_CODE)
+        assert cmd == "DXRK_MEMORY"
         assert ok is True
 
 
@@ -553,11 +579,11 @@ class TestBuildSeparateMCPContent:
 
     def test_valid_engram_command(self, tmp_path):
         f = tmp_path / "mcp.json"
-        f.write_text(json.dumps({"command": "engram", "args": ["mcp"]}))
-        default = json.dumps({"command": "engram", "args": []}).encode()
+        f.write_text(json.dumps({"command": "DXRK_MEMORY", "args": ["mcp"]}))
+        default = json.dumps({"command": "DXRK_MEMORY", "args": []}).encode()
         result = engram._build_separate_mcp_content(str(f), default)
         data = json.loads(result)
-        assert data["command"] == "engram"
+        assert data["command"] == "DXRK_MEMORY"
         assert data["args"] == ["mcp", "--tools=agent"]
 
     def test_non_engram_command_returns_default(self, tmp_path):
@@ -571,6 +597,7 @@ class TestBuildSeparateMCPContent:
 # ═══════════════════════════════════════════════════════════════════════════
 # 3. Download
 # ═══════════════════════════════════════════════════════════════════════════
+
 
 class TestIsWritableDir:
     def test_writable_dir(self, tmp_path):
@@ -626,28 +653,36 @@ class TestNormalizeArch:
 
 class TestEngramApiBaseUrl:
     def test_normal_base(self):
-        result = engram._engram_api_base_url()
+        result = engram._DXRK_MEMORY_api_base_url()
         assert result == "https://api.github.com"
 
     def test_localhost_base(self, monkeypatch):
-        monkeypatch.setattr(engram, "_engram_github_base_url", "http://localhost:8080")
-        result = engram._engram_api_base_url()
+        monkeypatch.setattr(
+            engram, "_DXRK_MEMORY_github_base_url", "http://localhost:8080"
+        )
+        result = engram._DXRK_MEMORY_api_base_url()
         assert result == "http://localhost:8080"
 
     def test_127_localhost_base(self, monkeypatch):
-        monkeypatch.setattr(engram, "_engram_github_base_url", "http://127.0.0.1:8080")
-        result = engram._engram_api_base_url()
+        monkeypatch.setattr(
+            engram, "_DXRK_MEMORY_github_base_url", "http://127.0.0.1:8080"
+        )
+        result = engram._DXRK_MEMORY_api_base_url()
         assert result == "http://127.0.0.1:8080"
 
 
 class TestEngramAssetUrl:
     def test_linux(self):
-        url = engram._engram_asset_url("https://github.com", "1.0.0", "linux", "amd64")
+        url = engram._DXRK_MEMORY_asset_url(
+            "https://github.com", "1.0.0", "linux", "amd64"
+        )
         assert url.endswith(".tar.gz")
         assert "v1.0.0" in url
 
     def test_windows(self):
-        url = engram._engram_asset_url("https://github.com", "2.0.0", "windows", "amd64")
+        url = engram._DXRK_MEMORY_asset_url(
+            "https://github.com", "2.0.0", "windows", "amd64"
+        )
         assert url.endswith(".zip")
         assert "v2.0.0" in url
 
@@ -655,24 +690,24 @@ class TestEngramAssetUrl:
 class TestEngramInstallDir:
     def test_windows(self, monkeypatch):
         monkeypatch.setenv("LOCALAPPDATA", "C:\\Users\\test\\AppData\\Local")
-        result = engram._engram_install_dir("windows")
+        result = engram._DXRK_MEMORY_install_dir("windows")
         assert "AppData" in result
-        assert "engram" in result
+        assert "DXRK_MEMORY" in result
         assert "bin" in result
 
     def test_windows_no_localappdata(self, monkeypatch):
         monkeypatch.delenv("LOCALAPPDATA", raising=False)
-        result = engram._engram_install_dir("windows")
+        result = engram._DXRK_MEMORY_install_dir("windows")
         assert "AppData" in result
 
     def test_linux_writable_usr_local(self, monkeypatch):
         monkeypatch.setattr(engram, "_is_writable_dir", lambda d: d == "/usr/local/bin")
-        result = engram._engram_install_dir("linux")
+        result = engram._DXRK_MEMORY_install_dir("linux")
         assert result == "/usr/local/bin"
 
     def test_linux_not_writable_usr_local(self, monkeypatch):
         monkeypatch.setattr(engram, "_is_writable_dir", lambda d: False)
-        result = engram._engram_install_dir("linux")
+        result = engram._DXRK_MEMORY_install_dir("linux")
         assert ".local" in result
         assert "bin" in result
 
@@ -735,15 +770,19 @@ class TestWriteExecutable:
         out = tmp_path / "bin" / "engram"
         with pytest.raises(RuntimeError):
             engram._write_executable(b"data", str(out))
-        tmp_files = list(tmp_path.glob(".engram-upgrade-*"))
+        tmp_files = list(tmp_path.glob(".DXRK_MEMORY-upgrade-*"))
         assert len(tmp_files) == 0
 
 
 class TestDownloadAndExtractTarGz:
     def test_extracts_binary(self, monkeypatch, tmp_path):
-        monkeypatch.setattr(engram, "_write_executable", lambda data, out_path: Path(out_path).write_bytes(data))
-        binary_name = "engram"
-        out_path = str(tmp_path / "engram")
+        monkeypatch.setattr(
+            engram,
+            "_write_executable",
+            lambda data, out_path: Path(out_path).write_bytes(data),
+        )
+        binary_name = "DXRK_MEMORY"
+        out_path = str(tmp_path / "DXRK_MEMORY")
 
         tar_buffer = BytesIO()
         with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
@@ -765,7 +804,9 @@ class TestDownloadAndExtractTarGz:
                 pass
 
         monkeypatch.setattr(engram, "urlopen", lambda req, timeout=None: FakeResp())
-        engram._download_and_extract_tar_gz("https://example.com/engram.tar.gz", binary_name, out_path)
+        engram._download_and_extract_tar_gz(
+            "https://example.com/engram.tar.gz", binary_name, out_path
+        )
         assert Path(out_path).read_bytes() == b"extracted binary"
 
     def test_not_found(self, monkeypatch):
@@ -789,14 +830,20 @@ class TestDownloadAndExtractTarGz:
 
         monkeypatch.setattr(engram, "urlopen", lambda req, timeout=None: FakeResp())
         with pytest.raises(FileNotFoundError, match="binary.*not found"):
-            engram._download_and_extract_tar_gz("https://example.com/engram.tar.gz", "engram", "/tmp/out")
+            engram._download_and_extract_tar_gz(
+                "https://example.com/DXRK_MEMORY.tar.gz", "DXRK_MEMORY", "/tmp/out"
+            )
 
 
 class TestDownloadAndExtractZip:
     def test_extracts_binary(self, monkeypatch, tmp_path):
-        monkeypatch.setattr(engram, "_write_executable", lambda data, out_path: Path(out_path).write_bytes(data))
-        binary_name = "engram.exe"
-        out_path = str(tmp_path / "engram.exe")
+        monkeypatch.setattr(
+            engram,
+            "_write_executable",
+            lambda data, out_path: Path(out_path).write_bytes(data),
+        )
+        binary_name = "DXRK_MEMORY.exe"
+        out_path = str(tmp_path / "DXRK_MEMORY.exe")
 
         zip_buffer = BytesIO()
         with zipfile.ZipFile(zip_buffer, "w") as zf:
@@ -814,7 +861,9 @@ class TestDownloadAndExtractZip:
                 pass
 
         monkeypatch.setattr(engram, "urlopen", lambda req, timeout=None: FakeResp())
-        engram._download_and_extract_zip("https://example.com/engram.zip", binary_name, out_path)
+        engram._download_and_extract_zip(
+            "https://example.com/engram.zip", binary_name, out_path
+        )
         assert Path(out_path).read_bytes() == b"extracted zip binary"
 
     def test_not_found(self, monkeypatch):
@@ -836,17 +885,20 @@ class TestDownloadAndExtractZip:
 
         monkeypatch.setattr(engram, "urlopen", lambda req, timeout=None: FakeResp())
         with pytest.raises(FileNotFoundError, match="binary.*not found"):
-            engram._download_and_extract_zip("https://example.com/engram.zip", "engram.exe", "/tmp/out")
+            engram._download_and_extract_zip(
+                "https://example.com/DXRK_MEMORY.zip", "DXRK_MEMORY.exe", "/tmp/out"
+            )
 
 
 class TestFetchLatestEngramVersion:
     def test_success(self, monkeypatch):
         monkeypatch.setattr(
-            engram, "_fetch_latest_engram_version_request",
+            engram,
+            "_fetch_latest_DXRK_MEMORY_version_request",
             lambda token: ("3.2.1", 200),
         )
         monkeypatch.setattr(engram, "_github_token", lambda: "token123")
-        version = engram._fetch_latest_engram_version()
+        version = engram._fetch_latest_DXRK_MEMORY_version()
         assert version == "3.2.1"
 
     def test_fallback_with_token(self, monkeypatch):
@@ -858,20 +910,23 @@ class TestFetchLatestEngramVersion:
                 raise RuntimeError("api error")
             return ("1.0.0", 200)
 
-        monkeypatch.setattr(engram, "_fetch_latest_engram_version_request", request)
+        monkeypatch.setattr(
+            engram, "_fetch_latest_DXRK_MEMORY_version_request", request
+        )
         monkeypatch.setattr(engram, "_github_token", lambda: "mytoken")
-        version = engram._fetch_latest_engram_version()
+        version = engram._fetch_latest_DXRK_MEMORY_version()
         assert version == "1.0.0"
         assert calls == ["mytoken", ""]
 
     def test_error_no_token_raises(self, monkeypatch):
         monkeypatch.setattr(
-            engram, "_fetch_latest_engram_version_request",
+            engram,
+            "_fetch_latest_DXRK_MEMORY_version_request",
             lambda token: (_ for _ in ()).throw(RuntimeError("fail")),
         )
         monkeypatch.setattr(engram, "_github_token", lambda: "")
         with pytest.raises(RuntimeError, match="fail"):
-            engram._fetch_latest_engram_version()
+            engram._fetch_latest_DXRK_MEMORY_version()
 
 
 class TestFetchLatestEngramVersionRequest:
@@ -887,7 +942,7 @@ class TestFetchLatestEngramVersionRequest:
                 pass
 
         monkeypatch.setattr(engram, "urlopen", lambda req, timeout=None: FakeResp())
-        version, status = engram._fetch_latest_engram_version_request("")
+        version, status = engram._fetch_latest_DXRK_MEMORY_version_request("")
         assert version == "1.2.3"
         assert status == 200
 
@@ -904,21 +959,32 @@ class TestFetchLatestEngramVersionRequest:
 
         monkeypatch.setattr(engram, "urlopen", lambda req, timeout=None: FakeResp())
         with pytest.raises(RuntimeError, match="empty tag_name"):
-            engram._fetch_latest_engram_version_request("")
+            engram._fetch_latest_DXRK_MEMORY_version_request("")
 
 
 class TestDownloadLatestBinary:
     def test_end_to_end_tar(self, monkeypatch, tmp_path):
-        monkeypatch.setattr(engram, "_write_executable", lambda data, out_path: Path(out_path).write_bytes(data))
-        monkeypatch.setattr(engram, "_fetch_latest_engram_version", lambda: "4.0.0")
+        monkeypatch.setattr(
+            engram,
+            "_write_executable",
+            lambda data, out_path: Path(out_path).write_bytes(data),
+        )
+        monkeypatch.setattr(
+            engram, "_fetch_latest_DXRK_MEMORY_version", lambda: "4.0.0"
+        )
         monkeypatch.setattr("platform.machine", lambda: "x86_64")
 
         install_dir = tmp_path / "install"
-        monkeypatch.setattr(engram, "_engram_install_dir_fn", lambda goos: str(install_dir), raising=False)
+        monkeypatch.setattr(
+            engram,
+            "_DXRK_MEMORY_install_dir_fn",
+            lambda goos: str(install_dir),
+            raising=False,
+        )
 
         tar_buffer = BytesIO()
         with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
-            info = tarfile.TarInfo(name="engram")
+            info = tarfile.TarInfo(name="DXRK_MEMORY")
             info.type = tarfile.REGTYPE
             content = b"binary!"
             info.size = len(content)
@@ -943,16 +1009,27 @@ class TestDownloadLatestBinary:
         assert Path(out).read_bytes() == b"binary!"
 
     def test_end_to_end_zip(self, monkeypatch, tmp_path):
-        monkeypatch.setattr(engram, "_write_executable", lambda data, out_path: Path(out_path).write_bytes(data))
-        monkeypatch.setattr(engram, "_fetch_latest_engram_version", lambda: "5.0.0")
+        monkeypatch.setattr(
+            engram,
+            "_write_executable",
+            lambda data, out_path: Path(out_path).write_bytes(data),
+        )
+        monkeypatch.setattr(
+            engram, "_fetch_latest_DXRK_MEMORY_version", lambda: "5.0.0"
+        )
         monkeypatch.setattr("platform.machine", lambda: "amd64")
 
         install_dir = tmp_path / "install"
-        monkeypatch.setattr(engram, "_engram_install_dir_fn", lambda goos: str(install_dir), raising=False)
+        monkeypatch.setattr(
+            engram,
+            "_DXRK_MEMORY_install_dir_fn",
+            lambda goos: str(install_dir),
+            raising=False,
+        )
 
         zip_buffer = BytesIO()
         with zipfile.ZipFile(zip_buffer, "w") as zf:
-            zf.writestr("engram.exe", b"windows binary!")
+            zf.writestr("DXRK_MEMORY.exe", b"windows binary!")
         zip_data = zip_buffer.getvalue()
 
         class FakeResp:
@@ -977,6 +1054,7 @@ class TestDownloadLatestBinary:
 # 4. Verify
 # ═══════════════════════════════════════════════════════════════════════════
 
+
 class TestCommand:
     def test_output_with_echo(self):
         cmd = engram._Command("echo", "hello world")
@@ -985,7 +1063,10 @@ class TestCommand:
 
 class TestVerifyInstalled:
     def test_installed(self, monkeypatch):
-        monkeypatch.setattr("shutil.which", lambda x: "/usr/bin/engram" if x == "engram" else None)
+        monkeypatch.setattr(
+            "shutil.which",
+            lambda x: "/usr/bin/DXRK_MEMORY" if x == "DXRK_MEMORY" else None,
+        )
         assert engram.verify_installed() is None
 
     def test_not_installed(self, monkeypatch):
@@ -1017,7 +1098,9 @@ class TestVerifyVersion:
     def test_file_not_found(self, monkeypatch):
         monkeypatch.setattr(
             "subprocess.check_output",
-            lambda args, text=True: (_ for _ in ()).throw(FileNotFoundError("no such file")),
+            lambda args, text=True: (_ for _ in ()).throw(
+                FileNotFoundError("no such file")
+            ),
         )
         result = engram.verify_version()
         assert "no such file" in result
@@ -1055,6 +1138,7 @@ class TestVerifyHealth:
     def test_url_error(self, monkeypatch):
         def fake_urlopen(url, timeout=2):
             import urllib.error
+
             raise urllib.error.URLError("connection refused")
 
         monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
@@ -1066,6 +1150,7 @@ class TestVerifyHealth:
 # ═══════════════════════════════════════════════════════════════════════════
 # 5. Install command
 # ═══════════════════════════════════════════════════════════════════════════
+
 
 class TestInstallCommand:
     def test_returns_list(self):
@@ -1088,27 +1173,31 @@ class TestInstallCommand:
 # 6. Edge case coverage for uncovered lines
 # ═══════════════════════════════════════════════════════════════════════════
 
+
 class TestResolveEngramCommandEdge:
     def test_versioned_homebrew_cellar_path(self, monkeypatch):
         monkeypatch.setattr(
-            engram, "_engram_look_path",
-            lambda x: "/opt/homebrew/Cellar/engram/1.2.3/bin/engram",
+            engram,
+            "_DXRK_MEMORY_look_path",
+            lambda x: "/opt/homebrew/Cellar/DXRK_MEMORY/1.2.3/bin/DXRK_MEMORY",
         )
-        cmd, ok = engram._resolve_engram_command()
-        assert cmd == "engram"
+        cmd, ok = engram._resolve_DXRK_MEMORY_command()
+        assert cmd == "DXRK_MEMORY"
         assert ok is False
 
 
 class TestInjectTOMLFileError:
     def test_write_codex_instruction_files_returns_error(self, monkeypatch, tmp_path):
         monkeypatch.setattr(
-            engram, "_write_codex_instruction_files",
+            engram,
+            "_write_codex_instruction_files",
             lambda home_dir: ("", "", "mock error"),
         )
         config_path = tmp_path / ".codex" / "config.toml"
         config_path.parent.mkdir(parents=True)
         config_path.write_text("")
         from dxrk.models import AgentID, MCPStrategy
+
         adapter = FakeAdapter(
             agent=AgentID.CODEX,
             mcp_strategy=MCPStrategy.TOML_FILE,
@@ -1130,7 +1219,7 @@ class TestExistingMergedEngramCommandEdge:
             "dxrk.components.filemerge.merge_json_objects",
             lambda raw, default: (_ for _ in ()).throw(ValueError("corrupt")),
         )
-        cmd, ok = engram._existing_merged_engram_command(b"{}", AgentID.OPENCODE)
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(b"{}", AgentID.OPENCODE)
         assert cmd == ""
         assert ok is False
 
@@ -1139,7 +1228,7 @@ class TestExistingMergedEngramCommandEdge:
             "dxrk.components.filemerge.merge_json_objects",
             lambda raw, default: b"corrupted{json",
         )
-        cmd, ok = engram._existing_merged_engram_command(b"{}", AgentID.OPENCODE)
+        cmd, ok = engram._existing_merged_DXRK_MEMORY_command(b"{}", AgentID.OPENCODE)
         assert cmd == ""
         assert ok is False
 
@@ -1153,13 +1242,13 @@ class TestExecutableFromCommandValueEdge:
 
 class TestIsEngramCommandEdge:
     def test_empty_string(self):
-        assert engram._is_engram_command("") is False
+        assert engram._is_DXRK_MEMORY_command("") is False
 
     def test_non_engram_command(self):
-        assert engram._is_engram_command("not-engram") is False
+        assert engram._is_DXRK_MEMORY_command("not-engram") is False
 
     def test_valid_engram(self):
-        assert engram._is_engram_command("/usr/local/bin/engram") is True
+        assert engram._is_DXRK_MEMORY_command("/usr/local/bin/DXRK_MEMORY") is True
 
 
 class TestFetchLatestEngramVersionEdge:
@@ -1172,9 +1261,11 @@ class TestFetchLatestEngramVersionEdge:
                 return ("1.0.0", 0)
             return ("2.0.0", 200)
 
-        monkeypatch.setattr(engram, "_fetch_latest_engram_version_request", request)
+        monkeypatch.setattr(
+            engram, "_fetch_latest_DXRK_MEMORY_version_request", request
+        )
         monkeypatch.setattr(engram, "_github_token", lambda: "mytoken")
-        version = engram._fetch_latest_engram_version()
+        version = engram._fetch_latest_DXRK_MEMORY_version()
         assert version == "2.0.0"
         assert calls == ["mytoken", ""]
 
@@ -1186,6 +1277,7 @@ class TestFetchLatestEngramVersionRequestEdge:
         class FakeRequest:
             def __init__(self, url):
                 self.url = url
+
             def add_header(self, key, value):
                 headers[key] = value
 
@@ -1195,14 +1287,18 @@ class TestFetchLatestEngramVersionRequestEdge:
         class FakeResp:
             def read(self):
                 return json.dumps({"tag_name": "v1.2.3"}).encode()
+
             def __enter__(self):
                 return self
+
             def __exit__(self, *args):
                 pass
 
         monkeypatch.setattr(engram, "urlopen", lambda req, timeout=None: FakeResp())
 
-        version, status = engram._fetch_latest_engram_version_request("gh_token_abc")
+        version, status = engram._fetch_latest_DXRK_MEMORY_version_request(
+            "gh_token_abc"
+        )
         assert version == "1.2.3"
         assert status == 200
         assert headers.get("Authorization") == "Bearer gh_token_abc"
@@ -1214,12 +1310,16 @@ class TestWriteExecutableEdge:
 
         class FakeFile:
             fd = 9999
+
             def __enter__(self):
                 return self
+
             def __exit__(self, *args):
                 pass
+
             def write(self, data):
                 pass
+
             def flush(self):
                 pass
 

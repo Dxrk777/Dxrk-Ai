@@ -22,10 +22,10 @@ from dxrk.update import (
 from dxrk.update import (
     _detect_command_hint,
     _detect_npm_package_version,
-    _engram_hint,
+    _DXRK_MEMORY_hint,
     _execute_one,
     _dxrk_hint,
-    _gga_hint,
+    _DXRK_GUARDIAN_hint,
     _go_arch,
     _install_script_url,
     _look_path,
@@ -270,24 +270,24 @@ class TestEngramHint:
     def test_brew(self):
         p = MagicMock()
         p.package_manager = "brew"
-        assert _engram_hint(p) == "brew upgrade engram"
+        assert _DXRK_MEMORY_hint(p) == "brew upgrade DXRK_MEMORY"
 
     def test_not_brew(self):
         p = MagicMock()
         p.package_manager = "apt"
-        assert "dxrk upgrade" in _engram_hint(p)
+        assert "dxrk upgrade" in _DXRK_MEMORY_hint(p)
 
 
 class TestGgaHint:
     def test_brew(self):
         p = MagicMock()
         p.package_manager = "brew"
-        assert _gga_hint(p) == "brew upgrade gga"
+        assert _DXRK_GUARDIAN_hint(p) == "brew upgrade DXRK_GUARDIAN"
 
     def test_not_brew(self):
         p = MagicMock()
         p.package_manager = "apt"
-        assert "github.com" in _gga_hint(p)
+        assert "github.com" in _DXRK_GUARDIAN_hint(p)
 
 
 class TestUpdateHint:
@@ -301,8 +301,8 @@ class TestUpdateHint:
     def test_engram(self):
         p = MagicMock()
         p.package_manager = "brew"
-        t = ToolInfo(name="engram")
-        assert update_hint(t, p) == "brew upgrade engram"
+        t = ToolInfo(name="DXRK_MEMORY")
+        assert update_hint(t, p) == "brew upgrade DXRK_MEMORY"
 
     def test_opencode_plugin(self):
         p = MagicMock()
@@ -429,13 +429,13 @@ class TestHasCheckFailures:
 class TestUpdateSummaryLine:
     def test_with_updates(self):
         r = UpdateResult(
-            tool=ToolInfo(name="engram"),
+            tool=ToolInfo(name="DXRK_MEMORY"),
             installed_version="1.0.0",
             latest_version="2.0.0",
             status=UpdateStatus.UPDATE_AVAILABLE,
         )
         result = update_summary_line([r])
-        assert "engram" in result
+        assert "DXRK_MEMORY" in result
         assert "1.0.0 -> 2.0.0" in result
 
     def test_no_updates(self):
@@ -457,14 +457,16 @@ class TestUpdateSummaryLine:
 
 class TestRenderCli:
     def test_all_up_to_date(self):
-        r = UpdateResult(tool=ToolInfo(name="engram"), status=UpdateStatus.UP_TO_DATE)
+        r = UpdateResult(
+            tool=ToolInfo(name="DXRK_MEMORY"), status=UpdateStatus.UP_TO_DATE
+        )
         output = render_cli([r])
         assert "All tools are up to date!" in output
         assert "[ok]" in output
 
     def test_with_updates(self):
         r = UpdateResult(
-            tool=ToolInfo(name="engram"),
+            tool=ToolInfo(name="DXRK_MEMORY"),
             installed_version="1",
             latest_version="2",
             status=UpdateStatus.UPDATE_AVAILABLE,
@@ -477,7 +479,7 @@ class TestRenderCli:
 
     def test_with_check_failures(self):
         r = UpdateResult(
-            tool=ToolInfo(name="engram"),
+            tool=ToolInfo(name="DXRK_MEMORY"),
             status=UpdateStatus.CHECK_FAILED,
         )
         output = render_cli([r])
@@ -490,7 +492,9 @@ class TestRenderCli:
         assert "[--]" in output
 
     def test_dev_build(self):
-        r = UpdateResult(tool=ToolInfo(name="engram"), status=UpdateStatus.DEV_BUILD)
+        r = UpdateResult(
+            tool=ToolInfo(name="DXRK_MEMORY"), status=UpdateStatus.DEV_BUILD
+        )
         output = render_cli([r])
         assert "[dev]" in output
 
@@ -528,89 +532,119 @@ class TestRenderUpgradeReport:
         assert "No upgrades available" in output
 
     def test_succeeded(self):
-        r = UpgradeReport(results=[
-            ToolUpgradeResult(
-                tool_name="engram", old_version="1", new_version="2",
-                status=ToolUpgradeStatus.SUCCEEDED,
-            ),
-        ])
+        r = UpgradeReport(
+            results=[
+                ToolUpgradeResult(
+                    tool_name="DXRK_MEMORY",
+                    old_version="1",
+                    new_version="2",
+                    status=ToolUpgradeStatus.SUCCEEDED,
+                ),
+            ]
+        )
         output = render_upgrade_report(r)
         assert "succeeded" in output
         assert "1 → 2" in output
 
     def test_failed(self):
-        r = UpgradeReport(results=[
-            ToolUpgradeResult(
-                tool_name="engram",
-                status=ToolUpgradeStatus.FAILED,
-                err="permission denied",
-            ),
-        ])
+        r = UpgradeReport(
+            results=[
+                ToolUpgradeResult(
+                    tool_name="DXRK_MEMORY",
+                    status=ToolUpgradeStatus.FAILED,
+                    err="permission denied",
+                ),
+            ]
+        )
         output = render_upgrade_report(r)
         assert "FAILED" in output
         assert "permission denied" in output
 
     def test_skipped_manual_hint(self):
-        r = UpgradeReport(results=[
-            ToolUpgradeResult(
-                tool_name="engram",
-                status=ToolUpgradeStatus.SKIPPED,
-                manual_hint="download manually",
-            ),
-        ])
+        r = UpgradeReport(
+            results=[
+                ToolUpgradeResult(
+                    tool_name="DXRK_MEMORY",
+                    status=ToolUpgradeStatus.SKIPPED,
+                    manual_hint="download manually",
+                ),
+            ]
+        )
         output = render_upgrade_report(r)
         assert "manual" in output
         assert "download manually" in output
 
     def test_skipped_dry_run(self):
-        r = UpgradeReport(dry_run=True, results=[
-            ToolUpgradeResult(
-                tool_name="engram", old_version="1", new_version="2",
-                status=ToolUpgradeStatus.SKIPPED,
-            ),
-        ])
+        r = UpgradeReport(
+            dry_run=True,
+            results=[
+                ToolUpgradeResult(
+                    tool_name="DXRK_MEMORY",
+                    old_version="1",
+                    new_version="2",
+                    status=ToolUpgradeStatus.SKIPPED,
+                ),
+            ],
+        )
         output = render_upgrade_report(r)
         assert "dry-run" in output
 
     def test_backup_id(self):
-        r = UpgradeReport(backup_id="backup-123", results=[
-            ToolUpgradeResult(tool_name="x", status=ToolUpgradeStatus.SUCCEEDED),
-        ])
+        r = UpgradeReport(
+            backup_id="backup-123",
+            results=[
+                ToolUpgradeResult(tool_name="x", status=ToolUpgradeStatus.SUCCEEDED),
+            ],
+        )
         output = render_upgrade_report(r)
         assert "backup-123" in output
 
     def test_backup_warning(self):
-        r = UpgradeReport(backup_warning="no space", results=[
-            ToolUpgradeResult(tool_name="x", status=ToolUpgradeStatus.SUCCEEDED),
-        ])
+        r = UpgradeReport(
+            backup_warning="no space",
+            results=[
+                ToolUpgradeResult(tool_name="x", status=ToolUpgradeStatus.SUCCEEDED),
+            ],
+        )
         output = render_upgrade_report(r)
         assert "WARNING" in output
         assert "no space" in output
 
     def test_actionable_count(self):
-        r = UpgradeReport(dry_run=True, results=[
-            ToolUpgradeResult(
-                tool_name="a", old_version="1", new_version="2",
-                status=ToolUpgradeStatus.SKIPPED,
-            ),
-        ])
+        r = UpgradeReport(
+            dry_run=True,
+            results=[
+                ToolUpgradeResult(
+                    tool_name="a",
+                    old_version="1",
+                    new_version="2",
+                    status=ToolUpgradeStatus.SKIPPED,
+                ),
+            ],
+        )
         output = render_upgrade_report(r)
         assert "pending" in output
 
     def test_no_actionable(self):
-        r = UpgradeReport(dry_run=True, results=[
-            ToolUpgradeResult(
-                tool_name="a", status=ToolUpgradeStatus.SKIPPED,
-                manual_hint="do it yourself",
-            ),
-        ])
+        r = UpgradeReport(
+            dry_run=True,
+            results=[
+                ToolUpgradeResult(
+                    tool_name="a",
+                    status=ToolUpgradeStatus.SKIPPED,
+                    manual_hint="do it yourself",
+                ),
+            ],
+        )
         output = render_upgrade_report(r)
         assert "manual" in output
 
     def test_summary_line_live(self):
-        r = UpgradeReport(results=[
-            ToolUpgradeResult(tool_name="a", status=ToolUpgradeStatus.SUCCEEDED),
-        ])
+        r = UpgradeReport(
+            results=[
+                ToolUpgradeResult(tool_name="a", status=ToolUpgradeStatus.SUCCEEDED),
+            ]
+        )
         output = render_upgrade_report(r)
         assert "succeeded" in output
 
@@ -656,12 +690,18 @@ class TestSelectOpencodePackageManager:
     def test_none_available(self, mock_meta, mock_look):
         assert _select_opencode_package_manager("/x") is None
 
-    @patch("dxrk.update._look_path", side_effect=lambda p: f"/usr/bin/{p}" if p == "bun" else None)
+    @patch(
+        "dxrk.update._look_path",
+        side_effect=lambda p: f"/usr/bin/{p}" if p == "bun" else None,
+    )
     @patch("dxrk.update._opencode_pm_from_metadata", return_value=None)
     def test_bun_found(self, mock_meta, mock_look):
         assert _select_opencode_package_manager("/x") == "bun"
 
-    @patch("dxrk.update._look_path", side_effect=lambda p: f"/usr/bin/{p}" if p == "npm" else None)
+    @patch(
+        "dxrk.update._look_path",
+        side_effect=lambda p: f"/usr/bin/{p}" if p == "npm" else None,
+    )
     @patch("dxrk.update._opencode_pm_from_metadata", return_value=None)
     def test_npm_found(self, mock_meta, mock_look):
         assert _select_opencode_package_manager("/x") == "npm"
@@ -675,19 +715,28 @@ class TestSelectOpencodePackageManager:
 class TestOpencodePluginRegisteredOrMaterialized:
     def test_node_modules_exists(self, tmp_path):
         (tmp_path / "node_modules" / "my-pkg").mkdir(parents=True)
-        assert _opencode_plugin_registered_or_materialized(str(tmp_path), "my-pkg") is True
+        assert (
+            _opencode_plugin_registered_or_materialized(str(tmp_path), "my-pkg") is True
+        )
 
     def test_registered_in_tui_json(self, tmp_path):
         tui = tmp_path / "tui.json"
         tui.write_text(json.dumps({"plugin": ["my-pkg"]}))
-        assert _opencode_plugin_registered_or_materialized(str(tmp_path), "my-pkg") is True
+        assert (
+            _opencode_plugin_registered_or_materialized(str(tmp_path), "my-pkg") is True
+        )
 
     def test_not_found(self, tmp_path):
-        assert _opencode_plugin_registered_or_materialized(str(tmp_path), "no-pkg") is False
+        assert (
+            _opencode_plugin_registered_or_materialized(str(tmp_path), "no-pkg")
+            is False
+        )
 
     def test_invalid_tui_json(self, tmp_path):
         (tmp_path / "tui.json").write_text("bad json")
-        assert _opencode_plugin_registered_or_materialized(str(tmp_path), "pkg") is False
+        assert (
+            _opencode_plugin_registered_or_materialized(str(tmp_path), "pkg") is False
+        )
 
 
 class TestEnumerateFilesInDir:
@@ -818,7 +867,9 @@ class TestDetectInstalledVersion:
         assert detect_installed_version(t, "dev") == ""
 
     @patch("dxrk.update._look_path", return_value="/usr/bin/gga")
-    @patch("dxrk.update.subprocess.run", side_effect=subprocess.TimeoutExpired("cmd", 10))
+    @patch(
+        "dxrk.update.subprocess.run", side_effect=subprocess.TimeoutExpired("cmd", 10)
+    )
     def test_handles_timeout(self, mock_run, mock_look):
         t = ToolInfo(name="gga", detect_cmd=["gga", "--version"])
         assert detect_installed_version(t, "dev") == ""
@@ -852,11 +903,13 @@ class TestResolveGithubToken:
     @patch.dict(os.environ, {"GITHUB_TOKEN": "ghs_xxxx"}, clear=True)
     def test_uses_github_token_env(self):
         from dxrk.update import _resolve_github_token
+
         assert _resolve_github_token() == "ghs_xxxx"
 
     @patch.dict(os.environ, {"GH_TOKEN": "gho_yyyy"}, clear=True)
     def test_uses_gh_token_env(self):
         from dxrk.update import _resolve_github_token
+
         assert _resolve_github_token() == "gho_yyyy"
 
     @patch.dict(os.environ, {}, clear=True)
@@ -865,12 +918,14 @@ class TestResolveGithubToken:
     def test_uses_gh_auth_token(self, mock_run, mock_look):
         mock_run.return_value = MagicMock(returncode=0, stdout="ghs_zzzz\n")
         from dxrk.update import _resolve_github_token
+
         assert _resolve_github_token() == "ghs_zzzz"
 
     @patch.dict(os.environ, {}, clear=True)
     @patch("dxrk.update._look_path", return_value=None)
     def test_returns_empty_when_no_source(self, mock_look):
         from dxrk.update import _resolve_github_token
+
         assert _resolve_github_token() == ""
 
 
@@ -879,44 +934,71 @@ class TestFetchLatestRelease:
     @patch("dxrk.update._resolve_github_token", return_value="")
     def test_returns_release(self, mock_token, mock_urlopen):
         mock_resp = MagicMock()
-        mock_resp.read.return_value = json.dumps({
-            "tag_name": "v1.2.3",
-            "html_url": "https://github.com/o/r/releases/tag/v1.2.3",
-        }).encode()
+        mock_resp.read.return_value = json.dumps(
+            {
+                "tag_name": "v1.2.3",
+                "html_url": "https://github.com/o/r/releases/tag/v1.2.3",
+            }
+        ).encode()
         mock_urlopen.return_value.__enter__.return_value = mock_resp
 
         from dxrk.update import fetch_latest_release
+
         rel = fetch_latest_release("o", "r")
         assert rel.tag_name == "v1.2.3"
         assert rel.html_url == "https://github.com/o/r/releases/tag/v1.2.3"
 
-    @patch("dxrk.update.urllib.request.urlopen", side_effect=urllib.error.HTTPError(
-        "/url", 403, "Forbidden", {}, None,
-    ))
+    @patch(
+        "dxrk.update.urllib.request.urlopen",
+        side_effect=urllib.error.HTTPError(
+            "/url",
+            403,
+            "Forbidden",
+            {},
+            None,
+        ),
+    )
     @patch("dxrk.update._resolve_github_token", return_value="")
     def test_http_403_raises_rate_limit(self, mock_token, mock_urlopen):
         import urllib.error
         from dxrk.update import fetch_latest_release
+
         with pytest.raises(RuntimeError, match="rate limit"):
             fetch_latest_release("o", "r")
 
-    @patch("dxrk.update.urllib.request.urlopen", side_effect=urllib.error.HTTPError(
-        "/url", 404, "Not Found", {}, None,
-    ))
+    @patch(
+        "dxrk.update.urllib.request.urlopen",
+        side_effect=urllib.error.HTTPError(
+            "/url",
+            404,
+            "Not Found",
+            {},
+            None,
+        ),
+    )
     @patch("dxrk.update._resolve_github_token", return_value="")
     def test_http_404_raises_no_releases(self, mock_token, mock_urlopen):
         import urllib.error
         from dxrk.update import fetch_latest_release
+
         with pytest.raises(RuntimeError, match="No releases"):
             fetch_latest_release("o", "r")
 
-    @patch("dxrk.update.urllib.request.urlopen", side_effect=urllib.error.HTTPError(
-        "/url", 500, "Server Error", {}, None,
-    ))
+    @patch(
+        "dxrk.update.urllib.request.urlopen",
+        side_effect=urllib.error.HTTPError(
+            "/url",
+            500,
+            "Server Error",
+            {},
+            None,
+        ),
+    )
     @patch("dxrk.update._resolve_github_token", return_value="")
     def test_http_other_raises(self, mock_token, mock_urlopen):
         import urllib.error
         from dxrk.update import fetch_latest_release
+
         with pytest.raises(RuntimeError, match="HTTP 500"):
             fetch_latest_release("o", "r")
 
@@ -927,8 +1009,9 @@ class TestCheckSingleTool:
     def test_up_to_date(self, mock_fetch, mock_detect):
         mock_fetch.return_value = MagicMock(tag_name="v1.0.0", html_url="")
         p = MagicMock()
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.UP_TO_DATE
 
@@ -937,8 +1020,9 @@ class TestCheckSingleTool:
     def test_update_available(self, mock_fetch, mock_detect):
         mock_fetch.return_value = MagicMock(tag_name="v2.0.0", html_url="")
         p = MagicMock()
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.UPDATE_AVAILABLE
 
@@ -947,8 +1031,9 @@ class TestCheckSingleTool:
     def test_dev_build(self, mock_fetch, mock_detect):
         mock_fetch.return_value = MagicMock(tag_name="v2.0.0", html_url="")
         p = MagicMock()
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.DEV_BUILD
 
@@ -958,8 +1043,9 @@ class TestCheckSingleTool:
     def test_not_installed(self, mock_look, mock_fetch, mock_detect):
         mock_fetch.return_value = MagicMock(tag_name="v2.0.0", html_url="")
         p = MagicMock()
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.NOT_INSTALLED
 
@@ -970,6 +1056,7 @@ class TestCheckSingleTool:
         p = MagicMock()
         t = ToolInfo(name="dxrk", detect_cmd=None)
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.VERSION_UNKNOWN
 
@@ -978,8 +1065,9 @@ class TestCheckSingleTool:
     def test_version_unknown_when_binary_not_found(self, mock_fetch, mock_detect):
         mock_fetch.return_value = MagicMock(tag_name="v2.0.0", html_url="")
         p = MagicMock()
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import _check_single_tool
+
         with patch("dxrk.update._look_path", return_value="/usr/bin/engram"):
             result = _check_single_tool(t, "dev", p)
             assert result.status == UpdateStatus.VERSION_UNKNOWN
@@ -989,17 +1077,21 @@ class TestCheckSingleTool:
     def test_version_unknown_when_not_semver(self, mock_fetch, mock_detect):
         mock_fetch.return_value = MagicMock(tag_name="v2.0.0", html_url="")
         p = MagicMock()
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.VERSION_UNKNOWN
 
     @patch("dxrk.update.detect_installed_version", return_value="1.0.0")
-    @patch("dxrk.update.fetch_latest_release", side_effect=RuntimeError("GitHub API error"))
+    @patch(
+        "dxrk.update.fetch_latest_release", side_effect=RuntimeError("GitHub API error")
+    )
     def test_check_failed_on_fetch_error(self, mock_fetch, mock_detect):
         p = MagicMock()
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.CHECK_FAILED
         assert "GitHub API error" in result.err
@@ -1011,6 +1103,7 @@ class TestCheckSingleTool:
         p = MagicMock()
         t = ToolInfo(name="plugin", npm_package="my-plugin", detect_cmd=None)
         from dxrk.update import _check_single_tool
+
         result = _check_single_tool(t, "dev", p)
         assert result.status == UpdateStatus.NOT_INSTALLED
 
@@ -1025,15 +1118,20 @@ class TestDetectInstalledVersionWithNpm:
         with patch("dxrk.update.os.path.expanduser", return_value=home):
             t = ToolInfo(name="plugin", npm_package="test-pkg")
             from dxrk.update import detect_installed_version
+
             assert detect_installed_version(t, "dev") == "1.2.3"
 
 
 class TestDetectInstalledVersionSubprocessError:
     @patch("dxrk.update._look_path", return_value="/usr/bin/engram")
-    @patch("dxrk.update.subprocess.run", side_effect=subprocess.TimeoutExpired("engram version", 10))
+    @patch(
+        "dxrk.update.subprocess.run",
+        side_effect=subprocess.TimeoutExpired("engram version", 10),
+    )
     def test_timeout_returns_empty(self, mock_run, mock_look):
-        t = ToolInfo(name="engram", detect_cmd=["engram", "version"])
+        t = ToolInfo(name="DXRK_MEMORY", detect_cmd=["engram", "version"])
         from dxrk.update import detect_installed_version
+
         assert detect_installed_version(t, "dev") == ""
 
 
@@ -1041,6 +1139,7 @@ class TestResolveGithubTokenGHEnvFallback:
     @patch.dict(os.environ, {"GH_TOKEN": "gho_from_env"}, clear=True)
     def test_reads_gh_token_env(self):
         from dxrk.update import _resolve_github_token
+
         assert _resolve_github_token() == "gho_from_env"
 
 
@@ -1049,6 +1148,7 @@ class TestCheckAll:
     def test_check_all_delegates(self, mock_filtered):
         mock_filtered.return_value = []
         from dxrk.update import check_all
+
         p = MagicMock()
         result = check_all("dev", p)
         mock_filtered.assert_called_once_with("dev", p, None)
@@ -1059,8 +1159,11 @@ class TestCheckFiltered:
     @patch("dxrk.update._check_single_tool")
     @patch("dxrk.update.Tools", [ToolInfo(name="a"), ToolInfo(name="b")])
     def test_filters_by_tool_names(self, mock_single):
-        mock_single.return_value = UpdateResult(tool=ToolInfo(name="a"), status=UpdateStatus.UP_TO_DATE)
+        mock_single.return_value = UpdateResult(
+            tool=ToolInfo(name="a"), status=UpdateStatus.UP_TO_DATE
+        )
         from dxrk.update import check_filtered
+
         p = MagicMock()
         result = check_filtered("dev", p, ["a"])
         assert len(result) == 1
@@ -1069,8 +1172,11 @@ class TestCheckFiltered:
     @patch("dxrk.update._check_single_tool")
     @patch("dxrk.update.Tools", [ToolInfo(name="a"), ToolInfo(name="b")])
     def test_no_filter_checks_all(self, mock_single):
-        mock_single.return_value = UpdateResult(tool=ToolInfo(name="x"), status=UpdateStatus.UP_TO_DATE)
+        mock_single.return_value = UpdateResult(
+            tool=ToolInfo(name="x"), status=UpdateStatus.UP_TO_DATE
+        )
         from dxrk.update import check_filtered
+
         p = MagicMock()
         result = check_filtered("dev", p, None)
         assert len(result) == 2
@@ -1081,13 +1187,15 @@ class TestFetchLatestReleaseWithToken:
     @patch("dxrk.update._resolve_github_token", return_value="ghs_token123")
     def test_includes_token_in_header(self, mock_token, mock_urlopen):
         mock_resp = MagicMock()
-        mock_resp.read.return_value = json.dumps({"tag_name": "v1.0.0", "html_url": ""}).encode()
+        mock_resp.read.return_value = json.dumps(
+            {"tag_name": "v1.0.0", "html_url": ""}
+        ).encode()
         mock_urlopen.return_value.__enter__.return_value = mock_resp
 
         from dxrk.update import fetch_latest_release
+
         rel = fetch_latest_release("o", "r")
         assert rel.tag_name == "v1.0.0"
         # Verify auth header was set
         call_args = mock_urlopen.call_args[0][0]
         assert call_args.get_header("Authorization") == "Bearer ghs_token123"
-

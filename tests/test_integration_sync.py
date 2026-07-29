@@ -129,7 +129,7 @@ class TestBuildSyncSelection:
         )
         assert AgentID.OPENCODE in selection.agents
         assert ComponentID.SDD in selection.components
-        assert ComponentID.ENGRAM in selection.components
+        assert ComponentID.DXRK_MEMORY in selection.components
         assert ComponentID.PERMISSIONS not in selection.components
         assert ComponentID.THEME not in selection.components
 
@@ -166,7 +166,7 @@ class TestSyncRuntimeStagePlan:
     def test_returns_stage_plan(self, tmp_path, monkeypatch):
         selection = Selection(
             agents=[AgentID.OPENCODE],
-            components=[ComponentID.SDD, ComponentID.ENGRAM],
+            components=[ComponentID.SDD, ComponentID.DXRK_MEMORY],
         )
 
         monkeypatch.setattr("dxrk.cli.install._resolve_adapters", lambda agents: [])

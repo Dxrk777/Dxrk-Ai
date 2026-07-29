@@ -14,8 +14,8 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
 	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
 	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
 	"github.com/Dxrk777/Dxrk-Ai/internal/components/dxrkguardian"
+	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
 	"github.com/Dxrk777/Dxrk-Ai/internal/components/sdd"
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
 	"github.com/Dxrk777/Dxrk-Ai/internal/state"
@@ -25,7 +25,7 @@ const (
 	uninstallAgentKey      = "agent"
 	uninstallContext7Key   = "context7"
 	uninstallMCPServersKey = "mcpServers"
-	uninstallDxrkMemoryKey     = "dxrk-memory"
+	uninstallDxrkMemoryKey = "dxrk-memory"
 )
 
 type Manager interface {
@@ -140,13 +140,13 @@ func NewService(homeDir, workspaceDir, appVersion string) (*Service, error) {
 	}
 
 	return &Service{
-		homeDir:              homeDir,
-		workspaceDir:         workspaceDir,
-		backupRoot:           backupRoot,
-		appVersion:           appVersion,
-		snapshotter:          backup.NewSnapshotter(),
-		registry:             registry,
-		now:                  time.Now,
+		homeDir:                  homeDir,
+		workspaceDir:             workspaceDir,
+		backupRoot:               backupRoot,
+		appVersion:               appVersion,
+		snapshotter:              backup.NewSnapshotter(),
+		registry:                 registry,
+		now:                      time.Now,
 		dxrkMemoryUninstallScope: model.DxrkMemoryUninstallScopeGlobal,
 	}, nil
 }

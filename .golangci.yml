@@ -32,6 +32,13 @@ linters:
   - whitespace
   exclusions:
     rules:
+    - path: 'web/node_modules/'
+      linters:
+      - govet
+      - errcheck
+      - gosec
+      - unused
+      - ineffassign
     - path: '(.+_test\.go)'
       linters:
       - staticcheck
@@ -90,4 +97,6 @@ linters:
 run:
   modules-download-mode: readonly
   timeout: 5m
+  exclude-dirs:
+    - web/node_modules
 version: '2'

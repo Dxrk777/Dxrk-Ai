@@ -253,13 +253,13 @@ test_dry_run_full_preset_persona_before_sdd() {
     local order_str
     order_str=$(echo "$components_line" | sed 's/.*Components order: *//')
 
-    local persona_idx dxrk-memory_idx sdd_idx
+    local persona_idx dxrk_memory_idx sdd_idx
     persona_idx=$(echo "$order_str" | tr ',' '\n' | grep -n '^persona$' | cut -d: -f1)
-    dxrk-memory_idx=$(echo "$order_str" | tr ',' '\n' | grep -n '^dxrk-memory$' | cut -d: -f1)
+    dxrk_memory_idx=$(echo "$order_str" | tr ',' '\n' | grep -n '^dxrk-memory$' | cut -d: -f1)
     sdd_idx=$(echo "$order_str" | tr ',' '\n' | grep -n '^sdd$' | cut -d: -f1)
 
-    if [ -n "$persona_idx" ] && [ -n "$dxrk-memory_idx" ] && [ "$persona_idx" -lt "$dxrk-memory_idx" ]; then
-        log_pass "Persona ($persona_idx) before dxrk-memory ($dxrk-memory_idx)"
+    if [ -n "$persona_idx" ] && [ -n "$dxrk_memory_idx" ] && [ "$persona_idx" -lt "$dxrk_memory_idx" ]; then
+        log_pass "Persona ($persona_idx) before dxrk-memory ($dxrk_memory_idx)"
     else
         log_fail "Persona must appear before dxrk-memory in component order: $order_str"
     fi

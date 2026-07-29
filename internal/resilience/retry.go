@@ -37,7 +37,7 @@ func backoffDuration(attempt int, config RetryConfig) time.Duration {
 		delay = float64(config.MaxDelay)
 	}
 	if config.Jitter {
-		delay *= 0.5 + rand.Float64()*0.5
+		delay *= 0.5 + rand.Float64()*0.5 //nolint:gosec // jitter doesn't need crypto/rand
 	}
 	return time.Duration(delay)
 }

@@ -13,9 +13,9 @@ func PersonaOptions() []model.PersonaID {
 }
 
 var personaDescriptions = map[model.PersonaID]string{
-	model.PersonaDxrk: "Managed Dxrk persona with teaching-first guidance",
-	model.PersonaNeutral:   "Managed neutral persona with the same guidance and less regional tone",
-	model.PersonaCustom:    "Keep your existing persona unmanaged; dxrk does not inject a persona",
+	model.PersonaDxrk:    "Managed Dxrk persona with teaching-first guidance",
+	model.PersonaNeutral: "Managed neutral persona with the same guidance and less regional tone",
+	model.PersonaCustom:  "Keep your existing persona unmanaged; dxrk does not inject a persona",
 }
 
 func RenderPersona(selected model.PersonaID, cursor int) string {

@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 # Dockerfile.arch — E2E test image for dxrk on Arch Linux
 # Builds the binary from source and runs the E2E test suite as a non-root user.
-# archlinux:base only provides x86_64 images. Force amd64 platform so Docker
-# uses QEMU emulation on ARM hosts (Apple Silicon).
-FROM --platform=linux/amd64 archlinux:base
+# NOTE: docker buildx --platform (e.g. in GHA matrix) controls the target arch.
+# Do NOT use FROM --platform= here — buildx rejects FromPlatformFlagConstDisallowed.
+FROM archlinux:base
 
 # ---------------------------------------------------------------------------
 # System dependencies (includes npm for claude-code tests)
@@ -12,7 +12,7 @@ FROM --platform=linux/amd64 archlinux:base
 # Initialize the pacman keyring explicitly because fresh Arch containers may not
 # have a local secret key yet, which breaks archlinux-keyring post-install hooks.
 # DisableSandbox prevents the ALPM seccomp filter that is incompatible with QEMU user-mode.
-RUN echo 'DisableSandbox' >> /etc/pacman.conf && \
+RUN sed -i '/\[options\]/a DisableSandbox' /etc/pacman.conf && \
     pacman-key --init && \
     pacman-key --populate archlinux && \
     pacman -Syu --noconfirm && \

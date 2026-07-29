@@ -51,7 +51,7 @@ func executeStep(ctx context.Context, step RecoveryStep, cfg executeConfig) Reco
 		defer cancel()
 	}
 
-	cmd := exec.CommandContext(stepCtx, "sh", "-c", step.Command)
+	cmd := exec.CommandContext(stepCtx, "sh", "-c", step.Command) //nolint:gosec // step.Command is a trusted internal value
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr

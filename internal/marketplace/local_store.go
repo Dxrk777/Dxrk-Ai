@@ -111,11 +111,11 @@ func (s *LocalStore) Delete(ctx context.Context, id string) error {
 
 func (s *LocalStore) readFileLocked(id string) (*Listing, error) {
 	path := filepath.Join(s.dataDir, id+".json")
-	f, err := os.Open(path)
+	f, err := os.Open(path) //nolint:gosec // path is constructed from internal ID
 	if err != nil {
 		return nil, fmt.Errorf("open: %w", err)
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck // best-effort cleanup
 	var listing Listing
 	if err := json.NewDecoder(f).Decode(&listing); err != nil {
 		return nil, fmt.Errorf("decode: %w", err)
@@ -127,15 +127,15 @@ func (s *LocalStore) writeFileLocked(listing Listing) error {
 	if listing.ID == "" {
 		return fmt.Errorf("listing ID is required")
 	}
-	if err := os.MkdirAll(s.dataDir, 0o755); err != nil {
+	if err := os.MkdirAll(s.dataDir, 0o750); err != nil {
 		return fmt.Errorf("mkdir: %w", err)
 	}
 	path := filepath.Join(s.dataDir, listing.ID+".json")
-	f, err := os.Create(path)
+	f, err := os.Create(path) //nolint:gosec // path is constructed from internal ID
 	if err != nil {
 		return fmt.Errorf("create: %w", err)
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck // best-effort cleanup
 	enc := json.NewEncoder(f)
 	enc.SetIndent("", "  ")
 	if err := enc.Encode(listing); err != nil {

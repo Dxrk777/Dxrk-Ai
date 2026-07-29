@@ -18,7 +18,7 @@ func PresetOptions() []model.PresetID {
 }
 
 var presetDescriptions = map[model.PresetID]string{
-	model.PresetFullDxrk: "Everything: memory, SDD, skills, docs, persona & security",
+	model.PresetFullDxrk:      "Everything: memory, SDD, skills, docs, persona & security",
 	model.PresetEcosystemOnly: "Core tools only: memory, SDD, skills & docs (no persona/security)",
 	model.PresetMinimal:       "Just DxrkMemory persistent memory",
 	model.PresetCustom:        "Choose components and skills manually; keep existing persona/settings unmanaged",

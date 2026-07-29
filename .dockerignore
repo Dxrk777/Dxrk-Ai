@@ -19,9 +19,6 @@ bin/
 node_modules/
 __pycache__/
 vendor/
-dist/
-tests/
-e2e/
 testdata/
 
 # Ignore docs and config not needed in image

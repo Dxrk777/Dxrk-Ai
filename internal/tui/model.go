@@ -477,12 +477,12 @@ func NewModel(detection system.DetectionResult, version string) Model {
 	}
 
 	return Model{
-		Screen:               ScreenWelcome,
-		Version:              version,
-		Selection:            selection,
-		Detection:            detection,
-		UninstallAgents:      agents,
-		UninstallComponents:  defaultUninstallComponents(),
+		Screen:                   ScreenWelcome,
+		Version:                  version,
+		Selection:                selection,
+		Detection:                detection,
+		UninstallAgents:          agents,
+		UninstallComponents:      defaultUninstallComponents(),
 		UninstallDxrkMemoryScope: model.DxrkMemoryUninstallScopeGlobal,
 		Progress: NewProgressState([]string{
 			"Install dependencies",

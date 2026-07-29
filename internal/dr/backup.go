@@ -24,13 +24,13 @@ func Backup(ctx context.Context, src, dst string) (*BackupResult, error) {
 		return nil, fmt.Errorf("create backup directory: %w", err)
 	}
 
-	srcFile, err := os.Open(src)
+	srcFile, err := os.Open(src) //nolint:gosec // src is an internal backup path
 	if err != nil {
 		return nil, fmt.Errorf("open source: %w", err)
 	}
-	defer srcFile.Close()
+	defer srcFile.Close() //nolint:errcheck,gosec // best-effort cleanup
 
-	dstFile, err := os.Create(dst)
+	dstFile, err := os.Create(dst) //nolint:gosec // dst is an internal backup path
 	if err != nil {
 		return nil, fmt.Errorf("create destination: %w", err)
 	}
@@ -40,13 +40,13 @@ func Backup(ctx context.Context, src, dst string) (*BackupResult, error) {
 
 	written, err := io.Copy(writer, srcFile)
 	if err != nil {
-		dstFile.Close()
-		os.Remove(dst)
+		dstFile.Close() //nolint:errcheck,gosec // best-effort cleanup
+		os.Remove(dst)  //nolint:errcheck,gosec // best-effort cleanup
 		return nil, fmt.Errorf("copy data: %w", err)
 	}
 
 	if err := dstFile.Close(); err != nil {
-		os.Remove(dst)
+		os.Remove(dst) //nolint:errcheck,gosec // best-effort cleanup
 		return nil, fmt.Errorf("close destination: %w", err)
 	}
 
@@ -61,25 +61,25 @@ func Backup(ctx context.Context, src, dst string) (*BackupResult, error) {
 }
 
 func Restore(ctx context.Context, src, dst string) error {
-	srcFile, err := os.Open(src)
+	srcFile, err := os.Open(src) //nolint:gosec // src is an internal backup path
 	if err != nil {
 		return fmt.Errorf("open backup: %w", err)
 	}
-	defer srcFile.Close()
+	defer srcFile.Close() //nolint:errcheck,gosec // best-effort cleanup
 
 	if err := os.MkdirAll(filepath.Dir(dst), 0o750); err != nil {
 		return fmt.Errorf("create restore directory: %w", err)
 	}
 
-	dstFile, err := os.Create(dst)
+	dstFile, err := os.Create(dst) //nolint:gosec // dst is an internal backup path
 	if err != nil {
 		return fmt.Errorf("create destination: %w", err)
 	}
 
 	_, err = io.Copy(dstFile, srcFile)
 	if err != nil {
-		dstFile.Close()
-		os.Remove(dst)
+		dstFile.Close() //nolint:errcheck,gosec // best-effort cleanup
+		os.Remove(dst)  //nolint:errcheck,gosec // best-effort cleanup
 		return fmt.Errorf("restore data: %w", err)
 	}
 

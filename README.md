@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="1672" height="941" alt="Dxrk Logo" src=".github/dxrk-logo.png" />
+<img width="1600" height="900" alt="Dxrk Logo" src=".github/dxrk-logo.jpeg" />
 
 # Dxrk
 

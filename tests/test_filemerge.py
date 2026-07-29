@@ -93,7 +93,9 @@ class TestInjectMarkdownSection:
             "<!-- /dxrk:my-section -->\n"
             "after"
         )
-        result = filemerge.inject_markdown_section(existing, "my-section", "new content")
+        result = filemerge.inject_markdown_section(
+            existing, "my-section", "new content"
+        )
         assert "old content" not in result
         assert "new content" in result
         assert "before" in result
@@ -166,19 +168,19 @@ class TestStripLegacyATLBlock:
 
 class TestCodexUpserts:
     def test_adds_block_to_empty(self):
-        result = filemerge.upsert_codex_engram_block("", "")
-        assert "[mcp_servers.engram]" in result
+        result = filemerge.upsert_codex_DXRK_MEMORY_block("", "")
+        assert "[mcp_servers.DXRK_MEMORY]" in result
 
     def test_replaces_existing_block(self):
         content = (
-            '[mcp_servers.engram]\n'
+            "[mcp_servers.DXRK_MEMORY]\n"
             'command = "old"\n'
             'args = ["old"]\n'
-            '\n'
-            '[other]\n'
+            "\n"
+            "[other]\n"
             'key = "val"\n'
         )
-        result = filemerge.upsert_codex_engram_block(content, "new-cmd")
+        result = filemerge.upsert_codex_DXRK_MEMORY_block(content, "new-cmd")
         assert "old" not in result
         assert "new-cmd" in result
         assert "other" in result

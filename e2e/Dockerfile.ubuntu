@@ -1,6 +1,15 @@
 # syntax=docker/dockerfile:1
 # Dockerfile.ubuntu — E2E test image for dxrk on Ubuntu 22.04
 # Builds the binary from source and runs the E2E test suite as a non-root user.
+
+# ---------------------------------------------------------------------------
+# Stage 0: Node.js binaries from official image
+# ---------------------------------------------------------------------------
+FROM node:22-slim AS node
+
+# ---------------------------------------------------------------------------
+# Stage 1: Main build
+# ---------------------------------------------------------------------------
 FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -23,15 +32,17 @@ RUN sed -i 's|http://archive.ubuntu.com|http://azure.archive.ubuntu.com|g; \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------------------------------------------------------------------------
-# Install Node.js LTS via NodeSource (Ubuntu 22.04 repos ship Node 12.x)
+# Install Node.js LTS (copy from official image)
 # ---------------------------------------------------------------------------
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
-    apt-get install -y nodejs
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 
 # ---------------------------------------------------------------------------
 # Install Go (match go.mod version)
 # ---------------------------------------------------------------------------
-ARG GO_VERSION=1.25.10
+ARG GO_VERSION=1.25.12
 RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" \
     | tar -C /usr/local -xz
 ENV PATH="/usr/local/go/bin:${PATH}"

@@ -26,7 +26,9 @@ def _make_detection() -> DetectionResult:
             arch="arm64",
             shell="/bin/zsh",
             supported=True,
-            profile=PlatformProfile(os="darwin", package_manager="brew", supported=True),
+            profile=PlatformProfile(
+                os="darwin", package_manager="brew", supported=True
+            ),
         ),
     )
 
@@ -50,24 +52,34 @@ class TestRunInstallDryRun:
         assert result.resolved is not None
 
     def test_minimal_preset(self):
-        result = install_mod.run_install(["--dry-run", "--preset", "minimal"], _make_detection())
+        result = install_mod.run_install(
+            ["--dry-run", "--preset", "minimal"], _make_detection()
+        )
         assert result.dry_run is True
         assert result.selection.preset == PresetID.MINIMAL
 
     def test_ecosystem_preset(self):
-        result = install_mod.run_install(["--dry-run", "--preset", "ecosystem-only"], _make_detection())
+        result = install_mod.run_install(
+            ["--dry-run", "--preset", "ecosystem-only"], _make_detection()
+        )
         assert result.selection.preset == PresetID.ECOSYSTEM_ONLY
 
     def test_with_agent_flag(self):
-        result = install_mod.run_install(["--dry-run", "--agents", "claude-code"], _make_detection())
+        result = install_mod.run_install(
+            ["--dry-run", "--agents", "claude-code"], _make_detection()
+        )
         assert AgentID.CLAUDE_CODE in result.selection.agents
 
     def test_with_component_flag(self):
-        result = install_mod.run_install(["--dry-run", "--components", "engram"], _make_detection())
-        assert ComponentID.ENGRAM in result.selection.components
+        result = install_mod.run_install(
+            ["--dry-run", "--components", "DXRK_MEMORY"], _make_detection()
+        )
+        assert ComponentID.DXRK_MEMORY in result.selection.components
 
     def test_with_skills_flag(self):
-        result = install_mod.run_install(["--dry-run", "--skills", "go-testing"], _make_detection())
+        result = install_mod.run_install(
+            ["--dry-run", "--skills", "go-testing"], _make_detection()
+        )
         assert SkillID.GO_TESTING in result.selection.skills
 
     def test_multiple_agents(self):
@@ -80,10 +92,12 @@ class TestRunInstallDryRun:
 
 class TestBuildStagePlan:
     def test_returns_stage_plan(self):
-        selection = Selection(agents=[AgentID.CLAUDE_CODE], components=[ComponentID.ENGRAM])
+        selection = Selection(
+            agents=[AgentID.CLAUDE_CODE], components=[ComponentID.DXRK_MEMORY]
+        )
         resolved = ResolvedPlan(
             agents=[AgentID.CLAUDE_CODE],
-            ordered_components=[ComponentID.ENGRAM],
+            ordered_components=[ComponentID.DXRK_MEMORY],
         )
         plan = install_mod.build_stage_plan(selection, resolved)
         assert plan is not None
@@ -115,12 +129,12 @@ class TestRenderDryRun:
     def test_renders_dry_run_output(self):
         selection = Selection(
             agents=[AgentID.CLAUDE_CODE],
-            components=[ComponentID.ENGRAM, ComponentID.SDD],
+            components=[ComponentID.DXRK_MEMORY, ComponentID.SDD],
             preset=PresetID.FULL_DXRK,
         )
         resolved = ResolvedPlan(
             agents=[AgentID.CLAUDE_CODE],
-            ordered_components=[ComponentID.ENGRAM, ComponentID.SDD],
+            ordered_components=[ComponentID.DXRK_MEMORY, ComponentID.SDD],
         )
         result = install_mod.InstallResult(
             selection=selection,
@@ -129,14 +143,14 @@ class TestRenderDryRun:
         )
         output = install_mod.render_dry_run(result)
         assert "claude-code" in output
-        assert "engram" in output or "ENGRAM" in output
+        assert "DXRK_MEMORY" in output
 
     def test_dry_run_label_in_output(self):
         selection = Selection(
             preset=PresetID.MINIMAL,
-            components=[ComponentID.ENGRAM],
+            components=[ComponentID.DXRK_MEMORY],
         )
-        resolved = ResolvedPlan(ordered_components=[ComponentID.ENGRAM])
+        resolved = ResolvedPlan(ordered_components=[ComponentID.DXRK_MEMORY])
         result = install_mod.InstallResult(
             selection=selection,
             resolved=resolved,
@@ -148,12 +162,20 @@ class TestRenderDryRun:
     def test_renders_agent_and_component_count(self):
         selection = Selection(
             agents=[AgentID.CLAUDE_CODE, AgentID.OPENCODE],
-            components=[ComponentID.ENGRAM, ComponentID.SDD, ComponentID.GGA],
+            components=[
+                ComponentID.DXRK_MEMORY,
+                ComponentID.SDD,
+                ComponentID.DXRK_GUARDIAN,
+            ],
             preset=PresetID.FULL_DXRK,
         )
         resolved = ResolvedPlan(
             agents=[AgentID.CLAUDE_CODE, AgentID.OPENCODE],
-            ordered_components=[ComponentID.ENGRAM, ComponentID.SDD, ComponentID.GGA],
+            ordered_components=[
+                ComponentID.DXRK_MEMORY,
+                ComponentID.SDD,
+                ComponentID.DXRK_GUARDIAN,
+            ],
         )
         result = install_mod.InstallResult(
             selection=selection,
@@ -167,6 +189,7 @@ class TestRenderDryRun:
 class TestNormalizeInstallFlags:
     def test_dry_run_flag(self):
         from dxrk.cli.install import parse_install_flags, normalize_install_flags
+
         flags = parse_install_flags(["--dry-run"])
         detection = _make_detection()
         inp = normalize_install_flags(flags, detection)
@@ -174,6 +197,7 @@ class TestNormalizeInstallFlags:
 
     def test_minimal_preset(self):
         from dxrk.cli.install import parse_install_flags, normalize_install_flags
+
         flags = parse_install_flags(["--preset", "minimal"])
         detection = _make_detection()
         inp = normalize_install_flags(flags, detection)
@@ -181,6 +205,7 @@ class TestNormalizeInstallFlags:
 
     def test_agents_flag(self):
         from dxrk.cli.install import parse_install_flags, normalize_install_flags
+
         flags = parse_install_flags(["--agents", "claude-code"])
         detection = _make_detection()
         inp = normalize_install_flags(flags, detection)

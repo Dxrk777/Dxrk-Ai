@@ -1,5 +1,5 @@
 # Binaries
-/dxrk
+/dist/dxrk
 *.exe
 *.dll
 *.so
@@ -31,6 +31,7 @@ __pycache__/
 *.pyo
 .pytest_cache/
 .coverage
+coverage.xml
 dxrk.egg-info/
 .venv/
 venv/

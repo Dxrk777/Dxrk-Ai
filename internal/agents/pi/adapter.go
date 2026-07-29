@@ -17,16 +17,16 @@ import (
 )
 
 const (
-	piMCPAdapterPackage      = "npm:pi-mcp-adapter"
-	piMCPAdapterPackageSpec  = "npm:pi-mcp-adapter"
-	piMCPAdapterDependency   = "pi-mcp-adapter"
-	piMCPAdapterVersion      = "2.6.0"
-	piMCPAdapterVersionRange = "^2.6.0"
-	piDxrkMemoryMCPConfigFile    = "mcp.json"
-	piSettingsFile           = "settings.json"
-	piNPMDirectory           = "npm"
-	piNPMPackageFile         = "package.json"
-	piInstallCmd             = "install"
+	piMCPAdapterPackage       = "npm:pi-mcp-adapter"
+	piMCPAdapterPackageSpec   = "npm:pi-mcp-adapter"
+	piMCPAdapterDependency    = "pi-mcp-adapter"
+	piMCPAdapterVersion       = "2.6.0"
+	piMCPAdapterVersionRange  = "^2.6.0"
+	piDxrkMemoryMCPConfigFile = "mcp.json"
+	piSettingsFile            = "settings.json"
+	piNPMDirectory            = "npm"
+	piNPMPackageFile          = "package.json"
+	piInstallCmd              = "install"
 )
 
 type statResult struct {

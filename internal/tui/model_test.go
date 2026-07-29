@@ -3487,7 +3487,7 @@ func TestModelConfigOpenCodePrePopulatesAssignments(t *testing.T) {
 	// Pre-existing assignments that should be read from settings
 	preExisting := map[string]model.ModelAssignment{
 		"dxrk-orchestrator": {ProviderID: "anthropic", ModelID: "claude-sonnet-4-20250514"},
-		"sdd-apply":           {ProviderID: "openai", ModelID: "gpt-4o"},
+		"sdd-apply":         {ProviderID: "openai", ModelID: "gpt-4o"},
 	}
 
 	// Override the read function to return pre-existing assignments

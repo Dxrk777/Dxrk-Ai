@@ -18,8 +18,8 @@ func TestGeminiProvider_GenerateTextOnly(t *testing.T) {
 		if !strings.Contains(r.URL.String(), ":generateContent") {
 			t.Fatalf("path = %q, want :generateContent", r.URL.String())
 		}
-		if !strings.Contains(r.URL.RawQuery, "key=test-key") {
-			t.Fatalf("query = %q, want key=test-key", r.URL.RawQuery)
+		if r.Header.Get("x-goog-api-key") != "test-key" {
+			t.Fatalf("x-goog-api-key header = %q, want test-key", r.Header.Get("x-goog-api-key"))
 		}
 
 		w.WriteHeader(http.StatusOK)

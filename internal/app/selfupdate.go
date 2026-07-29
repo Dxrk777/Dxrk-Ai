@@ -23,7 +23,7 @@ var lookPathFn = exec.LookPath
 const (
 	envNoSelfUpdate   = "DXRK_NO_SELF_UPDATE"
 	envSelfUpdateDone = "DXRK_SELF_UPDATE_DONE"
-	dxrkTool      = "dxrk"
+	dxrkTool          = "dxrk"
 )
 
 // selfUpdateTimeout is the maximum time allowed for the update check + upgrade.

@@ -54,6 +54,7 @@ func TestSettingsPathUsesVSCodeUserProfile(t *testing.T) {
 	home := "/tmp/home"
 
 	t.Run("linux default", func(t *testing.T) {
+		t.Setenv("XDG_CONFIG_HOME", "")
 		path := a.SettingsPath(home)
 		want := filepath.Join(home, ".config", "Code", "User", "settings.json")
 		if path != want {
@@ -76,6 +77,7 @@ func TestMCPConfigPathUsesVSCodeUserProfile(t *testing.T) {
 	home := "/tmp/home"
 
 	t.Run("linux default", func(t *testing.T) {
+		t.Setenv("XDG_CONFIG_HOME", "")
 		path := a.MCPConfigPath(home, "context7")
 		want := filepath.Join(home, ".config", "Code", "User", "mcp.json")
 		if path != want {
@@ -222,6 +224,7 @@ func TestAdapterPaths(t *testing.T) {
 }
 
 func TestSystemPromptDir(t *testing.T) {
+	t.Setenv("XDG_CONFIG_HOME", "")
 	a := NewAdapter()
 	home := "/tmp/home"
 	dir := a.SystemPromptDir(home)

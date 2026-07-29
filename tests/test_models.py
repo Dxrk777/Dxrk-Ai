@@ -76,13 +76,13 @@ def test_shorthand_aliases():
 
 
 def test_component_shorthand_aliases():
-    assert ComponentID.ENGRAM.value == "engram"
+    assert ComponentID.DXRK_MEMORY.value == "DXRK_MEMORY"
     assert ComponentID.SDD.value == "sdd"
     assert ComponentID.SKILLS.value == "skills"
     assert ComponentID.CONTEXT7.value == "context7"
     assert ComponentID.PERSONA.value == "persona"
     assert ComponentID.PERMISSIONS.value == "permissions"
-    assert ComponentID.GGA.value == "gga"
+    assert ComponentID.DXRK_GUARDIAN.value == "DXRK_GUARDIAN"
     assert ComponentID.THEME.value == "theme"
 
 
@@ -95,7 +95,7 @@ def test_agents_list_contains_all():
 
 def test_components_list_contains_all():
     assert len(COMPONENTS) == 10
-    assert ComponentID.ENGRAM in COMPONENTS
+    assert ComponentID.DXRK_MEMORY in COMPONENTS
     assert ComponentID.OPENCODE_DXRK_LOGO in COMPONENTS
 
 
@@ -173,7 +173,7 @@ def test_open_code_plugins():
     assert (
         OpenCodeCommunityPluginID.SUB_AGENT_STATUSLINE.value == "sub-agent-statusline"
     )
-    assert OpenCodeCommunityPluginID.SDD_ENGRAM_PLUGIN.value == "sdd-engram-plugin"
+    assert OpenCodeCommunityPluginID.SDD_ENGRAM_PLUGIN.value == "sdd-DXRK_MEMORY-plugin"
 
 
 def test_plan_status():
@@ -229,11 +229,11 @@ class TestSelection:
         assert not s.has_agent(AgentID.OPENCODE)
 
     def test_has_component_true(self):
-        s = Selection(components=[ComponentID.ENGRAM])
-        assert s.has_component(ComponentID.ENGRAM)
+        s = Selection(components=[ComponentID.DXRK_MEMORY])
+        assert s.has_component(ComponentID.DXRK_MEMORY)
 
     def test_has_component_false(self):
-        s = Selection(components=[ComponentID.ENGRAM])
+        s = Selection(components=[ComponentID.DXRK_MEMORY])
         assert not s.has_component(ComponentID.SDD)
 
 

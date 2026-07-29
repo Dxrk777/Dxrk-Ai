@@ -11,6 +11,11 @@ import (
 const (
 	dxrkName             = "dxrk"
 	dxrkProgrammingOwner = "Dxrk777"
+	dxrkMemoryName       = "dxrk-memory"
+	dxrkGuardianName     = "dxrk-guardian"
+	osDarwin             = "darwin"
+	osLinux              = "linux"
+	osWindows            = "windows"
 )
 
 // updateHint returns a platform-specific instruction string for updating the given tool.
@@ -18,6 +23,10 @@ func updateHint(tool ToolInfo, profile system.PlatformProfile) string {
 	switch tool.Name {
 	case dxrkName:
 		return dxrkHint(profile)
+	case dxrkMemoryName:
+		return dxrkMemoryHint(profile)
+	case dxrkGuardianName:
+		return dxrkGuardianHint(profile)
 	default:
 		return ""
 	}
@@ -33,12 +42,32 @@ func openCodeRegisteredNotMaterializedHint(tool ToolInfo) string {
 
 func dxrkHint(profile system.PlatformProfile) string {
 	switch profile.OS {
-	case "darwin":
+	case osDarwin:
 		return "brew upgrade dxrk"
-	case "linux":
-		return "curl -fsSL https://raw.githubusercontent.com/Dxrk777/Dxrk-Ai/main/scripts/install.sh | bash"
-	case "windows":
-		return "irm https://raw.githubusercontent.com/Dxrk777/Dxrk-Ai/main/scripts/install.ps1 | iex"
+	case osLinux:
+		return "curl -fsSL https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.sh | bash"
+	case osWindows:
+		return "irm https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.ps1 | iex"
+	default:
+		return ""
+	}
+}
+
+func dxrkMemoryHint(profile system.PlatformProfile) string {
+	switch profile.OS {
+	case osDarwin:
+		return "brew upgrade dxrk-memory"
+	default:
+		return "dxrk upgrade (downloads pre-built binary)"
+	}
+}
+
+func dxrkGuardianHint(profile system.PlatformProfile) string {
+	switch profile.OS {
+	case osDarwin:
+		return "brew upgrade dxrk-guardian"
+	case osLinux:
+		return "See https://github.com/Dxrk777/dxrk-guardian-angel"
 	default:
 		return ""
 	}

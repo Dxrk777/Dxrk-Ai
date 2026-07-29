@@ -7,10 +7,15 @@ from dxrk.models import AgentID
 
 class TestProviderForAgents:
     def test_claude_first(self):
-        assert gga.provider_for_agents([AgentID.CLAUDE_CODE, AgentID.OPENCODE]) == "claude"
+        assert (
+            gga.provider_for_agents([AgentID.CLAUDE_CODE, AgentID.OPENCODE]) == "claude"
+        )
 
     def test_opcode_fallback(self):
-        assert gga.provider_for_agents([AgentID.OPENCODE, AgentID.GEMINI_CLI]) == "opencode"
+        assert (
+            gga.provider_for_agents([AgentID.OPENCODE, AgentID.GEMINI_CLI])
+            == "opencode"
+        )
 
     def test_gemini_fallback(self):
         assert gga.provider_for_agents([AgentID.GEMINI_CLI]) == "gemini"
@@ -31,7 +36,11 @@ class TestProviderForAgents:
 class TestBuildConfig:
     def test_contains_provider(self):
         config = gga.build_config("claude")
-        assert b"PROVIDER='claude'" in config or b'PROVIDER="claude"' in config or b"PROVIDER='claude'" in config
+        assert (
+            b"PROVIDER='claude'" in config
+            or b'PROVIDER="claude"' in config
+            or b"PROVIDER='claude'" in config
+        )
         assert b"claude" in config
 
     def test_contains_section_headers(self):
@@ -52,19 +61,19 @@ class TestBuildConfig:
 class TestPaths:
     def test_config_path(self):
         path = gga.config_path("/home/user")
-        assert path == "/home/user/.config/gga/config"
+        assert path == "/home/user/.config/DXRK_GUARDIAN/config"
 
     def test_agents_template_path(self):
         path = gga.agents_template_path("/home/user")
-        assert path == "/home/user/.config/gga/AGENTS.md"
+        assert path == "/home/user/.config/DXRK_GUARDIAN/AGENTS.md"
 
     def test_runtime_lib_dir(self):
         path = gga.runtime_lib_dir("/home/user")
-        assert path == "/home/user/.local/share/gga/lib"
+        assert path == "/home/user/.local/share/DXRK_GUARDIAN/lib"
 
     def test_runtime_bin_dir(self):
         path = gga.runtime_bin_dir("/home/user")
-        assert path == "/home/user/.local/share/gga/bin"
+        assert path == "/home/user/.local/share/DXRK_GUARDIAN/bin"
 
     def test_runtime_pr_mode_path(self):
         path = gga.runtime_pr_mode_path("/home/user")
@@ -72,7 +81,7 @@ class TestPaths:
 
     def test_runtime_ps1_path(self):
         path = gga.runtime_ps1_path("/home/user")
-        assert path.endswith("gga.ps1")
+        assert path.endswith("DXRK_GUARDIAN.ps1")
 
 
 class TestPostInstallMessages:
@@ -80,7 +89,7 @@ class TestPostInstallMessages:
         msgs = gga.post_install_messages()
         assert len(msgs) == 2
         assert all(isinstance(m, str) for m in msgs)
-        assert any("gga install" in m for m in msgs)
+        assert any("DXRK_GUARDIAN install" in m for m in msgs)
 
 
 class TestInject:
@@ -91,11 +100,11 @@ class TestInject:
         assert result.ConfigChanged is True
         assert result.AgentsChanged is True
 
-        config = tmp_path / ".config" / "gga" / "config"
+        config = tmp_path / ".config" / "DXRK_GUARDIAN" / "config"
         assert config.exists()
         assert b"PROVIDER=" in config.read_bytes()
 
-        agents = tmp_path / ".config" / "gga" / "AGENTS.md"
+        agents = tmp_path / ".config" / "DXRK_GUARDIAN" / "AGENTS.md"
         assert agents.exists()
 
     def test_returns_files_written(self, tmp_path):
