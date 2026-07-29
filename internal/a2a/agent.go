@@ -75,13 +75,31 @@ func (a *AgentNode) Send(ctx context.Context, target string, msg Message) (Messa
 		return Message{}, fmt.Errorf("peer %q not found", target)
 	}
 
+	ch := make(chan Message, 1)
+	pendingMu.Lock()
+	pending[msg.ID] = ch
+	pendingMu.Unlock()
+
+	defer func() {
+		pendingMu.Lock()
+		delete(pending, msg.ID)
+		pendingMu.Unlock()
+	}()
+
 	select {
 	case peer.messages <- msg:
 	default:
 		return Message{}, fmt.Errorf("peer %q message buffer full", target)
 	}
 
-	return a.waitForResponse(ctx, msg.ID, 30*time.Second)
+	select {
+	case resp := <-ch:
+		return resp, nil
+	case <-time.After(30 * time.Second):
+		return Message{}, fmt.Errorf("timeout waiting for response to %s", msg.ID)
+	case <-ctx.Done():
+		return Message{}, ctx.Err()
+	}
 }
 
 func (a *AgentNode) Handoff(ctx context.Context, target, task string, contextData any) (*HandoffResult, error) {
@@ -230,28 +248,6 @@ var (
 	pendingMu sync.Mutex
 	pending   = make(map[string]chan Message)
 )
-
-func (a *AgentNode) waitForResponse(ctx context.Context, msgID string, timeout time.Duration) (Message, error) {
-	ch := make(chan Message, 1)
-	pendingMu.Lock()
-	pending[msgID] = ch
-	pendingMu.Unlock()
-
-	defer func() {
-		pendingMu.Lock()
-		delete(pending, msgID)
-		pendingMu.Unlock()
-	}()
-
-	select {
-	case resp := <-ch:
-		return resp, nil
-	case <-time.After(timeout):
-		return Message{}, fmt.Errorf("timeout waiting for response to %s", msgID)
-	case <-ctx.Done():
-		return Message{}, ctx.Err()
-	}
-}
 
 func (a *AgentNode) messageLoop() {
 	for {
