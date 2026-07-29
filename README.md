@@ -7,8 +7,9 @@
 **Ecosistema, Frameworks y Workflows para agentes de IA.**
 
 [![Release](https://img.shields.io/github/v/release/Dxrk777/Dxrk-Ai)](https://github.com/Dxrk777/Dxrk-Ai/releases)
+[![CI](https://github.com/Dxrk777/Dxrk-Ai/actions/workflows/ci.yml/badge.svg)](https://github.com/Dxrk777/Dxrk-Ai/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/Licencia-MIT-blue.svg)](LICENSE)
-![Go 1.26+](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go&logoColor=white)
+![Go 1.25+](https://img.shields.io/badge/Go-1.25+-00ADD8?logo=go&logoColor=white)
 ![Platform](https://img.shields.io/badge/plataforma-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)
 
 </div>
@@ -64,6 +65,30 @@ scoop install dxrk
 go install github.com/Dxrk777/Dxrk-Ai/cmd/dxrk@latest
 ```
 
+### Build from source
+
+```bash
+git clone https://github.com/Dxrk777/Dxrk-Ai.git
+cd Dxrk-Ai
+go build -o dxrk ./cmd/dxrk
+./dxrk --version
+```
+
+---
+
+## Hello World
+
+```bash
+# Instala el preset completo para Claude Code
+dxrk install --agent claude-code --preset full-dxrk
+
+# Pregunta a tu agente — ahora tiene memoria, skills y MCP
+dxrk query "explica que es Spec-Driven Development"
+
+# Verifica la memoria
+dxrk-memory search "SDD"
+```
+
 ---
 
 ## Configuracion por Proyecto
@@ -95,6 +120,23 @@ dxrk-memory projects list
 dxrk-memory search "auth bug"
 dxrk-memory tui
 ```
+
+### 39 Servidores MCP
+
+Dxrk configura automaticamente servidores MCP para Context7, Kubernetes, Redis, MongoDB, Elasticsearch, Jira, Grafana, Prometheus, OpenAI, Confluence, y mas. Ver [MCP servers](.mcp.json) para la lista completa.
+
+---
+
+## Roadmap
+
+| Version | Estado | Description |
+|---------|--------|-------------|
+| v4.0.0 | **Actual** | Go CLI, 13 agentes, 2242 skills, 39 MCP servers, 6 GitHub Actions |
+| v4.1.0 | Planeado | Homebrew tap + Scoop bucket publishing |
+| v4.2.0 | Planeado | Plugin marketplace para skills de la comunidad |
+| v5.0.0 | Vision | Multi-tenant support, team collaboration features |
+
+Ver [CHANGELOG.md](CHANGELOG.md) para historial completo de cambios.
 
 ---
 

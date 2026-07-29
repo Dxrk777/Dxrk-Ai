@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Python test coverage reporting in CI (Codecov)
 - benchstat integration for benchmark regression detection in CI
 - CHANGELOG.md
+- CI badge in README
+- Hello World section in README
+- Roadmap section in README
+- Build from source instructions in README
+- 10 new MCP servers: context7, kubernetes, redis, mongodb, elasticsearch, jira, grafana, prometheus, openai, confluence (39 total)
+- 9 Go library wrappers: gin, jwt, pgx, redis, fx, cron, gocron, websocket, grpc
+- 3 GitHub Actions workflows: security (CodeQL + Trivy), quality (SonarCloud), audit (OWASP + govulncheck)
 
 ### Fixed
 - 13 TUI golden files regenerated for test compatibility
@@ -23,10 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSS `@import` ordering warning
 - Phantom sidebar pages (Terminal/Files) removed
 - Dashboard/LogsPage WebSocket connection via useWebSocket hook
+- TestShowTip case-sensitive match (`Dxrk` → `dxrk`)
+- E2E lib.sh hyphenated bash variable name
 
 ### Changed
 - Skills registry expanded to 2,242 total (34 dxrk + 2,208 imported)
 - Curated skill pack: 66 skills across 10 categories
+- Go 1.25.12 minimum (was incorrectly documented as 1.26)
 
 ## [4.0.0] - 2026-07-26
 
@@ -36,7 +46,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zap structured logging adapter
 - Colly web scraper integration
 - GoReleaser v2 config (Linux, macOS, Windows; amd64 + arm64)
-- Homebrew tap + Scoop bucket publishing
 - Engram REST API (31 endpoints: sessions, observations, search, timeline, prompts, context, export/import, stats, conflicts)
 - Engram Cloud API (sync push/pull, HTMX dashboard)
 - MCP protocol server (stdio + TCP)
@@ -53,8 +62,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Install scripts (bash + PowerShell) with checksum verification
 
 ### Changed
-- Module path: `github.com/Dxrk777/Dxrk-Ai
-- Go 1.26.0 minimum
+- Module path: `github.com/Dxrk777/Dxrk-Ai`
+- Go 1.25.12 minimum
 - Python >=3.13 required
 
 ## [3.0.0] - 2026-07-01

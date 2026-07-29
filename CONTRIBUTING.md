@@ -78,7 +78,7 @@ PRs that are not linked to an approved issue will be **automatically rejected** 
 
 ### Prerequisites
 
-- Go 1.26+
+- Go 1.25+
 - Docker (for E2E tests)
 - Git
 - [golangci-lint v2.1+](https://golangci-lint.run/) (for linting)
