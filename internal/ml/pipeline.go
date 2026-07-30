@@ -11,7 +11,7 @@ import (
 // Prepare stage: validate data.
 // Apply stage: train, optionally push hub, optionally convert GGUF.
 func BuildPipeline(cfg *TrainConfig) pipeline.StagePlan {
-	var prepare []pipeline.Step
+	prepare := make([]pipeline.Step, 0, 1)
 	var apply []pipeline.Step
 
 	// ── Prepare ──

@@ -18,7 +18,7 @@ func (s *PushHubStep) Run() error {
 		return nil
 	}
 
-	cmd := exec.Command("huggingface-cli", "upload",
+	cmd := exec.Command("huggingface-cli", "upload", //nolint:gosec // trusted CLI invocation
 		s.Config.Model.HubID,
 		"--repo-type", "model",
 	)

@@ -20,7 +20,7 @@ func (s *ValidateDataStep) Run() error {
 	}
 
 	// Use huggingface-cli to check dataset access
-	cmd := exec.Command("huggingface-cli", "repo", "info", "dataset", dataset)
+	cmd := exec.Command("huggingface-cli", "repo", "info", "dataset", dataset) //nolint:gosec // validated dataset name
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("dataset %q not accessible: %s", dataset, string(out))

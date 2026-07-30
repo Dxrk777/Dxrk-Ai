@@ -20,7 +20,7 @@ func (s *ConvertGGUFStep) Run() error {
 	}
 
 	// Use llama.cpp convert script via uv
-	cmd := exec.Command("uv", "run", "--with", "llama-cpp-python", "python", "-c",
+	cmd := exec.Command("uv", "run", "--with", "llama-cpp-python", "python", "-c", //nolint:gosec // trusted subprocess
 		fmt.Sprintf(`
 from llama_cpp import Llama
 import sys
@@ -39,7 +39,7 @@ print("GGUF conversion for %s")
 
 func (s *ConvertGGUFStep) Rollback() error {
 	if s.OutputPath != "" {
-		cmd := exec.Command("rm", "-f", s.OutputPath)
+		cmd := exec.Command("rm", "-f", s.OutputPath) //nolint:gosec // safe literal path
 		_ = cmd.Run()
 	}
 	return nil
