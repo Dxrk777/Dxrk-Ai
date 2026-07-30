@@ -41,7 +41,6 @@ linters:
   - musttag
   - noctx
   - sqlclosecheck
-  - tenv
   - tparallel
   - usestdlibvars
   - wastedassign
