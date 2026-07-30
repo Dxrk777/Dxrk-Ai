@@ -13,7 +13,7 @@ import (
 func TestCheckDependenciesStepFailsWhenKimiUVMissing(t *testing.T) {
 	restore := installcmd.OverrideLookPath(func(file string) (string, error) {
 		if file == "uv" {
-			return "", errNotFound{}
+			return "", notFoundError{}
 		}
 		return "/usr/bin/" + file, nil
 	})
@@ -39,7 +39,7 @@ func TestCheckDependenciesStepFailsWhenKimiUVMissing(t *testing.T) {
 
 func TestCheckDependenciesStepDoesNotRequireUVForOtherAgents(t *testing.T) {
 	restore := installcmd.OverrideLookPath(func(file string) (string, error) {
-		return "", errNotFound{}
+		return "", notFoundError{}
 	})
 	t.Cleanup(restore)
 
@@ -56,6 +56,6 @@ func TestCheckDependenciesStepDoesNotRequireUVForOtherAgents(t *testing.T) {
 	}
 }
 
-type errNotFound struct{}
+type notFoundError struct{}
 
-func (errNotFound) Error() string { return "not found" }
+func (notFoundError) Error() string { return "not found" }
