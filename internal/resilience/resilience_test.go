@@ -84,6 +84,7 @@ func TestDo(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			var count int
 			err := Do(context.Background(), func(_ context.Context) error {
 				count++
@@ -361,6 +362,7 @@ func TestRateLimiter_Allow(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			rl := NewRateLimiterWithConfig(RateLimiterConfig{
 				MaxTokens:      tt.max,
 				RefillInterval: time.Hour,

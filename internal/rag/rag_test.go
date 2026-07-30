@@ -527,7 +527,7 @@ func TestVectorStore_Stats(t *testing.T) {
 	store.Insert([]VectorRecord{
 		{ID: "1", Chunk: Chunk{Text: "a"}, Embedding: []float64{1, 0, 0, 0, 0}},
 	})
-	count, dims = store.Stats()
+	count, _ = store.Stats()
 	if count != 1 {
 		t.Errorf("expected 1 count, got %d", count)
 	}

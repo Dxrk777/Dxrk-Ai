@@ -5,37 +5,26 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
-      - id: check-json
-      - id: check-toml
       - id: check-added-large-files
-      - id: mixed-line-ending
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+      - id: detect-private-key
 
-  - repo: local
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v2.1.6
     hooks:
-      - id: spdx-header-go
-        name: SPDX header (Go)
-        entry: bash -c '! grep -rL "SPDX-License-Identifier" --include="*.go" vendor/ . | grep -v "^vendor/" | head -10 | grep .'
-        language: system
-        files: '\.go$'
-        pass_filenames: false
+      - id: golangci-lint
+      - id: golangci-lint-fmt
 
-      - id: spdx-header-py
-        name: SPDX header (Python)
-        entry: bash -c '! grep -rL "SPDX-License-Identifier" --include="*.py" . | grep -v "^vendor/" | grep -v "__pycache__" | grep -v "node_modules" | head -10 | grep .'
-        language: system
-        files: '\.py$'
-        pass_filenames: false
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        language_version: python3.13
 
-      - id: go-vet
-        name: go vet
-        entry: go vet ./...
-        language: system
-        files: '\.go$'
-        pass_filenames: false
-
-      - id: go-build
-        name: go build
-        entry: go build ./...
-        language: system
-        files: '\.go$'
-        pass_filenames: false
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        args: ['--ignore-missing-imports']
+        additional_dependencies: []

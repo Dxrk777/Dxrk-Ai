@@ -62,7 +62,7 @@ func TestOpenAIEmbedder_Embed_Empty(t *testing.T) {
 
 func TestOpenAIEmbedder_Embed_Success(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
+		if r.Method != http.MethodPost {
 			t.Errorf("expected POST, got %s", r.Method)
 		}
 		if r.URL.Path != "/embeddings" {

@@ -39,7 +39,7 @@ func TestWorkerPool_ErrorDoesNotCrash(t *testing.T) {
 	var count atomic.Int32
 	handler := func(_ context.Context, task *Task) (any, error) {
 		count.Add(1)
-		return nil, assertAnError
+		return nil, errAssert
 	}
 
 	wp := NewWorkerPool(q, handler,
@@ -120,9 +120,9 @@ func TestWorkerPool_ActiveWorkers(t *testing.T) {
 	wp.Stop()
 }
 
-var assertAnError = assertAnErrorFn()
+var errAssert = errAssertFn()
 
-func assertAnErrorFn() error { return &testError{"assert"} }
+func errAssertFn() error { return &testError{"assert"} }
 
 type testError struct{ msg string }
 

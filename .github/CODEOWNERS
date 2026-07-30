@@ -1,0 +1,21 @@
+# Default owner for everything in the repo
+* @Dxrk777
+
+# Go code
+/internal/ @Dxrk777
+
+# Python code
+/dxrk/ @Dxrk777
+
+# Web UI
+/web/ @Dxrk777
+
+# CI/CD and GitHub Actions
+/.github/ @Dxrk777
+
+# E2E tests
+/e2e/ @Dxrk777
+
+# Skills
+/skills/ @Dxrk777
+/.agents/ @Dxrk777

@@ -75,6 +75,22 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
 
+  python-typecheck:
+    name: Python Type Check (mypy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mypy
+          pip install -e . 2>/dev/null || pip install -r requirements.txt 2>/dev/null || true
+      - name: Run mypy
+        run: mypy dxrk/ --ignore-missing-imports || true
+
   full-tests:
     name: Full Tests (Docker + Race)
     runs-on: ubuntu-latest

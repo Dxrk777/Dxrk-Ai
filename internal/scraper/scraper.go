@@ -49,7 +49,7 @@ func Scrape(url string, timeout time.Duration) (*Result, error) {
 }
 
 func extractDomain(rawURL string) string {
-	req, err := http.NewRequest("GET", rawURL, nil)
+	req, err := http.NewRequest(http.MethodGet, rawURL, nil)
 	if err != nil {
 		return ""
 	}

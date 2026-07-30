@@ -102,7 +102,7 @@ func (e *OpenAIEmbedder) embedBatch(texts []string) ([][]float64, error) {
 		return nil, fmt.Errorf("marshal: %w", err)
 	}
 
-	req, err := http.NewRequest("POST", e.baseURL+"/embeddings", bytes.NewReader(payload))
+	req, err := http.NewRequest(http.MethodPost, e.baseURL+"/embeddings", bytes.NewReader(payload))
 	if err != nil {
 		return nil, fmt.Errorf("request: %w", err)
 	}
@@ -121,7 +121,7 @@ func (e *OpenAIEmbedder) embedBatch(texts []string) ([][]float64, error) {
 		return nil, fmt.Errorf("read: %w", err)
 	}
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("api error %d: %s", resp.StatusCode, string(raw))
 	}
 

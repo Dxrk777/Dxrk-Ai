@@ -30,6 +30,16 @@ linters:
   - unconvert
   - unparam
   - whitespace
+  - copyloopvar
+  - durationcheck
+  - errname
+  - fatcontext
+  - makezero
+  - mirror
+  - sqlclosecheck
+  - tparallel
+  - usestdlibvars
+  - wastedassign
   exclusions:
     rules:
     - path: 'web/node_modules/'
