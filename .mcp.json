@@ -131,6 +131,14 @@
     "confluence": {
       "command": "npx",
       "args": ["-y", "@anthropic/mcp-server-confluence"]
+    },
+    "rag-code-mcp": {
+      "command": "/home/dxrk/.local/bin/rag-code-mcp",
+      "args": ["-ollama-base-url", "http://localhost:11434", "-qdrant-url", "http://localhost:6333", "-allowed-paths", "/home/dxrk/Proyectos"]
+    },
+    "chunkhound": {
+      "command": "/home/dxrk/.local/bin/chunkhound-mcp",
+      "args": ["--transport", "stdio"]
     }
   }
 }

@@ -41,14 +41,14 @@ changelog:
       - "^test:"
       - "^ci:"
 
-# brews/scoops: enable after creating homebrew-tap and scoop-bucket repos
-# brews:
-#   - repository:
-#       owner: Dxrk777
-#       name: homebrew-tap
-#       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-# scoops:
-#   - repository:
-#       owner: Dxrk777
-#       name: scoop-bucket
-#       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+brews:
+  - repository:
+      owner: Dxrk777
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+
+scoops:
+  - repository:
+      owner: Dxrk777
+      name: scoop-bucket
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"

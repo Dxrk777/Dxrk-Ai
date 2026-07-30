@@ -334,7 +334,7 @@ const (
 	SkillDxrkRelease         SkillID = "dxrk-release-maintainer"
 	SkillDxrkRemember        SkillID = "dxrk-remember"
 	SkillDxrkScheduleAgents  SkillID = "dxrk-schedule-agents"
-	SkillDxrkSecretScan      SkillID = "dxrk-secret-scanning"
+	SkillDxrkSecretScan      SkillID = "dxrk-secret-scanning" //nolint:gosec // not a real secret
 	SkillDxrkSecurityTriage  SkillID = "dxrk-security-triage"
 	SkillDxrkSimplify        SkillID = "dxrk-simplify"
 	SkillDxrkSkillGenerator  SkillID = "dxrk-skill-generator"
@@ -509,7 +509,7 @@ const (
 
 	// ── Environment / DX ──────────────────────────────────────────
 	SkillEnvGuide          SkillID = "environment-setup-guide"
-	SkillEnvSecretsManager SkillID = "env-secrets-manager"
+	SkillEnvSecretsManager SkillID = "env-secrets-manager" //nolint:gosec // not a real secret
 	SkillCodexProfiles     SkillID = "codex-profiles"
 	SkillCodexReview       SkillID = "codex-review"
 	SkillCodexSubagent     SkillID = "codex-subagent"
