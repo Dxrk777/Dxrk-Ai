@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- ML training pipeline (`internal/ml/`): data validation, model training, GGUF conversion, Hugging Face push, configurable hyperparameters
 - 14 new agent adapters: Aider, Cline, Roo Code, Continue, Junie, Amazon Q, OpenHands, Zed AI, GitHub Copilot, Devin, Cody, Tabnine, Replit, Void (28 total)
 - ESLint + Prettier for web UI (`web/`)
 - ErrorBoundary component for React crash handling
@@ -20,9 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hello World section in README
 - Roadmap section in README
 - Build from source instructions in README
-- 10 new MCP servers: context7, kubernetes, redis, mongodb, elasticsearch, jira, grafana, prometheus, openai, confluence (39 total)
+- 10 new MCP servers: context7, kubernetes, redis, mongodb, elasticsearch, jira, grafana, prometheus, openai, confluence (35 total)
+- rag-code-mcp and chunkhound MCP servers for RAG workflows
 - 9 Go library wrappers: gin, jwt, pgx, redis, fx, cron, gocron, websocket, grpc
 - 3 GitHub Actions workflows: security (CodeQL + Trivy), quality (SonarCloud), audit (OWASP + govulncheck)
+- Dev tooling: dependabot, CODEOWNERS, PR template, mypy type checking in CI
+- Pre-commit hooks: golangci-lint, black, mypy
+- 10 new golangci-lint linters: copyloopvar, durationcheck, errname, fatcontext, makezero, mirror, sqlclosecheck, tparallel, usestdlibvars, wastedassign
 
 ### Fixed
 - 13 TUI golden files regenerated for test compatibility
@@ -33,11 +38,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dashboard/LogsPage WebSocket connection via useWebSocket hook
 - TestShowTip case-sensitive match (`Dxrk` → `dxrk`)
 - E2E lib.sh hyphenated bash variable name
+- Deprecated `tenv` linter removed from golangci-lint config
+- Lint issues from new linters (errname, tparallel, usestdlibvars, wastedassign)
 
 ### Changed
 - Skills registry expanded to 2,242 total (34 dxrk + 2,208 imported)
 - Curated skill pack: 66 skills across 10 categories
 - Go 1.25.12 minimum (was incorrectly documented as 1.26)
+- golangci-lint config expanded with 10 new linters for code quality
 
 ## [4.0.0] - 2026-07-26
 
@@ -56,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PR validation workflow (size limit, issue reference, labels)
 - Renovate config with custom regex manager for pinned versions
 - SBOM generation via Trivy
+- 35 MCP servers (Context7, Kubernetes, Redis, MongoDB, Elasticsearch, Jira, Grafana, Prometheus, OpenAI, Confluence, and more)
 - 39 Go benchmarks across 7 packages
 - 1,320 Python tests
 - 2,242 skills (34 dxrk-specific + 2,208 imported from 4 community collections)

@@ -41,7 +41,9 @@ PRs that are not linked to an approved issue will be **automatically rejected** 
 | Label | Description |
 |-------|-------------|
 | `type:bug` | Bug fix |
+| `type:fix` | Bug fix (test, CI, etc.) |
 | `type:feature` | New feature or enhancement |
+| `type:feat` | New feature (alias for type:feature) |
 | `type:docs` | Documentation only |
 | `type:refactor` | Code refactoring, no functional changes |
 | `type:chore` | Build, CI, tooling changes |
@@ -147,6 +149,8 @@ To verify the config is valid:
 ```bash
 golangci-lint config verify
 ```
+
+Active linters include: `errname`, `fatcontext`, `makezero`, `mirror`, `sqlclosecheck`, `tparallel`, `usestdlibvars`, `wastedassign`, and standard linters.
 
 ### E2E Tests
 
