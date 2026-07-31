@@ -136,7 +136,7 @@ dxrk-memory search "auth bug"
 dxrk-memory tui
 ```
 
-### 39 Servidores MCP
+### 35 Servidores MCP
 
 Dxrk configura automaticamente servidores MCP para Context7, Kubernetes, Redis, MongoDB, Elasticsearch, Jira, Grafana, Prometheus, OpenAI, Confluence, y mas. Ver [MCP servers](.mcp.json) para la lista completa.
 
@@ -146,8 +146,8 @@ Dxrk configura automaticamente servidores MCP para Context7, Kubernetes, Redis, 
 
 | Version | Estado | Description |
 |---------|--------|-------------|
-| v4.0.0 | **Actual** | Go CLI, 28 agentes, 2242 skills, 39 MCP servers, 6 GitHub Actions |
-| v4.1.0 | Planeado | Homebrew tap + Scoop bucket publishing |
+| v4.0.0 | Publicado | Go CLI, 28 agentes, 2242 skills, 35 MCP servers, 9 GitHub Actions |
+| v4.1.0 | **Actual** | ML training pipeline, dev tooling (mypy, pre-commit, dependabot), 10 new golangci-lint linters, rag-code-mcp + chunkhound |
 | v4.2.0 | Planeado | Plugin marketplace para skills de la comunidad |
 | v5.0.0 | Vision | Multi-tenant support, team collaboration features |
 
