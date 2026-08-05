@@ -3,6 +3,8 @@ package marketplace
 import (
 	"context"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type Type int
@@ -25,7 +27,7 @@ func (t Type) String() string {
 	case TypeTheme:
 		return "theme"
 	default:
-		return "unknown"
+		return strconst.StrUnknown
 	}
 }
 

@@ -14,6 +14,7 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
 	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type InjectionResult struct {
@@ -105,7 +106,7 @@ func dxrkMemoryOverlayJSON(agentID model.AgentID, cmd string) []byte {
 				dxrkMemoryServer: map[string]any{
 					"__replace__": map[string]any{
 						dxrkMemoryCmdKey: []string{cmd, dxrkMemoryMCPServe, dxrkMemoryToolsArg},
-						"type":           "local",
+						"type":           strconst.StrLocal,
 					},
 				},
 			},

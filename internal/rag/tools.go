@@ -4,12 +4,13 @@ package rag
 import (
 	"fmt"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 )
 
 const (
-	keyDescription = "description"
-	keyEnabled     = "enabled"
+	keyDescription = strconst.StrDescription
+	keyEnabled     = strconst.StrEnabled
 	keyMessage     = "message"
 )
 
@@ -20,21 +21,21 @@ func RegisterTools(reg *tools.Registry) error {
 			Name:        "codebase_query",
 			Description: "Busca código relevante en el codebase usando búsqueda semántica. Retorna fragmentos de código con ruta, línea y score de similitud.",
 			InputSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
-					"query": map[string]any{
-						"type":         "string",
+				"type": strconst.StrObject,
+				strconst.StrProperties: map[string]any{
+					strconst.StrQuery: map[string]any{
+						"type":         strconst.StrString,
 						keyDescription: "Consulta en lenguaje natural sobre lo que buscas en el código",
 					},
 					"max_results": map[string]any{
-						"type":         "integer",
+						"type":         strconst.StrInteger,
 						keyDescription: "Máximo de resultados (default: 5)",
 					},
 				},
-				"required": []string{"query"},
+				strconst.StrRequired: []string{strconst.StrQuery},
 			},
 			Execute: func(ctx tools.Context, input map[string]any) (any, error) {
-				query, _ := input["query"].(string)
+				query, _ := input[strconst.StrQuery].(string)
 				if query == "" {
 					return nil, fmt.Errorf("query is required")
 				}
@@ -100,10 +101,10 @@ func RegisterTools(reg *tools.Registry) error {
 			Name:        "codebase_index",
 			Description: "Indexa el codebase completo: escanea archivos, genera embeddings y los almacena para búsqueda semántica.",
 			InputSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
+				"type": strconst.StrObject,
+				strconst.StrProperties: map[string]any{
 					"path": map[string]any{
-						"type":         "string",
+						"type":         strconst.StrString,
 						keyDescription: "Ruta del proyecto a indexar (default: root del proyecto)",
 					},
 				},

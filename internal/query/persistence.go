@@ -9,17 +9,18 @@ import (
 	"time"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/mcp"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 const (
-	scopeProject   = "project"
+	scopeProject   = strconst.StrProject
 	keyModel       = "model"
 	keyFunction    = "function"
 	keyType        = "type"
-	valObject      = "object"
-	keyProperties  = "properties"
+	valObject      = strconst.StrObject
+	keyProperties  = strconst.StrProperties
 	keyParameters  = "parameters"
-	keyDescription = "description"
+	keyDescription = strconst.StrDescription
 )
 
 // lookPathFn is mockable for tests (similar to osStatPathFn in tui/model.go).
@@ -88,10 +89,10 @@ func (e *DxrkMemoryBackend) SaveTurn(sessionID, userMsg, assistantMsg string) er
 	content := fmt.Sprintf("**User**: %s\n\n**Assistant**: %s", userMsg, assistantMsg)
 
 	params := map[string]any{
-		"memory": content,
-		"type":   "manual",
-		"title":  title,
-		"scope":  scopeProject,
+		"memory":          content,
+		"type":            "manual",
+		strconst.StrTitle: title,
+		"scope":           scopeProject,
 	}
 	if sessionID != "" {
 		params["session_id"] = sessionID
@@ -112,7 +113,7 @@ func (e *DxrkMemoryBackend) GetProjectContext(project string) (string, error) {
 	defer cancel()
 
 	params := map[string]any{
-		"project": project,
+		strconst.StrProject: project,
 	}
 	result, err := e.client.CallTool(ctx, "mem_context", params)
 	if err != nil {
@@ -131,8 +132,8 @@ func (e *DxrkMemoryBackend) Search(query, project string) ([]SearchResult, error
 	defer cancel()
 
 	params := map[string]any{
-		"query":   query,
-		"project": project,
+		strconst.StrQuery:   query,
+		strconst.StrProject: project,
 	}
 	result, err := e.client.CallTool(ctx, "mem_search", params)
 	if err != nil {

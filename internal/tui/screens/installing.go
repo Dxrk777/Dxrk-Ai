@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
 )
 
@@ -43,9 +44,9 @@ func RenderInstalling(progress InstallProgress, spinner string) string {
 		switch item.Status {
 		case "succeeded":
 			icon = styles.SuccessStyle.Render("✓")
-		case "failed":
+		case strconst.StrFailed:
 			icon = styles.ErrorStyle.Render("✗")
-		case "running":
+		case strconst.StrRunning:
 			icon = styles.WarningStyle.Render(spinner)
 		default:
 			icon = styles.SubtextStyle.Render("·")
@@ -91,7 +92,7 @@ func countResults(items []ProgressItem) (succeeded, failed int) {
 		switch item.Status {
 		case "succeeded":
 			succeeded++
-		case "failed":
+		case strconst.StrFailed:
 			failed++
 		}
 	}

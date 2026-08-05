@@ -15,6 +15,7 @@ import (
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/components/permissions"
 	"github.com/Dxrk777/Dxrk-Ai/internal/compress"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
 
@@ -26,9 +27,9 @@ import (
 type StopReason string
 
 const (
-	StopSuccess     StopReason = "success"
+	StopSuccess     StopReason = strconst.StrSuccess
 	StopMaxTurns    StopReason = "max_turns"
-	StopError       StopReason = "error"
+	StopError       StopReason = strconst.StrError
 	StopInterrupted StopReason = "interrupted"
 	StopToolFailure StopReason = "tool_failure"
 )
@@ -37,9 +38,9 @@ const (
 type Role string
 
 const (
-	RoleSystem    Role = "system"
+	RoleSystem    Role = strconst.StrSystem
 	RoleUser      Role = "user"
-	RoleAssistant Role = "assistant"
+	RoleAssistant Role = strconst.StrAssistant
 	RoleTool      Role = "tool"
 )
 
@@ -212,7 +213,7 @@ func (l *Loop) Run(ctx context.Context, messages []Message) (Result, error) {
 
 		// Execute tools
 		toolCtx, toolSpan := l.startSpan(turnCtx, "execute_tools",
-			attribute.Int("count", len(resp.ToolUses)),
+			attribute.Int(strconst.StrCount, len(resp.ToolUses)),
 		)
 		results, err := l.executeTools(toolCtx, resp.ToolUses)
 		toolSpan.End()

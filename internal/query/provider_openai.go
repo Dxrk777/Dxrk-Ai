@@ -9,6 +9,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type OpenAIProvider struct {
@@ -85,11 +87,11 @@ func (p *OpenAIProvider) buildRequest(messages []Message, tools []ToolSchema) ma
 		case RoleTool:
 			msg["role"] = "tool"
 			msg["tool_call_id"] = m.ToolCallID
-			msg["content"] = m.Content
+			msg[strconst.StrContent] = m.Content
 		case RoleAssistant:
-			msg["content"] = m.Content
+			msg[strconst.StrContent] = m.Content
 		default:
-			msg["content"] = m.Content
+			msg[strconst.StrContent] = m.Content
 		}
 		apiMsgs[i] = msg
 	}

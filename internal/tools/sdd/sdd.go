@@ -5,6 +5,7 @@ package sdd
 import (
 	"fmt"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 )
 
@@ -35,18 +36,18 @@ func RegisterAll(reg *tools.Registry) error {
 			Name:        p.Name,
 			Description: p.Description,
 			InputSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
+				"type": strconst.StrObject,
+				strconst.StrProperties: map[string]any{
 					keyProjectDir: map[string]any{
-						"type":        "string",
-						"description": "Project directory to run the SDD phase in",
+						"type":                  strconst.StrString,
+						strconst.StrDescription: "Project directory to run the SDD phase in",
 					},
 					"phase_data": map[string]any{
-						"type":        "string",
-						"description": "Optional context or data for the phase",
+						"type":                  strconst.StrString,
+						strconst.StrDescription: "Optional context or data for the phase",
 					},
 				},
-				"required": []string{keyProjectDir},
+				strconst.StrRequired: []string{keyProjectDir},
 			},
 			Validate: func(input map[string]any) error {
 				if input == nil || input[keyProjectDir] == nil {
@@ -64,11 +65,11 @@ func RegisterAll(reg *tools.Registry) error {
 					)
 				}
 				return map[string]any{
-					"phase":       p.Name,
-					"status":      "invoked",
-					keyProjectDir: projectDir,
-					"phase_data":  phaseData,
-					"message":     fmt.Sprintf("SDD phase %q invoked for project %q", p.Name, projectDir),
+					"phase":            p.Name,
+					strconst.StrStatus: "invoked",
+					keyProjectDir:      projectDir,
+					"phase_data":       phaseData,
+					"message":          fmt.Sprintf("SDD phase %q invoked for project %q", p.Name, projectDir),
 				}, nil
 			},
 			IsReadOnly: tools.DefaultDisabled(),

@@ -8,6 +8,7 @@ import (
 	"os/exec"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 // GenerationEngine abstracts the AI CLI tool used to generate a skill.
@@ -43,12 +44,12 @@ type ClaudeEngine struct{}
 func (e *ClaudeEngine) Agent() model.AgentID { return model.AgentClaudeCode }
 
 func (e *ClaudeEngine) Available() bool {
-	_, err := exec.LookPath("claude")
+	_, err := exec.LookPath(strconst.StrClaude)
 	return err == nil
 }
 
 func (e *ClaudeEngine) Generate(ctx context.Context, prompt string) (string, error) {
-	cmd := exec.CommandContext(ctx, "claude", "--print", "-p", prompt) //nolint:gosec
+	cmd := exec.CommandContext(ctx, strconst.StrClaude, "--print", "-p", prompt) //nolint:gosec
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	out, err := cmd.Output()

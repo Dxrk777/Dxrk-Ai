@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 const (
@@ -310,7 +311,7 @@ func parseFrontmatter(source string) (name, description, body string) {
 		switch m[1] {
 		case "name":
 			name = value
-		case "description":
+		case strconst.StrDescription:
 			description = value
 		}
 	}

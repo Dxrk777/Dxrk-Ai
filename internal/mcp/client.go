@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"sync/atomic"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/version"
 )
 
@@ -27,8 +28,8 @@ func (c *Client) Initialize(ctx context.Context) (*InitializeResult, error) {
 	params := map[string]any{
 		"protocolVersion": "2024-11-05",
 		"clientInfo": map[string]string{
-			"name":    "dxrk",
-			"version": version.Version,
+			"name":              "dxrk",
+			strconst.StrVersion: version.Version,
 		},
 	}
 

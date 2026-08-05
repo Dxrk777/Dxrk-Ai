@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/query"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -44,7 +45,7 @@ func (m *Model) sendChatMessage(input string) tea.Cmd {
 }
 
 const (
-	roleSystem = "system"
+	roleSystem = strconst.StrSystem
 	keyEnter   = "enter"
 )
 
@@ -58,7 +59,7 @@ func (m *Model) buildChatMessages(_ string) []query.Message {
 	}
 	for _, h := range m.chatHistory {
 		role := query.RoleUser
-		if h.role == "assistant" || h.role == "system" {
+		if h.role == strconst.StrAssistant || h.role == strconst.StrSystem {
 			role = query.RoleAssistant
 		}
 		msgs = append(msgs, query.Message{

@@ -5,19 +5,20 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 )
 
 const (
-	schemaTypeObject  = "object"
-	schemaProperties  = "properties"
+	schemaTypeObject  = strconst.StrObject
+	schemaProperties  = strconst.StrProperties
 	schemaTypeBoolean = "boolean"
-	schemaDescription = "description"
-	schemaTypeString  = "string"
+	schemaDescription = strconst.StrDescription
+	schemaTypeString  = strconst.StrString
 	schemaKeyBranch   = "branch"
 	schemaKeyMessage  = "message"
 	schemaKeyRemote   = "remote"
-	schemaRequired    = "required"
+	schemaRequired    = strconst.StrRequired
 	descRemoteDefault = "Remoto (default: origin)"
 )
 
@@ -99,7 +100,7 @@ func RegisterTools(reg *tools.Registry) error {
 				"type": schemaTypeObject,
 				schemaProperties: map[string]any{
 					"limit": map[string]any{
-						"type":            "integer",
+						"type":            strconst.StrInteger,
 						schemaDescription: "Número máximo de commits (default: 10)",
 					},
 					schemaKeyBranch: map[string]any{
@@ -153,10 +154,10 @@ func RegisterTools(reg *tools.Registry) error {
 						"type":            schemaTypeBoolean,
 						schemaDescription: "Auto-agregar archivos modificados (default: true)",
 					},
-					"files": map[string]any{
-						"type":            "array",
+					strconst.StrFiles: map[string]any{
+						"type":            strconst.StrArray,
 						schemaDescription: "Archivos específicos a incluir",
-						"items":           map[string]any{"type": schemaTypeString},
+						strconst.StrItems: map[string]any{"type": schemaTypeString},
 					},
 				},
 				schemaRequired: []string{schemaKeyMessage},
@@ -171,7 +172,7 @@ func RegisterTools(reg *tools.Registry) error {
 				if !autoAdd {
 					autoAdd = true
 				}
-				filesRaw, _ := input["files"].([]any)
+				filesRaw, _ := input[strconst.StrFiles].([]any)
 
 				if autoAdd || len(filesRaw) > 0 {
 					if len(filesRaw) > 0 {
@@ -348,7 +349,7 @@ func RegisterTools(reg *tools.Registry) error {
 						schemaDescription: "Mensaje descriptivo (solo push)",
 					},
 					"index": map[string]any{
-						"type":            "integer",
+						"type":            strconst.StrInteger,
 						schemaDescription: "Índice del stash a pop (default: 0)",
 					},
 				},
@@ -416,7 +417,7 @@ func RegisterTools(reg *tools.Registry) error {
 			InputSchema: map[string]any{
 				"type": schemaTypeObject,
 				schemaProperties: map[string]any{
-					"title": map[string]any{
+					strconst.StrTitle: map[string]any{
 						"type":            schemaTypeString,
 						schemaDescription: "Título del PR",
 					},
@@ -433,19 +434,19 @@ func RegisterTools(reg *tools.Registry) error {
 						schemaDescription: "Crear como draft",
 					},
 					"labels": map[string]any{
-						"type":            "array",
+						"type":            strconst.StrArray,
 						schemaDescription: "Labels a aplicar",
-						"items":           map[string]any{"type": schemaTypeString},
+						strconst.StrItems: map[string]any{"type": schemaTypeString},
 					},
 				},
-				schemaRequired: []string{"title", "body"},
+				schemaRequired: []string{strconst.StrTitle, "body"},
 			},
 			Execute: func(ctx tools.Context, input map[string]any) (any, error) {
 				r, err := getRunner(ctx)
 				if err != nil {
 					return nil, err
 				}
-				title, _ := input["title"].(string)
+				title, _ := input[strconst.StrTitle].(string)
 				body, _ := input["body"].(string)
 				base, _ := input["base"].(string)
 				draft, _ := input["draft"].(bool)

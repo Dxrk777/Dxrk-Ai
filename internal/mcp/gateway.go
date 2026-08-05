@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	dxrklog "github.com/Dxrk777/Dxrk-Ai/internal/log"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
 
@@ -96,7 +97,7 @@ func (g *Gateway) connectOne(ctx context.Context, name string, cfg ServerConfig)
 		_ = transport.Close()
 		return nil, nil, fmt.Errorf("initialize: %w", err)
 	}
-	log.Debug("MCP server initialized", "name", info.ServerInfo.Name, "version", info.ServerInfo.Version)
+	log.Debug("MCP server initialized", "name", info.ServerInfo.Name, strconst.StrVersion, info.ServerInfo.Version)
 
 	defs, err := client.ListTools(ctx)
 	if err != nil {
@@ -129,7 +130,7 @@ func (g *Gateway) RegisterTools(registry *tools.Registry) (int, error) {
 	for name, client := range g.clients {
 		defs, err := client.ListTools(context.Background())
 		if err != nil {
-			g.logger.Warn("MCP gateway: list tools failed", "server", name, "error", err)
+			g.logger.Warn("MCP gateway: list tools failed", "server", name, strconst.StrError, err)
 			continue
 		}
 		for _, d := range defs {
@@ -141,7 +142,7 @@ func (g *Gateway) RegisterTools(registry *tools.Registry) (int, error) {
 				tp:         g.tp,
 			}
 			if err := gt.register(registry); err != nil {
-				g.logger.Warn("MCP gateway: register tool failed", "server", name, "tool", d.Name, "error", err)
+				g.logger.Warn("MCP gateway: register tool failed", "server", name, "tool", d.Name, strconst.StrError, err)
 				continue
 			}
 			registered++
@@ -156,7 +157,7 @@ func (g *Gateway) Disconnect() {
 	defer g.mu.Unlock()
 	for name, client := range g.clients {
 		if err := client.Close(); err != nil {
-			g.logger.Warn("MCP gateway: close failed", "server", name, "error", err)
+			g.logger.Warn("MCP gateway: close failed", "server", name, strconst.StrError, err)
 		}
 	}
 	g.clients = make(map[string]*Client)
@@ -301,13 +302,13 @@ func (gt *gatewayTool) register(registry *tools.Registry) error {
 	props := make(map[string]any)
 	for k, v := range schema.Properties {
 		props[k] = map[string]any{
-			"type":        v.Type,
-			"description": v.Description,
+			"type":                  v.Type,
+			strconst.StrDescription: v.Description,
 		}
 	}
 	inputSchema := map[string]any{
-		"type":       schema.Type,
-		"properties": props,
+		"type":                 schema.Type,
+		strconst.StrProperties: props,
 	}
 
 	t, err := tools.Build(tools.ToolDef{
@@ -340,9 +341,9 @@ func (gt *gatewayTool) register(registry *tools.Registry) error {
 // MarshalJSON for gatewayTool's tool definition (for display).
 func (gt *gatewayTool) String() string {
 	b, _ := json.Marshal(map[string]string{
-		"server":      gt.serverName,
-		"tool":        gt.toolName,
-		"description": gt.toolDef.Description,
+		"server":                gt.serverName,
+		"tool":                  gt.toolName,
+		strconst.StrDescription: gt.toolDef.Description,
 	})
 	return string(b)
 }

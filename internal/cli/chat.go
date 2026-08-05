@@ -8,6 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tui"
 )
@@ -18,7 +19,7 @@ func RunChat(apiKey, model string) error {
 		os.Exit(1) //nolint:revive
 	}
 	if model == "" {
-		model = "claude-sonnet-4-20250514"
+		model = strconst.StrClaudeSonnet420250514
 	}
 
 	var tp trace.Exporter

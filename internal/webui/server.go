@@ -16,13 +16,14 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/pipeline"
 	"github.com/Dxrk777/Dxrk-Ai/internal/rag"
 	"github.com/Dxrk777/Dxrk-Ai/internal/router"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/vault"
 	"github.com/Dxrk777/Dxrk-Ai/internal/version"
 
 	"golang.org/x/net/websocket"
 )
 
-const statusRunning = "running"
+const statusRunning = strconst.StrRunning
 
 type Server struct {
 	config   *config.WebUIConfig
@@ -184,9 +185,9 @@ func (s *Server) Start() error {
 		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			_ = json.NewEncoder(w).Encode(map[string]string{
-				"name":    "Dxrk.ai API",
-				"version": version.Version,
-				"status":  statusRunning, //nolint:goconst
+				"name":              "Dxrk.ai API",
+				strconst.StrVersion: version.Version,
+				strconst.StrStatus:  statusRunning, //nolint:goconst
 			})
 		})
 	}
@@ -274,7 +275,7 @@ func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleHealth(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, map[string]string{"status": "ok"}) //nolint:goconst
+	writeJSON(w, map[string]string{strconst.StrStatus: "ok"}) //nolint:goconst
 }
 
 func (s *Server) HandleConfig(w http.ResponseWriter, r *http.Request) {
@@ -327,7 +328,7 @@ func (s *Server) HandleSettings(w http.ResponseWriter, r *http.Request) {
 		s.config.AutoUpdate = v
 	}
 
-	writeJSON(w, map[string]string{"status": "ok"})
+	writeJSON(w, map[string]string{strconst.StrStatus: "ok"})
 }
 
 func (s *Server) handleWebSocket(ws *websocket.Conn) {
@@ -361,13 +362,13 @@ func (s *Server) handleWebSocket(ws *websocket.Conn) {
 
 func (s *Server) sendStatusViaWS(ws *websocket.Conn) {
 	resp := map[string]any{
-		"type":   "status", //nolint:goconst
+		"type":   strconst.StrStatus, //nolint:goconst
 		"uptime": time.Since(s.stats.startedAt).String(),
 	}
 	if s.autonomy != nil {
 		resp["autonomy"] = map[string]any{
-			"enabled": s.autonomy.Config.Enabled,
-			"iq":      s.autonomy.CurrentIQ().OverallIQ,
+			strconst.StrEnabled: s.autonomy.Config.Enabled,
+			"iq":                s.autonomy.CurrentIQ().OverallIQ,
 		}
 	}
 	if s.router != nil {
@@ -441,7 +442,7 @@ type logEntry struct {
 func generateMockLogs() []logEntry {
 	now := time.Now()
 	return []logEntry{
-		{Timestamp: now.Format(time.RFC3339), Level: "INFO", Source: "system", Message: "Web UI server started"},
+		{Timestamp: now.Format(time.RFC3339), Level: "INFO", Source: strconst.StrSystem, Message: "Web UI server started"},
 		{Timestamp: now.Add(-1 * time.Second).Format(time.RFC3339), Level: "INFO", Source: "router", Message: "Provider claude/gpt-4o initialized"},
 		{Timestamp: now.Add(-2 * time.Second).Format(time.RFC3339), Level: "WARN", Source: "sandbox", Message: "Container pool at 80% capacity"},
 		{Timestamp: now.Add(-3 * time.Second).Format(time.RFC3339), Level: "INFO", Source: "autonomy", Message: "IQ report: score 85.3, 12 patterns learned"},

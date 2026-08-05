@@ -7,6 +7,7 @@ import (
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
 	"github.com/Dxrk777/Dxrk-Ai/internal/planner"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/system"
 )
 
@@ -63,7 +64,7 @@ func joinComponentIDs(values []model.ComponentID) string {
 func formatPlatformDecision(decision planner.PlatformDecision) string {
 	osName := decision.OS
 	if strings.TrimSpace(osName) == "" {
-		osName = "unknown"
+		osName = strconst.StrUnknown
 	}
 
 	distro := decision.LinuxDistro

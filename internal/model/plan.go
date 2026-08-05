@@ -1,21 +1,23 @@
 // SPDX-License-Identifier: MIT
 package model
 
+import "github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+
 type PlanStatus string
 
 const (
-	PlanStatusPending   PlanStatus = "pending"
-	PlanStatusRunning   PlanStatus = "running"
+	PlanStatusPending   PlanStatus = strconst.StrPending
+	PlanStatusRunning   PlanStatus = strconst.StrRunning
 	PlanStatusSucceeded PlanStatus = "succeeded"
-	PlanStatusFailed    PlanStatus = "failed"
+	PlanStatusFailed    PlanStatus = strconst.StrFailed
 )
 
 type RunResult string
 
 const (
 	RunResultSkipped RunResult = "skipped"
-	RunResultSuccess RunResult = "success"
-	RunResultFailed  RunResult = "failed"
+	RunResultSuccess RunResult = strconst.StrSuccess
+	RunResultFailed  RunResult = strconst.StrFailed
 )
 
 type PlanStep struct {

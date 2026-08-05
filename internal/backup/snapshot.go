@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 const ManifestFilename = "manifest.json"
@@ -122,7 +124,7 @@ func (s Snapshotter) buildEntry(sourcePath string) (ManifestEntry, ArchiveEntry,
 		relative = "root"
 	}
 
-	relPath := filepath.ToSlash(filepath.Join("files", relative))
+	relPath := filepath.ToSlash(filepath.Join(strconst.StrFiles, relative))
 
 	archiveEntry := ArchiveEntry{
 		RelPath:    relPath,

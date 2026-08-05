@@ -1,6 +1,10 @@
 package team
 
-import "time"
+import (
+	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+)
 
 type Role int
 
@@ -25,7 +29,7 @@ func (r Role) String() string {
 	case RoleOwner:
 		return "owner"
 	default:
-		return "unknown"
+		return strconst.StrUnknown
 	}
 }
 

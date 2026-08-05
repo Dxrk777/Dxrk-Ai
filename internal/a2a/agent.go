@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/google/uuid"
 )
 
@@ -318,7 +319,7 @@ func extractFromAgent(msg Message) string {
 		_ = json.Unmarshal(msg.Params, &p)
 		return p.FromAgent
 	default:
-		return "unknown"
+		return strconst.StrUnknown
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/pipeline"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tui/screens"
 )
 
@@ -14,8 +15,8 @@ type ProgressItem struct {
 }
 
 const (
-	ProgressStatusPending = "pending"
-	ProgressStatusRunning = "running"
+	ProgressStatusPending = strconst.StrPending
+	ProgressStatusRunning = strconst.StrRunning
 )
 
 type ProgressState struct {

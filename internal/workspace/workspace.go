@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/query"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
 
@@ -139,7 +140,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.err != nil {
 			m.chatHistory = append(m.chatHistory, chatMessage{role: roleSystem, content: "Error: " + msg.err.Error()})
 		} else {
-			m.chatHistory = append(m.chatHistory, chatMessage{role: "assistant", content: msg.text})
+			m.chatHistory = append(m.chatHistory, chatMessage{role: strconst.StrAssistant, content: msg.text})
 		}
 		m.chatViewport.GotoBottom()
 

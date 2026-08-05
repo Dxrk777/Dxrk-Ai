@@ -1,15 +1,19 @@
 // SPDX-License-Identifier: MIT
 package pipeline
 
-import "time"
+import (
+	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+)
 
 type StepStatus string
 
 const (
-	StepStatusPending    StepStatus = "pending"
-	StepStatusRunning    StepStatus = "running"
+	StepStatusPending    StepStatus = strconst.StrPending
+	StepStatusRunning    StepStatus = strconst.StrRunning
 	StepStatusSucceeded  StepStatus = "succeeded"
-	StepStatusFailed     StepStatus = "failed"
+	StepStatusFailed     StepStatus = strconst.StrFailed
 	StepStatusRolledBack StepStatus = "rolled-back"
 	StepStatusSkipped    StepStatus = "skipped"
 )

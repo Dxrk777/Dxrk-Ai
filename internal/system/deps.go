@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 const versionFlag = "--version"
@@ -83,7 +85,7 @@ func defineDependencies(profile PlatformProfile) []Dependency {
 	deps = append(deps, Dependency{
 		Name:        "go",
 		Required:    false,
-		DetectCmd:   []string{"go", "version"},
+		DetectCmd:   []string{"go", strconst.StrVersion},
 		InstallHint: installHintGo(profile),
 	})
 

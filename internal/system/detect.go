@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type SystemInfo struct {
@@ -26,7 +28,7 @@ type PlatformProfile struct {
 }
 
 const (
-	LinuxDistroUnknown = "unknown"
+	LinuxDistroUnknown = strconst.StrUnknown
 	LinuxDistroUbuntu  = "ubuntu"
 	LinuxDistroDebian  = "debian"
 	LinuxDistroArch    = "arch"
@@ -90,7 +92,7 @@ func detectFromInputs(goos, arch, shell, linuxOSRelease string, tools map[string
 		if goos == osWindows {
 			shell = "powershell"
 		} else {
-			shell = "unknown"
+			shell = strconst.StrUnknown
 		}
 	}
 

@@ -9,6 +9,7 @@ import (
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/installcmd"
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/system"
 )
 
@@ -48,7 +49,7 @@ func (a *Adapter) Tier() model.SupportTier {
 func (a *Adapter) Detect(_ context.Context, homeDir string) (bool, string, string, bool, error) {
 	configPath := ConfigPath(homeDir)
 
-	binaryPath, err := a.lookPath("claude")
+	binaryPath, err := a.lookPath(strconst.StrClaude)
 	installed := err == nil
 
 	stat := a.statPath(configPath)

@@ -7,6 +7,7 @@ import (
 	"sync/atomic"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/log"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 // WorkerPool manages a configurable number of goroutines consuming tasks from a Queue.
@@ -98,10 +99,10 @@ func (wp *WorkerPool) runWorker(id int) {
 		result, err := wp.handler(nil, task)
 		if err != nil {
 			task.Fail(err)
-			logger.Error("task failed", "task_id", task.ID, "type", task.Type, "error", err)
+			logger.Error("task failed", strconst.StrTaskId, task.ID, "type", task.Type, strconst.StrError, err)
 		} else {
 			task.Complete(result)
-			logger.Debug("task completed", "task_id", task.ID, "type", task.Type)
+			logger.Debug("task completed", strconst.StrTaskId, task.ID, "type", task.Type)
 		}
 		wp.active.Add(-1)
 	}

@@ -11,6 +11,7 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/a2a"
 	"github.com/Dxrk777/Dxrk-Ai/internal/query"
 	"github.com/Dxrk777/Dxrk-Ai/internal/router"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 const PipelineVersion = "1.0"
@@ -234,10 +235,10 @@ func (p *Pipeline) runNode(_ context.Context, _ *workUnit, role PipelineRole, fn
 		DurationMs: duration.Milliseconds(),
 	}
 	if err != nil {
-		report.Status = "failed"
+		report.Status = strconst.StrFailed
 		report.Error = err.Error()
 	} else {
-		report.Status = "completed"
+		report.Status = strconst.StrCompleted
 		report.Output = output
 	}
 	return report
@@ -249,7 +250,7 @@ func (p *Pipeline) llmGenerate(ctx context.Context, role PipelineRole, prompt st
 	}
 
 	messages := []query.Message{
-		{Role: "system", Content: p.systemPromptForRole(role)},
+		{Role: strconst.StrSystem, Content: p.systemPromptForRole(role)},
 		{Role: "user", Content: prompt},
 	}
 
@@ -295,7 +296,7 @@ func (p *Pipeline) makeHandler(role PipelineRole, systemPrompt string) a2a.Messa
 				return nil, err
 			}
 			messages := []query.Message{
-				{Role: "system", Content: systemPrompt},
+				{Role: strconst.StrSystem, Content: systemPrompt},
 				{Role: "user", Content: params.Query},
 			}
 			resp, err := p.cfg.Router.Generate(ctx, messages, nil)
@@ -310,7 +311,7 @@ func (p *Pipeline) makeHandler(role PipelineRole, systemPrompt string) a2a.Messa
 				return nil, fmt.Errorf("bad share_context params: %w", err)
 			}
 			p.cfg.Logger("[pipeline] %s received context from %s", role, params.FromAgent)
-			return map[string]string{"status": "received"}, nil
+			return map[string]string{strconst.StrStatus: "received"}, nil
 
 		default:
 			return nil, fmt.Errorf("pipeline agent %s: unhandled method %s", role, msg.Method)

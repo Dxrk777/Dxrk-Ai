@@ -9,6 +9,7 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
 	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 // InjectionResult describes all files written by the GGA config injection.
@@ -49,7 +50,7 @@ func ProviderForAgents(agentIDs []model.AgentID) string {
 
 	switch {
 	case has[model.AgentClaudeCode]:
-		return "claude"
+		return strconst.StrClaude
 	case has[model.AgentOpenCode]:
 		return "opencode"
 	case has[model.AgentGeminiCLI]:
@@ -60,7 +61,7 @@ func ProviderForAgents(agentIDs []model.AgentID) string {
 	case has[model.AgentCodex]:
 		return "codex"
 	default:
-		return "claude"
+		return strconst.StrClaude
 	}
 }
 

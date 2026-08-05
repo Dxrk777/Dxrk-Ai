@@ -8,20 +8,21 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 )
 
 const (
-	valObject      = "object"
-	keyProperties  = "properties"
+	valObject      = strconst.StrObject
+	keyProperties  = strconst.StrProperties
 	keyType        = "type"
-	valString      = "string"
-	keyDescription = "description"
-	keyTimeout     = "timeout"
-	valInteger     = "integer"
-	keyRequired    = "required"
-	keyStdout      = "stdout"
-	keyStderr      = "stderr"
+	valString      = strconst.StrString
+	keyDescription = strconst.StrDescription
+	keyTimeout     = strconst.StrTimeout
+	valInteger     = strconst.StrInteger
+	keyRequired    = strconst.StrRequired
+	keyStdout      = strconst.StrStdout
+	keyStderr      = strconst.StrStderr
 	keyExitCode    = "exit_code"
 	keyDurationMs  = "duration_ms"
 	keyProjectPath = "project_path"
@@ -56,7 +57,7 @@ func RegisterTools(reg *tools.Registry) error {
 			Execute: func(ctx tools.Context, input map[string]any) (any, error) {
 				code, _ := input["code"].(string)
 				lang, _ := input["language"].(string)
-				timeoutSec, _ := input["timeout"].(int)
+				timeoutSec, _ := input[strconst.StrTimeout].(int)
 
 				if code == "" {
 					return nil, fmt.Errorf("code is required")
@@ -110,7 +111,7 @@ func RegisterTools(reg *tools.Registry) error {
 			Execute: func(ctx tools.Context, input map[string]any) (any, error) {
 				projectPath, _ := input[keyProjectPath].(string)
 				cmdStr, _ := input["command"].(string)
-				timeoutSec, _ := input["timeout"].(int)
+				timeoutSec, _ := input[strconst.StrTimeout].(int)
 
 				if projectPath == "" {
 					return nil, fmt.Errorf("project_path is required")
@@ -145,12 +146,12 @@ func RegisterTools(reg *tools.Registry) error {
 
 				passed := result.ExitCode == 0
 				return map[string]any{
-					"passed":      passed,
-					"stdout":      result.Stdout,
-					"stderr":      result.Stderr,
-					"exit_code":   result.ExitCode,
-					"timed_out":   result.TimedOut,
-					"duration_ms": result.Duration.Milliseconds(),
+					"passed":           passed,
+					strconst.StrStdout: result.Stdout,
+					strconst.StrStderr: result.Stderr,
+					"exit_code":        result.ExitCode,
+					"timed_out":        result.TimedOut,
+					"duration_ms":      result.Duration.Milliseconds(),
 				}, nil
 			},
 		},
@@ -178,7 +179,7 @@ func RegisterTools(reg *tools.Registry) error {
 			Execute: func(ctx tools.Context, input map[string]any) (any, error) {
 				projectPath, _ := input[keyProjectPath].(string)
 				cmdStr, _ := input["command"].(string)
-				timeoutSec, _ := input["timeout"].(int)
+				timeoutSec, _ := input[strconst.StrTimeout].(int)
 
 				if projectPath == "" {
 					return nil, fmt.Errorf("project_path is required")
@@ -213,11 +214,11 @@ func RegisterTools(reg *tools.Registry) error {
 
 				success := result.ExitCode == 0
 				return map[string]any{
-					"success":     success,
-					keyStdout:     result.Stdout,
-					keyStderr:     result.Stderr,
-					keyExitCode:   result.ExitCode,
-					keyDurationMs: result.Duration.Milliseconds(),
+					strconst.StrSuccess: success,
+					keyStdout:           result.Stdout,
+					keyStderr:           result.Stderr,
+					keyExitCode:         result.ExitCode,
+					keyDurationMs:       result.Duration.Milliseconds(),
 				}, nil
 			},
 		},

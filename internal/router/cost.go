@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: MIT
 package router
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+)
 
 type CostConfig struct {
 	InputPricePer1K  float64
@@ -9,21 +13,21 @@ type CostConfig struct {
 }
 
 var DefaultCosts = map[string]CostConfig{
-	"claude-sonnet-4-20250514":   {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
-	"claude-sonnet-4":            {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
-	"claude-3-5-sonnet-20241022": {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
-	"claude-3-haiku-20240307":    {InputPricePer1K: 0.00025, OutputPricePer1K: 0.00125},
-	"claude-opus-4-20250514":     {InputPricePer1K: 0.015, OutputPricePer1K: 0.075},
-	"gpt-4o":                     {InputPricePer1K: 0.0025, OutputPricePer1K: 0.01},
-	"gpt-4o-mini":                {InputPricePer1K: 0.00015, OutputPricePer1K: 0.0006},
-	"gpt-4-turbo":                {InputPricePer1K: 0.01, OutputPricePer1K: 0.03},
-	"gemini-1.5-pro":             {InputPricePer1K: 0.00125, OutputPricePer1K: 0.005},
-	"gemini-1.5-flash":           {InputPricePer1K: 0.000075, OutputPricePer1K: 0.0003},
-	"gemini-2.0-flash":           {InputPricePer1K: 0.0001, OutputPricePer1K: 0.0004},
-	"ollama/llama3.1:8b":         {InputPricePer1K: 0, OutputPricePer1K: 0},
-	"ollama/mixtral:8x7b":        {InputPricePer1K: 0, OutputPricePer1K: 0},
-	"bedrock/claude-sonnet-4":    {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
-	"bedrock/claude-haiku-3":     {InputPricePer1K: 0.00025, OutputPricePer1K: 0.00125},
+	strconst.StrClaudeSonnet420250514: {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
+	"claude-sonnet-4":                 {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
+	"claude-3-5-sonnet-20241022":      {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
+	"claude-3-haiku-20240307":         {InputPricePer1K: 0.00025, OutputPricePer1K: 0.00125},
+	"claude-opus-4-20250514":          {InputPricePer1K: 0.015, OutputPricePer1K: 0.075},
+	"gpt-4o":                          {InputPricePer1K: 0.0025, OutputPricePer1K: 0.01},
+	"gpt-4o-mini":                     {InputPricePer1K: 0.00015, OutputPricePer1K: 0.0006},
+	"gpt-4-turbo":                     {InputPricePer1K: 0.01, OutputPricePer1K: 0.03},
+	"gemini-1.5-pro":                  {InputPricePer1K: 0.00125, OutputPricePer1K: 0.005},
+	"gemini-1.5-flash":                {InputPricePer1K: 0.000075, OutputPricePer1K: 0.0003},
+	"gemini-2.0-flash":                {InputPricePer1K: 0.0001, OutputPricePer1K: 0.0004},
+	"ollama/llama3.1:8b":              {InputPricePer1K: 0, OutputPricePer1K: 0},
+	"ollama/mixtral:8x7b":             {InputPricePer1K: 0, OutputPricePer1K: 0},
+	"bedrock/claude-sonnet-4":         {InputPricePer1K: 0.003, OutputPricePer1K: 0.015},
+	"bedrock/claude-haiku-3":          {InputPricePer1K: 0.00025, OutputPricePer1K: 0.00125},
 }
 
 type CostTracker struct {

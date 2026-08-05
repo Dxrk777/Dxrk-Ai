@@ -9,6 +9,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type OllamaProvider struct {
@@ -73,7 +75,7 @@ func (p *OllamaProvider) Generate(ctx context.Context, messages []Message, tools
 func (p *OllamaProvider) buildRequest(messages []Message, tools []ToolSchema) map[string]any {
 	apiMsgs := make([]map[string]any, len(messages))
 	for i, m := range messages {
-		msg := map[string]any{"role": string(m.Role), "content": m.Content}
+		msg := map[string]any{"role": string(m.Role), strconst.StrContent: m.Content}
 		if m.Role == RoleTool {
 			msg["role"] = "tool"
 		}

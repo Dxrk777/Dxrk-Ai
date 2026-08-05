@@ -14,6 +14,8 @@ import (
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 // TaskType classifies tasks for routing and rendering.
@@ -40,17 +42,17 @@ const (
 func (s TaskStatus) String() string {
 	switch s {
 	case StatusPending:
-		return "pending"
+		return strconst.StrPending
 	case StatusRunning:
-		return "running"
+		return strconst.StrRunning
 	case StatusCompleted:
-		return "completed"
+		return strconst.StrCompleted
 	case StatusFailed:
-		return "failed"
+		return strconst.StrFailed
 	case StatusCancelled:
-		return "cancelled"
+		return strconst.StrCancelled
 	default:
-		return "unknown"
+		return strconst.StrUnknown
 	}
 }
 

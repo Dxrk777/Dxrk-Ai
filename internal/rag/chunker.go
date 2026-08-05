@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type Chunk struct {
@@ -47,7 +49,7 @@ func LanguageFromExt(path string) string {
 	case ".ts", ".tsx":
 		return "typescript"
 	case ".js", ".jsx":
-		return "javascript"
+		return strconst.StrJavascript
 	case ".py":
 		return "python"
 	case ".rs":
@@ -77,7 +79,7 @@ func LanguageFromExt(path string) string {
 	case ".toml":
 		return "toml"
 	case ".md":
-		return "markdown"
+		return strconst.StrMarkdown
 	case ".html", ".svelte", ".vue":
 		return "html"
 	case ".css", ".scss", ".less":

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/gocolly/colly/v2"
 )
 
@@ -26,7 +27,7 @@ func Scrape(url string, timeout time.Duration) (*Result, error) {
 
 	res := &Result{URL: url}
 
-	c.OnHTML("title", func(e *colly.HTMLElement) {
+	c.OnHTML(strconst.StrTitle, func(e *colly.HTMLElement) {
 		res.Title = e.Text
 	})
 

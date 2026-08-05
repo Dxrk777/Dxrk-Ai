@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 package sdd
 
+import "github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+
 type OpenCodeCommand struct {
 	Name        string
 	Description string
@@ -8,7 +10,7 @@ type OpenCodeCommand struct {
 }
 
 const (
-	jsonDescription = "description"
+	jsonDescription = strconst.StrDescription
 	jsonPrompt      = "prompt"
 )
 

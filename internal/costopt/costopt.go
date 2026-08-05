@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/router"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type BudgetConfig struct {
@@ -92,7 +93,7 @@ func (co *CostOptimizer) checkBudget() {
 	}
 	if co.budget.MonthlyLimitUSD > 0 && co.monthlySpent >= co.budget.MonthlyLimitUSD*co.budget.AlertThreshold {
 		co.alerts = append(co.alerts, Alert{
-			Timestamp: time.Now(), Level: "critical",
+			Timestamp: time.Now(), Level: strconst.StrCritical,
 			Message: fmt.Sprintf("Monthly budget at %.0f%%", co.monthlySpent/co.budget.MonthlyLimitUSD*100),
 			Current: co.monthlySpent, Limit: co.budget.MonthlyLimitUSD,
 		})

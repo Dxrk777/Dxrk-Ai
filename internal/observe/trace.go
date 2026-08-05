@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
@@ -59,7 +60,7 @@ func SpanRecordDuration(ctx context.Context, name string, start time.Time, attrs
 }
 
 func ErrAttr(err error) attribute.KeyValue {
-	return attribute.String("error", err.Error())
+	return attribute.String(strconst.StrError, err.Error())
 }
 
 func IntAttr(key string, val int) attribute.KeyValue {

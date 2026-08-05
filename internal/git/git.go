@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 const (
@@ -46,7 +48,7 @@ func (r *Runner) runWithInput(ctx context.Context, input string, args ...string)
 }
 
 func (r *Runner) Status(ctx context.Context) (*StatusResult, error) {
-	stdout, _, err := r.run(ctx, "status", "--porcelain=v2", "--branch")
+	stdout, _, err := r.run(ctx, strconst.StrStatus, "--porcelain=v2", "--branch")
 	if err != nil {
 		return nil, fmt.Errorf("git status: %w", err)
 	}

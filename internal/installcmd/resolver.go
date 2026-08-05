@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/system"
 	"github.com/Dxrk777/Dxrk-Ai/internal/versions"
 )
@@ -19,7 +20,7 @@ var cmdLookPath = exec.LookPath
 var osStat = os.Stat
 var osGetenv = os.Getenv
 var cmdGoVersion = func() ([]byte, error) {
-	return exec.Command("go", "version").Output()
+	return exec.Command("go", strconst.StrVersion).Output()
 }
 
 const (

@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"sync"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 type UpdateResult struct {
@@ -97,7 +99,7 @@ func (u *Updater) Check(force bool) *UpdateResult {
 func (u *Updater) currentCommit() string {
 	out := u.git("rev-parse", "--short", "HEAD")
 	if out.err != nil {
-		return "unknown"
+		return strconst.StrUnknown
 	}
 	return string(bytes.TrimSpace(out.out))
 }

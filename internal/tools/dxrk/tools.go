@@ -14,24 +14,25 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
 	"github.com/Dxrk777/Dxrk-Ai/internal/skillregistry"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/system"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 )
 
 const (
-	valObject      = "object"
-	keyProperties  = "properties"
-	valString      = "string"
-	keyDescription = "description"
+	valObject      = strconst.StrObject
+	keyProperties  = strconst.StrProperties
+	valString      = strconst.StrString
+	keyDescription = strconst.StrDescription
 	keyAgent       = "agent"
-	keyRequired    = "required"
-	valInteger     = "integer"
-	keyPattern     = "pattern"
-	keyError       = "error"
-	keyFiles       = "files"
+	keyRequired    = strconst.StrRequired
+	valInteger     = strconst.StrInteger
+	keyPattern     = strconst.StrPattern
+	keyError       = strconst.StrError
+	keyFiles       = strconst.StrFiles
 	keyAgents      = "agents"
 	keyType        = "type"
-	keyCount       = "count"
+	keyCount       = strconst.StrCount
 	keyResults     = "results"
 )
 
@@ -62,7 +63,7 @@ func registerDetectAgents(reg *tools.Registry, agentReg *agents.Registry) error 
 			keyType: valObject,
 			keyProperties: map[string]any{
 				"home_dir": map[string]any{
-					"type":         "string",
+					"type":         strconst.StrString,
 					keyDescription: "Home directory (defaults to $HOME)",
 				},
 			},
@@ -102,7 +103,7 @@ func registerDetectAgent(reg *tools.Registry, agentReg *agents.Registry) error {
 					keyDescription: "Agent ID (e.g. claude-code, opencode, cursor)",
 				},
 				"home_dir": map[string]any{
-					"type":         "string",
+					"type":         strconst.StrString,
 					keyDescription: "Home directory (defaults to $HOME)",
 				},
 			},
@@ -147,7 +148,7 @@ func registerSystemInfo(reg *tools.Registry, _ *agents.Registry) error {
 		Name:        "system_info",
 		Description: "Get detailed system information (OS, arch, shell, tools, configs)",
 		InputSchema: map[string]any{
-			"type":        "object",
+			"type":        strconst.StrObject,
 			keyProperties: map[string]any{},
 		},
 		Execute: func(ctx tools.Context, _ map[string]any) (any, error) {
@@ -227,7 +228,7 @@ func registerListSkills(reg *tools.Registry, _ *agents.Registry) error {
 					skills = append(skills, map[string]any{
 						"name": name,
 						"path": skillPath,
-						"type": "local",
+						"type": strconst.StrLocal,
 					})
 				}
 			}
@@ -286,7 +287,7 @@ func registerRunDiagnostic(reg *tools.Registry, agentReg *agents.Registry) error
 			})
 
 			diag := map[string]any{
-				"system": map[string]any{
+				strconst.StrSystem: map[string]any{
 					"os": sysResult.System.OS, "arch": sysResult.System.Arch,
 					"shell": sysResult.System.Shell, "supported": sysResult.System.Supported,
 				},
@@ -360,9 +361,9 @@ func registerReadFile(reg *tools.Registry, _ *agents.Registry) error {
 				return nil, fmt.Errorf("read %q: %w", path, err)
 			}
 			return map[string]any{
-				"path":    path,
-				"size":    len(data),
-				"content": string(data),
+				"path":              path,
+				"size":              len(data),
+				strconst.StrContent: string(data),
 			}, nil
 		},
 		IsReadOnly: defaultTrue(),
@@ -404,10 +405,10 @@ func registerGrepSearch(reg *tools.Registry, _ *agents.Registry) error {
 					keyDescription: "Maximum results (default 50)",
 				},
 			},
-			keyRequired: []string{"pattern"},
+			keyRequired: []string{strconst.StrPattern},
 		},
 		Validate: func(input map[string]any) error {
-			if input == nil || input["pattern"] == nil {
+			if input == nil || input[strconst.StrPattern] == nil {
 				return fmt.Errorf("pattern is required")
 			}
 			return nil
@@ -416,7 +417,7 @@ func registerGrepSearch(reg *tools.Registry, _ *agents.Registry) error {
 			if err := checkRgAvailable(); err != nil {
 				return map[string]any{keyError: err.Error(), keyResults: []string{}, keyCount: 0}, nil //nolint:nilerr
 			}
-			pattern := input["pattern"].(string)
+			pattern := input[strconst.StrPattern].(string)
 			searchPath := getProjectDir(input)
 			if p, ok := input["path"].(string); ok {
 				searchPath = p
@@ -444,7 +445,7 @@ func registerGrepSearch(reg *tools.Registry, _ *agents.Registry) error {
 			}
 			return map[string]any{
 				keyResults: lines, keyCount: len(lines),
-				"truncated": len(lines) > maxResults,
+				strconst.StrTruncated: len(lines) > maxResults,
 			}, nil
 		},
 		IsReadOnly: defaultTrue(),
@@ -475,10 +476,10 @@ func registerGlobSearch(reg *tools.Registry, _ *agents.Registry) error {
 					keyDescription: "Maximum results (default 100)",
 				},
 			},
-			keyRequired: []string{"pattern"},
+			keyRequired: []string{strconst.StrPattern},
 		},
 		Validate: func(input map[string]any) error {
-			if input == nil || input["pattern"] == nil {
+			if input == nil || input[strconst.StrPattern] == nil {
 				return fmt.Errorf("pattern is required")
 			}
 			return nil
@@ -487,7 +488,7 @@ func registerGlobSearch(reg *tools.Registry, _ *agents.Registry) error {
 			if err := checkRgAvailable(); err != nil {
 				return map[string]any{keyError: err.Error(), keyFiles: []string{}, keyCount: 0}, nil //nolint:nilerr
 			}
-			pattern := input["pattern"].(string)
+			pattern := input[strconst.StrPattern].(string)
 			searchPath := getProjectDir(input)
 			if p, ok := input["path"].(string); ok {
 				searchPath = p
@@ -502,15 +503,15 @@ func registerGlobSearch(reg *tools.Registry, _ *agents.Registry) error {
 				if exitErr, ok := err.(*exec.ExitError); ok && len(exitErr.Stderr) > 0 {
 					return nil, fmt.Errorf("rg --files: %s", string(exitErr.Stderr))
 				}
-				return map[string]any{"files": []string{}, "count": 0, "error": err.Error()}, nil
+				return map[string]any{strconst.StrFiles: []string{}, strconst.StrCount: 0, strconst.StrError: err.Error()}, nil
 			}
 			files := strings.Split(strings.TrimSpace(string(output)), "\n")
 			if len(files) > maxResults {
 				files = files[:maxResults]
 			}
 			return map[string]any{
-				"files": files, "count": len(files),
-				"truncated": len(files) > maxResults,
+				strconst.StrFiles: files, strconst.StrCount: len(files),
+				strconst.StrTruncated: len(files) > maxResults,
 			}, nil
 		},
 		IsReadOnly: defaultTrue(),

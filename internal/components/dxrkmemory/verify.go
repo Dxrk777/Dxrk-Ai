@@ -8,6 +8,8 @@ import (
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 var (
@@ -26,7 +28,7 @@ func VerifyInstalled() error {
 // VerifyVersion runs "dxrk-memory version" and returns the trimmed output.
 // Returns an error if the command fails or produces no output.
 func VerifyVersion() (string, error) {
-	cmd := execCommand("dxrk-memory", "version")
+	cmd := execCommand("dxrk-memory", strconst.StrVersion)
 	out, err := cmd.Output()
 	if err != nil {
 		return "", fmt.Errorf("dxrk-memory version command failed: %w", err)

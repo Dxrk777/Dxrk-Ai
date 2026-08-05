@@ -9,6 +9,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 // AnthropicProvider implements Provider for the Anthropic API.
@@ -95,7 +97,7 @@ func (p *AnthropicProvider) buildRequest(messages []Message, tools []ToolSchema)
 	}
 
 	if system != "" {
-		req["system"] = system
+		req[strconst.StrSystem] = system
 	}
 
 	return req
@@ -133,7 +135,7 @@ func (p *AnthropicProvider) parseResponse(body []byte) (Response, error) {
 		switch block.Type {
 		case "text":
 			textParts = append(textParts, block.Text)
-		case "tool_use":
+		case strconst.StrToolUse:
 			var inputMap map[string]any
 			if err := json.Unmarshal(block.Input, &inputMap); err != nil {
 				return Response{}, fmt.Errorf("parse tool_use input: %w", err)
@@ -193,15 +195,15 @@ func toAPIMessage(m Message) map[string]any {
 	}
 	switch m.Role {
 	case RoleTool:
-		msg["content"] = []map[string]any{
+		msg[strconst.StrContent] = []map[string]any{
 			{
-				"type":        "tool_result",
-				"tool_use_id": m.ToolCallID,
-				"content":     m.Content,
+				"type":              strconst.StrToolResult,
+				"tool_use_id":       m.ToolCallID,
+				strconst.StrContent: m.Content,
 			},
 		}
 	default:
-		msg["content"] = m.Content
+		msg[strconst.StrContent] = m.Content
 	}
 	return msg
 }
@@ -210,11 +212,11 @@ func toAPITools(tools []ToolSchema) []map[string]any {
 	result := make([]map[string]any, len(tools))
 	for i, t := range tools {
 		result[i] = map[string]any{
-			"name":        t.Name,
-			"description": t.Description,
+			"name":                  t.Name,
+			strconst.StrDescription: t.Description,
 			"input_schema": map[string]any{
-				"type":       "object",
-				"properties": t.InputSchema,
+				"type":                 strconst.StrObject,
+				strconst.StrProperties: t.InputSchema,
 			},
 		}
 	}

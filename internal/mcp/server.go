@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/Dxrk777/Dxrk-Ai/internal/log"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/task"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
@@ -221,7 +222,7 @@ func (s *Server) Serve(ctx context.Context) error {
 		case "resources/list":
 			result = map[string]any{"resources": []any{}}
 		case "health/ping":
-			result = map[string]string{"status": "ok"}
+			result = map[string]string{strconst.StrStatus: "ok"}
 		default:
 			s.sendError(&req.ID, -32601, fmt.Sprintf("Method not found: %s", req.Method))
 			continue
@@ -256,7 +257,7 @@ func (s *Server) ServeTCP(ctx context.Context, addr string) error {
 			if ctx.Err() != nil {
 				return ctx.Err()
 			}
-			s.logger.Error("mcp tcp accept", "error", err)
+			s.logger.Error("mcp tcp accept", strconst.StrError, err)
 			continue
 		}
 		go s.handleConnection(conn) //nolint:gosec
@@ -415,21 +416,21 @@ func (s *Server) sendError(id *json.RawMessage, code int, msg string) {
 func (s *Server) writeLine(v any) {
 	data, err := json.Marshal(v)
 	if err != nil {
-		s.logger.Error("failed to marshal response", "error", err)
+		s.logger.Error("failed to marshal response", strconst.StrError, err)
 		return
 	}
 	data = append(data, '\n')
 	if _, err := s.writer.Write(data); err != nil {
-		s.logger.Error("failed to write response", "error", err)
+		s.logger.Error("failed to write response", strconst.StrError, err)
 	}
 }
 
 func toolSchemaFromMap(m map[string]any) ToolSchema {
-	schema := ToolSchema{Type: "object"}
+	schema := ToolSchema{Type: strconst.StrObject}
 	if m == nil {
 		return schema
 	}
-	props, _ := m["properties"].(map[string]any)
+	props, _ := m[strconst.StrProperties].(map[string]any)
 	if props == nil {
 		return schema
 	}
@@ -440,12 +441,12 @@ func toolSchemaFromMap(m map[string]any) ToolSchema {
 			continue
 		}
 		prop := ToolProperty{
-			Description: getString(p, "description"),
+			Description: getString(p, strconst.StrDescription),
 		}
 		if t, ok := p["type"].(string); ok {
 			prop.Type = t
 		} else {
-			prop.Type = "string"
+			prop.Type = strconst.StrString
 		}
 		schema.Properties[key] = prop
 	}

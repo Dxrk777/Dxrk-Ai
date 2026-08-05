@@ -1,13 +1,17 @@
 // SPDX-License-Identifier: MIT
 package verify
 
-import "context"
+import (
+	"context"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+)
 
 type CheckStatus string
 
 const (
 	CheckStatusPassed  CheckStatus = "passed"
-	CheckStatusFailed  CheckStatus = "failed"
+	CheckStatusFailed  CheckStatus = strconst.StrFailed
 	CheckStatusSkipped CheckStatus = "skipped"
 	CheckStatusWarning CheckStatus = "warning"
 )

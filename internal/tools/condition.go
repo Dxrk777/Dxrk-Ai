@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
+
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 // Condition is a predicate that determines if a tool should be active.
@@ -60,7 +62,7 @@ func extractPaths(input map[string]any) []string {
 	if p, ok := input["paths"].([]string); ok {
 		paths = append(paths, p...)
 	}
-	if p, ok := input["files"].([]string); ok {
+	if p, ok := input[strconst.StrFiles].([]string); ok {
 		paths = append(paths, p...)
 	}
 	return paths
