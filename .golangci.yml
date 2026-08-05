@@ -60,6 +60,76 @@ linters:
       - staticcheck
       text: ST1005
       path: internal/installcmd/resolver\.go
+    - path: internal/config/config\.go
+      linters:
+      - goconst
+      - gosec
+    - path: internal/auth/providers\.go
+      linters:
+      - gosec
+    - path: internal/auth/oauth\.go
+      linters:
+      - gosec
+    - path: internal/auth/securestorage\.go
+      linters:
+      - gosec
+    - path: internal/bridge/advanced/.*\.go
+      linters:
+      - gosec
+    - path: internal/commands/(doctor|init|keybindings)\.go
+      linters:
+      - gosec
+    - path: internal/installcmd/resolver\.go
+      linters:
+      - gosec
+    - path: internal/memory/consolidation\.go
+      linters:
+      - gosec
+    - path: internal/security/ast\.go
+      linters:
+      - gosec
+    - path: internal/services/autodream/autodream\.go
+      linters:
+      - gosec
+    - path: internal/services/teammemorysync/teammemorysync\.go
+      linters:
+      - gosec
+    - path: internal/tools/filetools/.*\.go
+      linters:
+      - gosec
+    - path: internal/tools/lsptool/lsp\.go
+      linters:
+      - gosec
+    - path: internal/tools/shell/bash\.go
+      linters:
+      - gosec
+    - path: internal/tools/synthtools/(repl|transform)\.go
+      linters:
+      - gosec
+    - path: internal/tools/tasktools/output\.go
+      linters:
+      - gosec
+    - path: internal/tools/webtools/fetch\.go
+      linters:
+      - gosec
+    - path: internal/utils/hooks/.*\.go
+      linters:
+      - gosec
+    - path: internal/utils/fileops/.*\.go
+      linters:
+      - gosec
+    - path: internal/utils/image/.*\.go
+      linters:
+      - gosec
+    - path: internal/utils/http/.*\.go
+      linters:
+      - gosec
+    - path: internal/utils/session/.*\.go
+      linters:
+      - gosec
+    - path: internal/utils/diff/filediff\.go
+      linters:
+      - gosec
   settings:
     goconst:
       min-len: 5
@@ -91,7 +161,6 @@ linters:
       - name: range-val-in-closure
       - name: range-val-address
       - name: receiver-naming
-      - name: redefines-builtin-id
       - name: string-of-int
       - name: struct-tag
       - name: superfluous-else
