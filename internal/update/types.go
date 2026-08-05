@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 package update
 
+import "github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+
 // UpdateStatus represents the outcome of a single tool version check.
 type UpdateStatus string
 
@@ -30,7 +32,7 @@ const (
 	// InstallScript downloads and executes the project's install.sh via pipe.
 	// Used for tools that distribute via shell scripts rather than pre-built binaries
 	// (e.g., Dxrk Guardian which has no release binary assets).
-	InstallScript InstallMethod = "script"
+	InstallScript InstallMethod = strconst.StrScript
 	// InstallOpenCodePlugin is a manual upgrade method: Dxrk AI registers the
 	// package in tui.json, and OpenCode owns package resolution on restart/reload.
 	InstallOpenCodePlugin InstallMethod = "opencode-plugin"

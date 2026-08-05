@@ -4,6 +4,7 @@ package upgrade
 import (
 	"errors"
 
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 	"github.com/Dxrk777/Dxrk-Ai/internal/update"
 )
 
@@ -12,7 +13,7 @@ type ToolUpgradeStatus string
 
 const (
 	UpgradeSucceeded ToolUpgradeStatus = "succeeded"
-	UpgradeFailed    ToolUpgradeStatus = "failed"
+	UpgradeFailed    ToolUpgradeStatus = strconst.StrFailed
 	UpgradeSkipped   ToolUpgradeStatus = "skipped" // dry-run, dev build, or unsupported platform
 )
 

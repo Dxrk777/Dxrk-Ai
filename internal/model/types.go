@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 package model
 
+import "github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+
 type AgentID string
 
 const (
@@ -89,7 +91,7 @@ type DxrkMemoryUninstallScope string
 
 const (
 	DxrkMemoryUninstallScopeGlobal  DxrkMemoryUninstallScope = "global"
-	DxrkMemoryUninstallScopeProject DxrkMemoryUninstallScope = "project"
+	DxrkMemoryUninstallScopeProject DxrkMemoryUninstallScope = strconst.StrProject
 )
 
 type SkillID string

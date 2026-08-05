@@ -13,6 +13,7 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
 	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
 	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
 )
 
 // profileNameRegex matches valid profile name slugs: lowercase alphanumeric + hyphens,
@@ -255,9 +256,9 @@ func GenerateProfileOverlay(profile model.Profile, homeDir string) ([]byte, erro
 	}
 
 	orchEntry := map[string]any{
-		"mode":        "primary",
-		"description": "SDD Orchestrator (" + profile.Name + " profile) - coordinates sub-agents, never does work inline",
-		"prompt":      orchestratorPrompt,
+		"mode":                  "primary",
+		strconst.StrDescription: "SDD Orchestrator (" + profile.Name + " profile) - coordinates sub-agents, never does work inline",
+		"prompt":                orchestratorPrompt,
 		"permission": map[string]any{
 			"task": map[string]any{
 				"__replace__": taskPerms,
@@ -303,10 +304,10 @@ func GenerateProfileOverlay(profile model.Profile, homeDir string) ([]byte, erro
 	for _, phase := range profilePhaseOrder {
 		key := phase + suffix
 		entry := map[string]any{
-			"mode":        "subagent",
-			"hidden":      true,
-			"description": phaseDescriptions[phase],
-			"prompt":      "{file:" + filepath.Join(promptDir, phase+".md") + "}",
+			"mode":                  "subagent",
+			"hidden":                true,
+			strconst.StrDescription: phaseDescriptions[phase],
+			"prompt":                "{file:" + filepath.Join(promptDir, phase+".md") + "}",
 			"tools": map[string]any{
 				"read":  true,
 				"write": true,
