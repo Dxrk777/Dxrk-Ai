@@ -20,6 +20,7 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/task"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 	dxrktools "github.com/Dxrk777/Dxrk-Ai/internal/tools/dxrk"
+	"github.com/Dxrk777/Dxrk-Ai/internal/tools/filetools"
 	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
 )
 
@@ -66,6 +67,9 @@ func RunMCPServe(_ []string) error {
 	}
 	if err := dxrktools.RegisterAll(toolReg, agentReg); err != nil {
 		return fmt.Errorf("register tools: %w", err)
+	}
+	if err := filetools.RegisterAll(toolReg); err != nil {
+		return fmt.Errorf("register filetools: %w", err)
 	}
 
 	// Connect MCP gateway: discover and register tools from external MCP servers

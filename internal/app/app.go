@@ -268,7 +268,7 @@ func runUpdate(ctx context.Context, currentVersion string, profile system.Platfo
 	return updateCheckError(results)
 }
 
-// runUpgrade handles the `dxrk upgrade [--dry-run] [tool...]` command.
+// runUpgrade handles the `dxrk upgrade [--dry-run] [tool...]` command.`dxrk upgrade [--dry-run] [tool...]` command.
 //
 // This command:
 //   - Checks for available updates for managed tools (dxrk, dxrk-memory, dxrk-guardian)
@@ -305,6 +305,9 @@ func runUpgrade(ctx context.Context, args []string, detection system.DetectionRe
 	checkErr := updateCheckError(checkResults)
 	sp.Finish(checkErr == nil)
 	if checkErr != nil {
+		if dryRun {
+			_, _ = fmt.Fprintln(stdout, "Upgrade (dry-run): update check incomplete, no upgrades will be installed.")
+		}
 		_, _ = fmt.Fprint(stdout, update.RenderCLI(checkResults))
 		return checkErr
 	}
@@ -373,7 +376,7 @@ func tuiExecute(
 	execResult := orchestrator.Execute(stagePlan)
 	if execResult.Err == nil {
 		// Persist the user's agent selection and model assignments so that future
-		// `sync` runs target only the installed agents and preserve model choices.
+		// `sync` runs target only the installed agents and preserve model choices.`sync` runs target only the installed agents and preserve model choices.
 		agentIDs := make([]string, 0, len(selection.Agents))
 		for _, a := range selection.Agents {
 			agentIDs = append(agentIDs, string(a))
@@ -509,7 +512,7 @@ func applyOverrides(selection *model.Selection, overrides *model.SyncOverrides) 
 
 // loadPersistedAssignments reads previously-saved model assignments from
 // state.json and populates the selection when the corresponding maps are empty.
-// This ensures a plain `sync` (no TUI overrides, no CLI flags) preserves the
+// This ensures a plain `sync` (no TUI overrides, no CLI flags) preserves the`sync` (no TUI overrides, no CLI flags) preserves the
 // user's last-known model choices.
 func loadPersistedAssignments(homeDir string, selection *model.Selection) {
 	s, err := state.Read(homeDir)

@@ -15,6 +15,7 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/query"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 	dxrktools "github.com/Dxrk777/Dxrk-Ai/internal/tools/dxrk"
+	"github.com/Dxrk777/Dxrk-Ai/internal/tools/filetools"
 	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
 )
@@ -58,6 +59,7 @@ func NewChatModel(apiKey, modelName string, tp trace.Exporter) ChatModel {
 	if err == nil {
 		_ = dxrktools.RegisterAll(reg, agentReg)
 	}
+	_ = filetools.RegisterAll(reg)
 
 	provider := query.NewAnthropicProvider(apiKey, modelName)
 

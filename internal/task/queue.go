@@ -8,15 +8,18 @@ import (
 
 // Queue is a thread-safe priority queue of tasks.
 type Queue struct {
-	mu     sync.Mutex
-	cond   *sync.Cond
-	items  priorityHeap
-	closed bool
+	mu       sync.Mutex
+	cond     *sync.Cond
+	items    priorityHeap
+	closed   bool
+	registry map[TaskID]*Task // tracks all tasks by ID
 }
 
 // NewQueue creates an empty Queue.
 func NewQueue() *Queue {
-	q := &Queue{}
+	q := &Queue{
+		registry: make(map[TaskID]*Task),
+	}
 	q.cond = sync.NewCond(&q.mu)
 	q.items = make(priorityHeap, 0)
 	heap.Init(&q.items)
@@ -30,8 +33,28 @@ func (q *Queue) Push(t *Task) {
 	if q.closed {
 		return
 	}
+	q.registry[t.ID] = t
 	heap.Push(&q.items, t)
 	q.cond.Signal()
+}
+
+// List returns all tasks in the registry.
+func (q *Queue) List() []*Task {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	out := make([]*Task, 0, len(q.registry))
+	for _, t := range q.registry {
+		out = append(out, t)
+	}
+	return out
+}
+
+// Get returns a task by ID.
+func (q *Queue) Get(id TaskID) (*Task, bool) {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	t, ok := q.registry[id]
+	return t, ok
 }
 
 // Pop blocks until a task is available, then removes and returns the highest-priority task.

@@ -14,6 +14,7 @@ import (
 	"github.com/Dxrk777/Dxrk-Ai/internal/query"
 	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
 	dxrktools "github.com/Dxrk777/Dxrk-Ai/internal/tools/dxrk"
+	"github.com/Dxrk777/Dxrk-Ai/internal/tools/filetools"
 )
 
 // QueryFlags holds parsed flags for the query command.
@@ -26,7 +27,7 @@ type QueryFlags struct {
 	Project  string
 }
 
-// ParseQueryFlags parses flags for `dxrk query`.
+// ParseQueryFlags parses flags for `dxrk query`.`dxrk query`.
 func ParseQueryFlags(args []string) (QueryFlags, error) {
 	var opts QueryFlags
 	fs := flag.NewFlagSet("query", flag.ContinueOnError)
@@ -72,6 +73,9 @@ func RunQuery(flags QueryFlags) error {
 	}
 	if err := dxrktools.RegisterAll(toolReg, agentReg); err != nil {
 		return fmt.Errorf("register tools: %w", err)
+	}
+	if err := filetools.RegisterAll(toolReg); err != nil {
+		return fmt.Errorf("register filetools: %w", err)
 	}
 
 	// Create provider
