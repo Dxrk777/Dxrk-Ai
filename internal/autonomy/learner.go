@@ -117,7 +117,6 @@ func (l *Learner) makeStore() struct {
 
 func (l *Learner) Record(item MemoryItem) {
 	l.mu.Lock()
-	defer l.mu.Unlock()
 
 	if item.ID == "" {
 		item.ID = fmt.Sprintf("%x", sha256.Sum256([]byte(item.Input+item.Output+time.Now().String())))[:16]
@@ -136,7 +135,9 @@ func (l *Learner) Record(item MemoryItem) {
 		l.errorPatterns[key]++
 	}
 
-	go l.save()
+	l.mu.Unlock()
+
+	l.save()
 }
 
 func (l *Learner) learnPattern(item MemoryItem) {
