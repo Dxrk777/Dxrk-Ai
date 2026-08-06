@@ -43,6 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deprecated `tenv` linter removed from golangci-lint config
 - Lint issues from new linters (errname, tparallel, usestdlibvars, wastedassign)
 - Flaky `TestLearner` in `internal/autonomy` (TempDir cleanup race) fixed by making learner persistence synchronous
+- Flaky `TestConcurrentAccess` in `internal/services/ratelimit` made deterministic under `-race` (burst test uses 1 token/s refill to avoid overflow)
+- Release brew and scoop publishing disabled until `homebrew-tap` and `scoop-bucket` repos exist
 
 ### Changed
 - Skills registry expanded to 2,242 total (34 dxrk + 2,208 imported)
