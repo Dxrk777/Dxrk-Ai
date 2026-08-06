@@ -5,11 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.1.0] - 2026-08-05
 
 ### Added
-- ML training pipeline (`internal/ml/`): data validation, model training, GGUF conversion, Hugging Face push, configurable hyperparameters
+- Complete ConfigManager: hierarchical config resolution, validation, and typed accessors (`internal/config/`)
+- Queue API surface with list/get operations (`internal/task/queue.go`)
 - 14 new agent adapters: Aider, Cline, Roo Code, Continue, Junie, Amazon Q, OpenHands, Zed AI, GitHub Copilot, Devin, Cody, Tabnine, Replit, Void (28 total)
+- ML training pipeline (`internal/ml/`): data validation, model training, GGUF conversion, Hugging Face push, configurable hyperparameters
 - ESLint + Prettier for web UI (`web/`)
 - ErrorBoundary component for React crash handling
 - SettingsPage write support (POST /api/settings)
@@ -40,12 +42,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - E2E lib.sh hyphenated bash variable name
 - Deprecated `tenv` linter removed from golangci-lint config
 - Lint issues from new linters (errname, tparallel, usestdlibvars, wastedassign)
+- Flaky `TestLearner` in `internal/autonomy` (TempDir cleanup race) fixed by making learner persistence synchronous
 
 ### Changed
 - Skills registry expanded to 2,242 total (34 dxrk + 2,208 imported)
 - Curated skill pack: 66 skills across 10 categories
 - Go 1.25.12 minimum (was incorrectly documented as 1.26)
 - golangci-lint config expanded with 10 new linters for code quality
+- CI Actions upgraded: checkout v7, setup-go v7, upload-artifact v7, download-artifact v8, CodeQL v4
+- Web deps upgraded: vite 8.2.0, lucide-react 1.28.0, @playwright/test 1.62.1, autoprefixer 10.5.4
 
 ## [4.0.0] - 2026-07-26
 
