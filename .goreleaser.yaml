@@ -41,15 +41,25 @@ changelog:
       - "^test:"
       - "^ci:"
 
-# brews/scoops: enable after creating homebrew-tap and scoop-bucket repos
-# brews:
-#   - repository:
-#       owner: Dxrk777
-#       name: homebrew-tap
-#       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-#
-# scoops:
-#   - repository:
-#       owner: Dxrk777
-#       name: scoop-bucket
-#       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+brews:
+  - repository:
+      owner: Dxrk777
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    directory: Formula
+    name: dxrk
+    homepage: "https://github.com/Dxrk777/Dxrk-Ai"
+    description: "Dxrk-Ai — Ecosystem, Frameworks, Workflows for AI coding agents."
+    license: "MIT"
+    commit_msg_template: "chore: update dxrk formula to {{ .Tag }}"
+
+scoops:
+  - repository:
+      owner: Dxrk777
+      name: scoop-bucket
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    name: dxrk
+    homepage: "https://github.com/Dxrk777/Dxrk-Ai"
+    description: "Dxrk-Ai — Ecosystem, Frameworks, Workflows for AI coding agents."
+    license: MIT
+    commit_msg_template: "chore: update dxrk to {{ .Tag }}"
