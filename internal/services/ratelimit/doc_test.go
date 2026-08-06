@@ -222,7 +222,7 @@ func TestThrottleQueueOrdering(t *testing.T) {
 
 func TestConcurrentAccess(t *testing.T) {
 	l := NewLimiter(LimiterConfig{
-		DefaultRate:   1000,
+		DefaultRate:   1,
 		DefaultBurst:  100,
 		DefaultWindow: time.Second,
 	})
