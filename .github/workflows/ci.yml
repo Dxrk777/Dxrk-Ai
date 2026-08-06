@@ -39,7 +39,7 @@ jobs:
           go test -count=1 -coverprofile=coverage.out -covermode=atomic ./...
           go tool cover -func=coverage.out | tail -1
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: coverage.out
@@ -128,7 +128,7 @@ jobs:
         run: |
           go test -bench=. -benchtime=100ms -count=3 ./internal/router/... ./internal/rag/... ./internal/pipeline/... ./internal/sandbox/... ./internal/vault/... ./internal/observe/... ./internal/compress/... ./internal/tools/... 2>&1 | tee bench-results.txt
       - name: Upload benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bench-results
           path: bench-results.txt
