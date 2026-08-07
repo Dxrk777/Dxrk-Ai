@@ -9,16 +9,14 @@ from __future__ import annotations
 import json
 import os
 import shutil
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from io import BytesIO
-from typing import Any, Callable
+from typing import Any, cast
 
 from dxrk.components import filemerge
 from dxrk.components import gga as _gga
 from dxrk.components import sdd as _sdd
-from dxrk.components.assets import read as _read
 from dxrk.models import AgentID, ComponentID, DxrkMemoryUninstallScope
-
 
 # ─── Constants ─────────────────────────────────────────────────────────────
 
@@ -191,7 +189,7 @@ class Service:
         from dxrk.agents.registry import Registry
 
         reg = Registry()
-        return reg.resolve(agent_id)
+        return reg.get(agent_id)
 
     def _execute_plan(
         self, plan: tuple[list[str], list[Operation]], agents_to_remove: list[AgentID]
@@ -231,8 +229,8 @@ class Service:
             elif op.type_id in (OpType.REMOVE_TREE, OpType.REMOVE_IF_EMPTY) and removed:
                 result.RemovedDirectories.append(op.path)
 
-        removed = _update_state_after_uninstall(self.home_dir, agents_to_remove)
-        result.AgentsRemovedFromState = removed
+        state_removed = _update_state_after_uninstall(self.home_dir, agents_to_remove)
+        result.AgentsRemovedFromState = state_removed
         result.ManualActions = _dedupe_sorted_strings(result.ManualActions)
         return result
 
@@ -355,19 +353,22 @@ class Service:
             sp = adapter.settings_path(home)
             if sp and adapter.agent == AgentID.OPENCODE:
                 targets.append(sp)
-                paths: list[JsonPath] = [["agent", k] for k in _SDD_PHASE_AGENTS]
+                sdd_paths: list[JsonPath] = [["agent", k] for k in _SDD_PHASE_AGENTS]
+                profile_paths: list[JsonPath] = []
 
                 if self.profile_selection_scoped:
                     for pname in self.profile_names_to_remove:
                         for agent_key in _sdd.profile_agent_keys(pname):
-                            paths.append(["agent", agent_key])
+                            profile_paths.append(["agent", agent_key])
                 else:
                     profiles = _sdd.detect_profiles(sp)
                     for profile in profiles:
                         for agent_key in _sdd.profile_agent_keys(profile.name):
-                            paths.append(["agent", agent_key])
+                            profile_paths.append(["agent", agent_key])
 
-                ops.append(_rewrite_json_file(sp, *paths))
+                sdd_paths.extend(profile_paths)
+
+                ops.append(_rewrite_json_file(sp, *sdd_paths))
 
                 plugin_path = os.path.join(
                     home, ".config", "opencode", "plugins", "background-agents.ts"
@@ -729,7 +730,8 @@ def _update_state_after_uninstall(
 ) -> list[AgentID]:
     if not to_remove:
         return []
-    from dxrk.state import read as state_read, write as state_write
+    from dxrk.state import read as state_read
+    from dxrk.state import write as state_write
 
     try:
         current = state_read(home_dir)
@@ -897,12 +899,12 @@ def _unmarshal_json_object(raw: bytes) -> dict[str, Any] | None:
     if not raw.strip():
         return {}
     try:
-        return json.loads(raw)
+        return cast(dict[str, Any], json.loads(raw))
     except json.JSONDecodeError:
         pass
     normalized = _normalize_json(raw)
     try:
-        return json.loads(normalized)
+        return cast(dict[str, Any], json.loads(normalized))
     except json.JSONDecodeError:
         return None
 

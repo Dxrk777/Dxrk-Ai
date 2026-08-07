@@ -4,17 +4,18 @@ from dxrk.models import (
     ComponentID,
     ModelAssignment,
     PersonaID,
+    Plan,
     PresetID,
     SDDModeID,
     UninstallMode,
 )
-from dxrk.system import detect
+from dxrk.system import DetectionResult
 
 
 class AppState:
     def __init__(self):
         self.version: str = "dev"
-        self.detection = None
+        self.detection: DetectionResult | None = None
         self.selected_agents: list[AgentID] = []
         self.selected_components: list[ComponentID] = []
         self.selected_skills: list = []
@@ -25,7 +26,8 @@ class AppState:
         self.model_assignments: dict[str, ModelAssignment] = {}
         self.profiles: list = []
         self.backups: list = []
-        self.plan = None
+        self.plan: Plan | None = None
+        self.uninstall_mode: UninstallMode | None = None
         self.selected_backup: dict | None = None
 
 

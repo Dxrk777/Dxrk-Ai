@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: MIT
 import shutil
-import stat as stat_module
 from pathlib import Path
 
 from dxrk.agents.interface import Adapter, DetectResult

@@ -24,7 +24,14 @@ class UninstallFlags:
 
 def ParseUninstallFlags(args: list[str]) -> UninstallFlags:
     from dxrk.cli.install import parse_uninstall_flags
-    return parse_uninstall_flags(args)
+
+    parsed = parse_uninstall_flags(args)
+    return UninstallFlags(
+        agents=parsed.agents,
+        components=parsed.components,
+        all=parsed.all,
+        yes=parsed.yes,
+    )
 
 
 @dataclass

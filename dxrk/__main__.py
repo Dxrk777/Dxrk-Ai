@@ -179,7 +179,7 @@ def _run_uninstall_cli(args) -> None:
             print("Manual actions required:")
             for a in manual:
                 print(f"  {a}")
-        print(f"Uninstall complete")
+        print("Uninstall complete")
 
 
 def _run_backup_cli() -> None:

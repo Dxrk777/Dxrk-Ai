@@ -4,12 +4,13 @@ from textual.binding import Binding
 from textual.containers import Container, VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
+from textual.visual import Visual
+from textual.widget import Widget
 from textual.widgets import Footer, Static
 
 from dxrk.catalog import mvp_components
 from dxrk.models import PresetID
 from dxrk.tui.shared import STATE
-
 
 ALL_COMPONENTS = mvp_components()
 
@@ -34,7 +35,7 @@ class DependencyTreeScreen(Screen):
     def on_mount(self) -> None:
         self._render()
 
-    def _render(self) -> None:
+    def _render(self) -> Visual:
         scroll = self.query_one("#dep-tree-content", VerticalScroll)
         scroll.remove_children()
 
@@ -43,13 +44,15 @@ class DependencyTreeScreen(Screen):
         else:
             self._render_preset_plan(scroll)
 
+        return Widget._render(self)
+
     def _render_preset_plan(self, scroll: VerticalScroll) -> None:
         scroll.mount(Static("[bold]Install Plan[/]"))
         scroll.mount(Static(""))
 
         plan = STATE.plan
         ordered = plan.steps if plan else []
-        added = set()
+        added: set[str] = set()
 
         if not ordered:
             scroll.mount(Static("[yellow]No components selected yet.[/]"))
@@ -148,7 +151,7 @@ class DependencyTreeScreen(Screen):
         if self.cursor < total - 1:
             self.cursor += 1
 
-    def action_toggle(self) -> None:
+    async def action_toggle(self, attribute_name: str = "") -> None:
         if STATE.preset != PresetID.CUSTOM:
             return
         if self.cursor < len(ALL_COMPONENTS):
@@ -159,9 +162,9 @@ class DependencyTreeScreen(Screen):
                 STATE.selected_components.append(comp.id)
             self._update_component_list()
 
-    def action_select(self) -> None:
+    async def action_select(self) -> None:
         if self.cursor < self._comp_count():
-            self.action_toggle()
+            await self.action_toggle()
         elif self.cursor == self._comp_count():
             self.app.push_screen("review")
         else:

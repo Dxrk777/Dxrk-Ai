@@ -3,24 +3,24 @@ from __future__ import annotations
 
 import os
 import sys
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
+from typing import Any
 
+from dxrk.cli.run import run_install
 from dxrk.system import (
-    detect,
     DetectionResult,
+    detect,
     ensure_supported_os,
     ensure_supported_platform,
 )
-from dxrk.cli.run import run_install
-from dxrk.update import UpdateResult, UpdateStatus, check_filtered, check_failures
+from dxrk.update import UpdateResult, UpdateStatus, check_failures, check_filtered
 
 __all__ = [
-    "run_cli",
-    "resolve_version",
-    "print_help",
-    "SelfUpdateChecker",
     "VERSION",
+    "SelfUpdateChecker",
+    "print_help",
+    "resolve_version",
+    "run_cli",
 ]
 
 APP_NAME = "gentle-ai"
@@ -62,10 +62,10 @@ def print_help(version: str = VERSION) -> str:
 @dataclass
 class SelfUpdateChecker:
     version: str = ""
-    profile: any = None
+    profile: Any = None
     enabled: bool = True
 
-    def skip_reason(self) -> Optional[str]:
+    def skip_reason(self) -> str | None:
         if os.environ.get("DXRK_SELF_UPDATE_DONE") == "1":
             return "already updated this invocation"
         if os.environ.get("DXRK_NO_SELF_UPDATE") == "1":
@@ -74,13 +74,13 @@ class SelfUpdateChecker:
             return "dev build"
         return None
 
-    def check(self, stdout=sys.stdout) -> Optional[str]:
+    def check(self, stdout=sys.stdout) -> str | None:
         reason = self.skip_reason()
         if reason is not None:
             return None
 
         results = check_filtered(self.version, self.profile, ["gentle-ai"])
-        target: Optional[UpdateResult] = None
+        target: UpdateResult | None = None
         for r in results:
             if r.tool.name == "gentle-ai":
                 target = r
@@ -153,6 +153,8 @@ def run_cli(args: list[str]) -> int:
         if cmd == "update":
             from dxrk.update import (
                 check_all as update_check_all,
+            )
+            from dxrk.update import (
                 render_cli as update_render_cli,
             )
 
@@ -175,8 +177,11 @@ def run_cli(args: list[str]) -> int:
 
             from dxrk.update import (
                 check_filtered as upgrade_check,
-                has_check_failures,
+            )
+            from dxrk.update import (
                 execute as upgrade_execute,
+            )
+            from dxrk.update import (
                 render_upgrade_report,
             )
 

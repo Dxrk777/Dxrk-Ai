@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import os
-import warnings
 
 _ASSETS_ROOT = os.path.join(os.path.dirname(__file__), "..", "assets")
 

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 from __future__ import annotations
-import gzip
+
 import hashlib
 import json
 import logging
@@ -9,9 +9,8 @@ import shutil
 import tarfile
 import tempfile
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -115,10 +114,10 @@ class ManifestEntry:
 @dataclass
 class Manifest:
     id: str = ""
-    created_at: Optional[datetime] = None
+    created_at: datetime | None = None
     root_dir: str = ""
     entries: list[ManifestEntry] = field(default_factory=list)
-    source: Optional[BackupSource] = None
+    source: BackupSource | None = None
     description: str = ""
     file_count: int = 0
     created_by_version: str = ""
@@ -128,7 +127,7 @@ class Manifest:
 
     def display_label(self) -> str:
         src = self.source.label() if self.source else "unknown source"
-        created = self.created_at if self.created_at else datetime.now(timezone.utc)
+        created = self.created_at if self.created_at else datetime.now(UTC)
         base = f"{src} \u2014 {created.astimezone().strftime('%Y-%m-%d %H:%M')}"
         if self.file_count > 0:
             base = f"{base} ({self.file_count} files)"
@@ -289,7 +288,7 @@ class Snapshotter:
         os.makedirs(snapshot_dir, exist_ok=True)
         manifest = Manifest(
             id=os.path.basename(snapshot_dir),
-            created_at=self._now(timezone.utc),
+            created_at=self._now(UTC),
             root_dir=snapshot_dir,
             entries=[],
             compressed=True,
@@ -397,7 +396,7 @@ def is_duplicate(backup_dir: str, new_checksum: str) -> bool:
         return False
     latest = max(
         manifests,
-        key=lambda m: m.created_at or datetime.min.replace(tzinfo=timezone.utc),
+        key=lambda m: m.created_at or datetime.min.replace(tzinfo=UTC),
     )
     if not latest.checksum:
         return False
@@ -409,7 +408,7 @@ def prune(backup_dir: str, retention_count: int) -> list[str]:
         return []
     manifests = _list_manifests(backup_dir)
     manifests.sort(
-        key=lambda m: m.created_at or datetime.min.replace(tzinfo=timezone.utc),
+        key=lambda m: m.created_at or datetime.min.replace(tzinfo=UTC),
         reverse=True,
     )
     unpinned = [m for m in manifests if not m.pinned]

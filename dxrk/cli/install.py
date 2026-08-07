@@ -9,13 +9,11 @@ import argparse
 import logging
 import os
 import shutil
-import subprocess
 import sys
-import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Callable
+from datetime import UTC, datetime
+from typing import Any
 
 log = logging.getLogger(__name__)
 
@@ -162,7 +160,8 @@ class SyncFlags:
     _raw_profile_phases: list[str] = field(default_factory=list)
 
 
-from dxrk.models import SDDProfileStrategyID, Profile, ModelAssignment
+from dxrk.models import ModelAssignment, Profile, SDDProfileStrategyID
+from dxrk.state import ModelAssignmentState
 
 
 def _parse_profile_sync_strategy(raw: str) -> str:
@@ -178,7 +177,7 @@ def _parse_profile_sync_strategy(raw: str) -> str:
 
 def _parse_profile_flag(raw: str) -> Profile:
     from dxrk.components.sdd import validate_profile_name
-    from dxrk.models import Profile, ModelAssignment
+    from dxrk.models import Profile
 
     colon_idx = raw.find(":")
     if colon_idx <= 0:
@@ -197,7 +196,7 @@ def _parse_profile_flag(raw: str) -> Profile:
 
 
 def _parse_profile_phase_flag(raw: str) -> tuple[str, str, ModelAssignment]:
-    from dxrk.components.sdd import validate_profile_name, profile_phase_order
+    from dxrk.components.sdd import profile_phase_order, validate_profile_name
 
     parts = raw.split(":", 2)
     if len(parts) != 3:
@@ -594,14 +593,13 @@ def normalize_install_flags(
 # ─── Pipeline Steps ────────────────────────────────────────────────────────
 
 from dxrk.pipeline import (
-    Step,
     RollbackStep,
-    Stage,
+    Step,
     execute_command,
     run_command_sequence,
 )
+from dxrk.planner import PlatformDecision, ResolvedPlan, platform_decision_from_profile
 from dxrk.system import PlatformProfile
-from dxrk.planner import ResolvedPlan, platform_decision_from_profile
 
 
 class NoopStep(Step):
@@ -650,7 +648,6 @@ class AgentInstallStep(Step):
         return self._id
 
     def run(self) -> str | None:
-        from dxrk.agents.registry import Registry
         from dxrk.agents.factory import create_registry
 
         reg = create_registry()
@@ -689,12 +686,9 @@ class OpenCodePluginInstallStep(Step):
         return self._id
 
     def run(self) -> str | None:
-        from dxrk.components.opencodeplugin import Installer
+        from dxrk.components.opencodeplugin import install as opencode_plugin_install
 
-        installer = Installer()
-        res = installer.install(self._home_dir, self._plugin)
-        if res.error:
-            return res.error
+        opencode_plugin_install(self._home_dir, self._plugin)
         return None
 
 
@@ -707,14 +701,16 @@ class KimiSystemPromptHubStep(Step):
         return self._id
 
     def run(self) -> str | None:
-        from dxrk.agents.kimi import KimiAdapter
+        from dxrk.agents.kimi.adapter import KimiAdapter
 
         try:
             adapter = KimiAdapter()
         except Exception:
             # Fall back to opencode adapter if kimi not implemented
             return None
-        adapter.bootstrap_template(self._home_dir)
+        template_bootstrap = getattr(adapter, "bootstrap_template", None)
+        if callable(template_bootstrap):
+            template_bootstrap(self._home_dir)
         return None
 
 
@@ -889,12 +885,11 @@ class ComponentApplyStep(Step):
 
         if c == ComponentID.DXRK_MEMORY:
             from dxrk.components.engram import (
-                inject as engram_inject,
+                download_latest_binary,
                 parse_setup_mode,
                 parse_setup_strict,
-                should_attempt_setup,
                 setup_agent_slug,
-                download_latest_binary,
+                should_attempt_setup,
             )
 
             if self._profile.package_manager == "brew":
@@ -932,17 +927,19 @@ class ComponentApplyStep(Step):
 
                 from dxrk.components.engram import inject as engram_inject_fn
 
-                res = engram_inject_fn(self._home_dir, adapter)
-                if res.Changed:
-                    log.info("engram injected for %s: %s", adapter.agent, res.Files)
+                res_engram = engram_inject_fn(self._home_dir, adapter)
+                if res_engram.Changed:
+                    log.info(
+                        "engram injected for %s: %s", adapter.agent, res_engram.Files
+                    )
             return None
 
         if c == ComponentID.CONTEXT7:
             from dxrk.components.mcp import inject as mcp_inject
 
             for adapter in adapters:
-                res = mcp_inject(self._home_dir, adapter)
-                if res.Changed:
+                res_mcp = mcp_inject(self._home_dir, adapter)
+                if res_mcp.Changed:
                     log.info("context7 injected for %s", adapter.agent)
             return None
 
@@ -950,8 +947,10 @@ class ComponentApplyStep(Step):
             from dxrk.components.persona import inject as persona_inject
 
             for adapter in adapters:
-                res = persona_inject(self._home_dir, adapter, self._selection.persona)
-                if res.Changed:
+                res_persona = persona_inject(
+                    self._home_dir, adapter, self._selection.persona
+                )
+                if res_persona.Changed:
                     log.info("persona injected for %s", adapter.agent)
             return None
 
@@ -959,13 +958,14 @@ class ComponentApplyStep(Step):
             from dxrk.components.permissions import inject as perm_inject
 
             for adapter in adapters:
-                res = perm_inject(self._home_dir, adapter)
-                if res.Changed:
+                res_perms = perm_inject(self._home_dir, adapter)
+                if res_perms.Changed:
                     log.info("permissions injected for %s", adapter.agent)
             return None
 
         if c == ComponentID.SDD:
-            from dxrk.components.sdd import inject as sdd_inject, InjectOptions
+            from dxrk.components.sdd import InjectOptions
+            from dxrk.components.sdd import inject as sdd_inject
 
             for adapter in adapters:
                 opts = InjectOptions(
@@ -975,10 +975,10 @@ class ComponentApplyStep(Step):
                     workspace_dir=self._workspace_dir,
                     strict_tdd=self._selection.strict_tdd,
                 )
-                res = sdd_inject(
+                res_sdd = sdd_inject(
                     self._home_dir, adapter, self._selection.sdd_mode, opts
                 )
-                if res.Changed:
+                if res_sdd.Changed:
                     log.info("sdd injected for %s", adapter.agent)
             return None
 
@@ -989,14 +989,14 @@ class ComponentApplyStep(Step):
             from dxrk.components.skills import inject as skills_inject
 
             for adapter in adapters:
-                res = skills_inject(self._home_dir, adapter, skill_ids)
-                if res.Changed:
+                res_skills = skills_inject(self._home_dir, adapter, skill_ids)
+                if res_skills.Changed:
                     log.info("skills injected for %s", adapter.agent)
             return None
 
         if c == ComponentID.DXRK_GUARDIAN:
-            from dxrk.components.gga import inject as gga_inject, ensure_runtime_assets
-            from dxrk.components.gga import config_path as gga_config_path
+            from dxrk.components.gga import ensure_runtime_assets
+            from dxrk.components.gga import inject as gga_inject
 
             if not _gga_available(self._profile):
                 if self._profile.package_manager == "brew":
@@ -1019,15 +1019,13 @@ class ComponentApplyStep(Step):
                     else:
                         return err
 
-            err = ensure_runtime_assets(self._home_dir)
-            if err:
-                return err
+            ensure_runtime_assets(self._home_dir)
 
-            res = gga_inject(self._home_dir, self._agents)
+            res_gga = gga_inject(self._home_dir, self._agents)
             log.info(
                 "gga injected: config_changed=%s agents_changed=%s",
-                res.ConfigChanged,
-                res.AgentsChanged,
+                res_gga.ConfigChanged,
+                res_gga.AgentsChanged,
             )
             return None
 
@@ -1035,8 +1033,8 @@ class ComponentApplyStep(Step):
             from dxrk.components.theme import inject as theme_inject
 
             for adapter in adapters:
-                res = theme_inject(self._home_dir, adapter)
-                if res.Changed:
+                res_theme = theme_inject(self._home_dir, adapter)
+                if res_theme.Changed:
                     log.info("theme injected for %s", adapter.agent)
             return None
 
@@ -1139,7 +1137,7 @@ class InstallRuntime:
                 step_id="prepare:backup-snapshot",
                 snapshot_dir=os.path.join(
                     self.backup_root,
-                    datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S.%f"),
+                    datetime.now(UTC).strftime("%Y%m%d%H%M%S.%f"),
                 ),
                 targets=targets,
                 state=self._state,
@@ -1309,7 +1307,7 @@ def _component_paths(
                 result.append(p)
 
         elif component == ComponentID.DXRK_GUARDIAN:
-            from dxrk.components.gga import config_path, agents_template_path
+            from dxrk.components.gga import agents_template_path, config_path
 
             result.append(config_path(home_dir))
             result.append(agents_template_path(home_dir))
@@ -1367,24 +1365,26 @@ class ComponentSyncStep(Step):
             from dxrk.components.engram import inject as engram_inject
 
             for adapter in adapters:
-                res = engram_inject(self._home_dir, adapter)
-                self._count_changed(int(res.Changed))
+                res_engram = engram_inject(self._home_dir, adapter)
+                self._count_changed(int(res_engram.Changed))
             return None
 
         if c == ComponentID.CONTEXT7:
             from dxrk.components.mcp import inject as mcp_inject
 
             for adapter in adapters:
-                res = mcp_inject(self._home_dir, adapter)
-                self._count_changed(int(res.Changed))
+                res_mcp = mcp_inject(self._home_dir, adapter)
+                self._count_changed(int(res_mcp.Changed))
             return None
 
         if c == ComponentID.SDD:
             from dxrk.components.sdd import (
-                inject as sdd_inject,
                 InjectOptions,
-                resolve_profile_strategy,
                 detect_profiles,
+                resolve_profile_strategy,
+            )
+            from dxrk.components.sdd import (
+                inject as sdd_inject,
             )
 
             profile_strategy = resolve_profile_strategy(
@@ -1422,13 +1422,13 @@ class ComponentSyncStep(Step):
                     ),
                     profiles=profiles,
                 )
-                res = sdd_inject(
+                res_sdd = sdd_inject(
                     self._home_dir,
                     adapter,
                     sdd_mode or SDDModeID.SINGLE,
                     opts,
                 )
-                self._count_changed(int(res.Changed))
+                self._count_changed(int(res_sdd.Changed))
             return None
 
         if c == ComponentID.SKILLS:
@@ -1438,35 +1438,34 @@ class ComponentSyncStep(Step):
             from dxrk.components.skills import inject as skills_inject
 
             for adapter in adapters:
-                res = skills_inject(self._home_dir, adapter, skill_ids)
-                self._count_changed(int(res.Changed))
+                res_skills = skills_inject(self._home_dir, adapter, skill_ids)
+                self._count_changed(int(res_skills.Changed))
             return None
 
         if c == ComponentID.DXRK_GUARDIAN:
-            from dxrk.components.gga import inject as gga_inject, ensure_runtime_assets
+            from dxrk.components.gga import ensure_runtime_assets
+            from dxrk.components.gga import inject as gga_inject
 
-            err = ensure_runtime_assets(self._home_dir)
-            if err:
-                return err
+            ensure_runtime_assets(self._home_dir)
 
-            res = gga_inject(self._home_dir, self._agents)
-            self._count_changed(int(res.ConfigChanged) + int(res.AgentsChanged))
+            res_gga = gga_inject(self._home_dir, self._agents)
+            self._count_changed(int(res_gga.ConfigChanged) + int(res_gga.AgentsChanged))
             return None
 
         if c == ComponentID.PERMISSIONS:
             from dxrk.components.permissions import inject as perm_inject
 
             for adapter in adapters:
-                res = perm_inject(self._home_dir, adapter)
-                self._count_changed(int(res.Changed))
+                res_perms = perm_inject(self._home_dir, adapter)
+                self._count_changed(int(res_perms.Changed))
             return None
 
         if c == ComponentID.THEME:
             from dxrk.components.theme import inject as theme_inject
 
             for adapter in adapters:
-                res = theme_inject(self._home_dir, adapter)
-                self._count_changed(int(res.Changed))
+                res_theme = theme_inject(self._home_dir, adapter)
+                self._count_changed(int(res_theme.Changed))
             return None
 
         return None
@@ -1507,7 +1506,7 @@ class SyncRuntime:
                 step_id="prepare:backup-snapshot",
                 snapshot_dir=os.path.join(
                     self.backup_root,
-                    datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S.%f"),
+                    datetime.now(UTC).strftime("%Y%m%d%H%M%S.%f"),
                 ),
                 targets=targets,
                 state=self._state,
@@ -1563,6 +1562,7 @@ class InstallResult:
     verify: _VerifyReport = field(default_factory=_VerifyReport)
     dependencies: Any = None
     dry_run: bool = False
+    error: str = ""
 
 
 # ─── ResolveInstallProfile ─────────────────────────────────────────────────
@@ -1604,7 +1604,7 @@ app_version = "dev"
 
 
 def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
-    from dxrk.planner import new_resolver, build_review_payload
+    from dxrk.planner import build_review_payload, new_resolver
 
     flags = parse_install_flags(args)
     input_data = normalize_install_flags(flags, detection)
@@ -1649,7 +1649,7 @@ def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
     stage_plan = rt.stage_plan()
     result.plan = stage_plan
 
-    from dxrk.pipeline import new_orchestrator, default_rollback_policy
+    from dxrk.pipeline import default_rollback_policy, new_orchestrator
 
     orchestrator = new_orchestrator(default_rollback_policy())
     result.execution = orchestrator.execute(stage_plan)
@@ -1671,7 +1671,8 @@ def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
     if not result.verify.ready:
         return result
 
-    from dxrk.state import write as state_write, InstallState
+    from dxrk.state import InstallState
+    from dxrk.state import write as state_write
 
     agent_ids = [a.value for a in input_data.selection.agents]
     model_assignments = _model_assignments_to_state(
@@ -1758,7 +1759,6 @@ def build_real_stage_plan(
     resolved: ResolvedPlan,
     profile: PlatformProfile,
 ) -> Any:
-    from dxrk.pipeline import StagePlan
 
     backup_root = os.path.join(home_dir, ".gentle-ai", "backups")
     os.makedirs(backup_root, mode=0o755, exist_ok=True)
@@ -1814,8 +1814,8 @@ def discover_agents(home_dir: str) -> list[AgentID]:
     except Exception:
         pass
 
-    from dxrk.agents.factory import create_registry
     from dxrk.agents.discovery import discover_installed
+    from dxrk.agents.factory import create_registry
 
     reg = create_registry()
     installed = discover_installed(reg, home_dir)
@@ -1839,7 +1839,7 @@ def run_sync_with_selection(home_dir: str, selection: Selection) -> SyncResult:
     stage_plan = rt.stage_plan()
     result.plan = stage_plan
 
-    from dxrk.pipeline import new_orchestrator, default_rollback_policy
+    from dxrk.pipeline import default_rollback_policy, new_orchestrator
 
     orchestrator = new_orchestrator(default_rollback_policy())
     result.execution = orchestrator.execute(stage_plan)
@@ -1938,7 +1938,6 @@ def run_restore(args: list[str], stdout: Any = None) -> str | None:
             return None
 
     manifest_dir = manifest.get("_dir", "")
-    import json
 
     for entry in manifest.get("entries", []):
         dest_path = entry.get("source", "")
@@ -2088,14 +2087,6 @@ def _prompt_uninstall_confirm(flags: UninstallFlags, stdout: Any) -> bool:
 
 
 # ─── Dry Run ────────────────────────────────────────────────────────────────
-
-
-@dataclass
-class PlatformDecision:
-    os: str = ""
-    linux_distro: str = ""
-    package_manager: str = ""
-    supported: bool = False
 
 
 def _join_agent_ids(values: list[AgentID]) -> str:
@@ -2345,11 +2336,12 @@ def _run_post_sync_verification(home_dir: str, selection: Selection) -> _VerifyR
 
 def _model_assignments_to_state(
     m: dict[str, ModelAssignment] | None,
-) -> dict[str, dict[str, str]] | None:
+) -> dict[str, ModelAssignmentState] | None:
     if not m:
         return None
     return {
-        k: {"provider_id": v.provider_id, "model_id": v.model_id} for k, v in m.items()
+        k: ModelAssignmentState(provider_id=v.provider_id, model_id=v.model_id)
+        for k, v in m.items()
     }
 
 
@@ -2362,33 +2354,33 @@ def _claude_aliases_to_strings(m: dict[str, Any] | None) -> dict[str, str] | Non
 # ─── Exported symbols matching Go convention ───────────────────────────────
 
 __all__ = [
-    "InstallFlags",
-    "parse_install_flags",
-    "InstallInput",
-    "normalize_install_flags",
-    "InstallResult",
-    "resolve_install_profile",
-    "run_install",
-    "build_stage_plan",
-    "build_real_stage_plan",
-    "SyncFlags",
-    "parse_sync_flags",
-    "SyncResult",
-    "build_sync_selection",
-    "discover_agents",
-    "run_sync",
-    "run_sync_with_selection",
-    "render_sync_report",
-    "render_dry_run",
-    "render_uninstall_report",
-    "UninstallFlags",
-    "parse_uninstall_flags",
-    "run_uninstall",
-    "run_restore",
-    "Step",
-    "NoopStep",
     "ComponentApplyStep",
     "ComponentSyncStep",
+    "InstallFlags",
+    "InstallInput",
+    "InstallResult",
     "InstallRuntime",
+    "NoopStep",
+    "Step",
+    "SyncFlags",
+    "SyncResult",
     "SyncRuntime",
+    "UninstallFlags",
+    "build_real_stage_plan",
+    "build_stage_plan",
+    "build_sync_selection",
+    "discover_agents",
+    "normalize_install_flags",
+    "parse_install_flags",
+    "parse_sync_flags",
+    "parse_uninstall_flags",
+    "render_dry_run",
+    "render_sync_report",
+    "render_uninstall_report",
+    "resolve_install_profile",
+    "run_install",
+    "run_restore",
+    "run_sync",
+    "run_sync_with_selection",
+    "run_uninstall",
 ]

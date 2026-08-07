@@ -8,8 +8,8 @@ from dxrk.models import AgentID, Selection
 __all__ = [
     "ParseSyncFlags",
     "RunSync",
-    "SyncResult",
     "SyncFlags",
+    "SyncResult",
 ]
 
 

@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: MIT
 from __future__ import annotations
+
 import os
 import platform
 import re
@@ -8,8 +9,6 @@ import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from functools import lru_cache
-from typing import Optional
 
 LINUX_DISTRO_UNKNOWN = "unknown"
 LINUX_DISTRO_UBUNTU = "ubuntu"
@@ -458,7 +457,7 @@ def detect_dependencies(profile: PlatformProfile) -> DependencyReport:
     return report
 
 
-def install_commands_for_dep(name: str, profile: PlatformProfile) -> Optional[list[list[str]]]:
+def install_commands_for_dep(name: str, profile: PlatformProfile) -> list[list[str]] | None:
     commands: dict[str, dict[str, list[list[str]]]] = {
         "git": {
             "darwin": [["brew", "install", "git"]],

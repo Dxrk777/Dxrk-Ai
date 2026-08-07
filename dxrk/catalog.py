@@ -8,9 +8,9 @@ __all__ = [
     "Component",
     "Skill",
     "all_agents",
-    "mvp_agents",
     "is_mvp_agent",
     "is_supported_agent",
+    "mvp_agents",
     "mvp_components",
     "mvp_skills",
 ]

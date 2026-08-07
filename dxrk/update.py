@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: MIT
 from __future__ import annotations
-import gzip
-import hashlib
+
 import json
 import logging
 import os
@@ -12,15 +11,13 @@ import sys
 import tarfile
 import tempfile
 import threading
-import time
 import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
-from pathlib import Path
-from typing import Optional
+from typing import Optional, TextIO
 
 from dxrk.system import PlatformProfile
 
@@ -51,7 +48,7 @@ class ToolInfo:
     name: str = ""
     owner: str = ""
     repo: str = ""
-    detect_cmd: Optional[list[str]] = None
+    detect_cmd: list[str] | None = None
     version_prefix: str = ""
     install_method: InstallMethod = InstallMethod.BINARY
     go_import_path: str = ""
@@ -199,7 +196,7 @@ def _parse_version_parts(version: str) -> list[int]:
 # Detection
 
 
-def _look_path(name: str) -> Optional[str]:
+def _look_path(name: str) -> str | None:
     return shutil.which(name)
 
 
@@ -323,7 +320,7 @@ def check_all(current_version: str, profile: PlatformProfile) -> list[UpdateResu
 
 
 def check_filtered(
-    current_version: str, profile: PlatformProfile, tool_names: Optional[list[str]]
+    current_version: str, profile: PlatformProfile, tool_names: list[str] | None
 ) -> list[UpdateResult]:
     if tool_names:
         name_set = set(tool_names)
@@ -331,7 +328,7 @@ def check_filtered(
     else:
         targets = list(Tools)
 
-    results: list[Optional[UpdateResult]] = [None] * len(targets)
+    results: list[UpdateResult | None] = [None] * len(targets)
     with ThreadPoolExecutor(max_workers=len(targets)) as executor:
         futures = {
             executor.submit(_check_single_tool, t, current_version, profile): i
@@ -352,8 +349,8 @@ def _check_single_tool(
 
     # Run local detection and remote fetch concurrently
     local_version: str = ""
-    release: Optional[GitHubRelease] = None
-    fetch_err: Optional[Exception] = None
+    release: GitHubRelease | None = None
+    fetch_err: Exception | None = None
 
     with ThreadPoolExecutor(max_workers=2) as ex:
         local_fut = ex.submit(detect_installed_version, tool, current_build_version)
@@ -370,6 +367,8 @@ def _check_single_tool(
         result.err = str(fetch_err)
         result.status = UpdateStatus.CHECK_FAILED
         return result
+
+    assert release is not None
 
     result.latest_version = release.tag_name
     result.release_url = release.html_url
@@ -681,7 +680,7 @@ _backup_exclude_subdirs: set[str] = {
 
 
 def enumerate_files_in_dir(
-    dir_path: str, exclude_names: Optional[set[str]] = None
+    dir_path: str, exclude_names: set[str] | None = None
 ) -> list[str]:
     if exclude_names is None:
         exclude_names = _backup_exclude_subdirs
@@ -754,8 +753,8 @@ def execute(
 
 @dataclass
 class ExecuteOptions:
-    progress: Optional = None
-    backup_diagnostics: Optional = None
+    progress: Optional[TextIO] = None
+    backup_diagnostics: Optional[TextIO] = None
 
 
 def execute_with_options(
@@ -788,16 +787,19 @@ def execute_with_options(
     if not dry_run and executable:
         from dxrk.backup import (
             BackupSource as BackupSrc,
+        )
+        from dxrk.backup import (
             ManifestFilename as BManifestFilename,
         )
-        from dxrk.backup import Snapshotter, write_manifest as bw_manifest
+        from dxrk.backup import Snapshotter
+        from dxrk.backup import write_manifest as bw_manifest
 
         sp = CLISpinner(pw, "Creating pre-upgrade backup") if pw else None
         snapshot_dir = os.path.join(
             home_dir,
             ".gentle-ai",
             "backups",
-            f"upgrade-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}",
+            f"upgrade-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}",
         )
         try:
             snap = Snapshotter()
@@ -1213,7 +1215,7 @@ def _opencode_plugin_registered_or_materialized(opencode_dir: str, pkg: str) -> 
     return pkg in plugins
 
 
-def _select_opencode_package_manager(opencode_dir: str) -> Optional[str]:
+def _select_opencode_package_manager(opencode_dir: str) -> str | None:
     candidates: list[str] = []
     pm_from_meta = _opencode_pm_from_metadata(opencode_dir)
     if pm_from_meta:
@@ -1228,7 +1230,7 @@ def _select_opencode_package_manager(opencode_dir: str) -> Optional[str]:
     return None
 
 
-def _opencode_pm_from_metadata(opencode_dir: str) -> Optional[str]:
+def _opencode_pm_from_metadata(opencode_dir: str) -> str | None:
     pkg_json = os.path.join(opencode_dir, "package.json")
     try:
         with open(pkg_json) as f:

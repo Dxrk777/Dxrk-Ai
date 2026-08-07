@@ -3,16 +3,16 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
-from dxrk.models import Selection, AgentID, ComponentID
+from dxrk.models import AgentID, ComponentID, Selection
 from dxrk.system import DetectionResult
 
 __all__ = [
-    "run_install",
     "InstallResult",
     "build_stage_plan",
     "resolve_install_profile",
+    "run_install",
 ]
 
 
@@ -31,10 +31,9 @@ class InstallResult:
 
 def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
     from dxrk.cli.install import (
-        parse_install_flags,
-        normalize_install_flags,
         InstallRuntime,
-        InstallInput,
+        normalize_install_flags,
+        parse_install_flags,
     )
     from dxrk.cli.install import resolve_install_profile as resolve_profile
 
@@ -42,8 +41,8 @@ def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
     input_data = normalize_install_flags(flags, detection)
 
     from dxrk.planner import (
-        new_resolver,
         build_review_payload,
+        new_resolver,
         platform_decision_from_profile,
     )
 
@@ -78,6 +77,7 @@ def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
 
     if not detection.dependencies.all_present:
         import logging
+
         from dxrk.system import format_missing_deps_message
 
         log = logging.getLogger(__name__)
@@ -91,7 +91,7 @@ def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
     stage_plan = rt.stage_plan()
     result.plan = stage_plan
 
-    from dxrk.pipeline import new_orchestrator, default_rollback_policy
+    from dxrk.pipeline import default_rollback_policy, new_orchestrator
 
     orchestrator = new_orchestrator(default_rollback_policy())
     result.execution = orchestrator.execute(stage_plan)
@@ -100,7 +100,6 @@ def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
         result.error = f"execute install pipeline: {result.execution.error}"
         return result
 
-    from dxrk.cli.install import _VerifyReport
     from dxrk.state import write as state_write
 
     verify_result = _run_post_apply_verification(
@@ -114,18 +113,19 @@ def run_install(args: list[str], detection: DetectionResult) -> InstallResult:
         return result
 
     agent_ids = [a.value for a in input_data.selection.agents]
+    from dxrk.cli.install import _model_assignments_to_state
+    from dxrk.state import InstallState
+
     state_write(
         home_dir,
-        {
-            "InstalledAgents": agent_ids,
-            "ClaudeModelAssignments": dict(
-                input_data.selection.claude_model_assignments
+        InstallState(
+            installed_agents=agent_ids,
+            claude_model_assignments=input_data.selection.claude_model_assignments
+            or None,
+            model_assignments=_model_assignments_to_state(
+                input_data.selection.model_assignments
             ),
-            "ModelAssignments": {
-                k: {"ProviderID": v.provider_id, "ModelID": v.model_id}
-                for k, v in input_data.selection.model_assignments.items()
-            },
-        },
+        ),
     )
 
     return result
@@ -137,11 +137,9 @@ def _run_post_apply_verification(
     resolved: Any,
 ) -> Any:
     from dxrk.cli.install import (
-        _VerifyCheck,
-        _VerifyReport,
-        _run_checks,
         _build_report,
         _component_paths,
+        _run_checks,
     )
     from dxrk.models import ComponentID
 
@@ -165,8 +163,6 @@ def _run_post_apply_verification(
 
     if has_component(resolved.ordered_components, ComponentID.DXRK_MEMORY):
         checks.extend(_DXRK_MEMORY_health_checks())
-
-    from dxrk.models import AgentID
 
     checks.extend(_antigravity_collision_check(resolved.agents))
 
@@ -284,14 +280,14 @@ def resolve_install_profile(detection: DetectionResult) -> Any:
 
 
 def build_stage_plan(selection: Selection, resolved: Any) -> Any:
-    from dxrk.pipeline import StagePlan
     from dxrk.cli.install import NoopStep
+    from dxrk.pipeline import StagePlan, Step
 
-    prepare = [
+    prepare: list[Step] = [
         NoopStep("prepare:system-check"),
         NoopStep("prepare:check-dependencies"),
     ]
-    apply = []
+    apply: list[Step] = []
 
     for agent in resolved.agents:
         apply.append(NoopStep(f"agent:{agent.value}"))

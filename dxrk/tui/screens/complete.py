@@ -1,8 +1,10 @@
 # SPDX-License-Identifier: MIT
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Container, VerticalScroll
+from textual.containers import Container
 from textual.screen import Screen
+from textual.visual import Visual
+from textual.widget import Widget
 from textual.widgets import Footer, Static
 
 from dxrk.tui.shared import STATE
@@ -22,7 +24,7 @@ class CompleteScreen(Screen):
     def on_mount(self) -> None:
         self._render()
 
-    def _render(self) -> None:
+    def _render(self) -> Visual:
         content = self.query_one("#complete-content", Static)
         plan = STATE.plan
         failed = []
@@ -72,6 +74,8 @@ class CompleteScreen(Screen):
                 lines.append("")
             lines.append("[dim]Press Enter to return to welcome.[/]")
             content.update("\n".join(lines))
+
+        return Widget._render(self)
 
     def action_finish(self) -> None:
         self.app.push_screen("welcome")

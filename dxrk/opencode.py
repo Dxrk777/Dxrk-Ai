@@ -4,20 +4,19 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass, field
-from typing import Optional
 
 __all__ = [
-    "default_settings_path",
-    "default_cache_path",
-    "default_auth_path",
-    "OpencodeConfig",
+    "Model",
     "ModelCost",
     "ModelLimit",
-    "Model",
+    "OpencodeConfig",
     "Provider",
-    "load_models",
+    "default_auth_path",
+    "default_cache_path",
+    "default_settings_path",
     "detect_available_providers",
     "filter_models_for_sdd",
+    "load_models",
     "sdd_phases",
 ]
 

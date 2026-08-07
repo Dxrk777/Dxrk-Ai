@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: MIT
 import asyncio
 
+from textual import work
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Container
 from textual.screen import Screen
-from textual.widgets import Footer, ProgressBar, RichLog, Static, LoadingIndicator
-from textual import work
+from textual.widgets import Footer, LoadingIndicator, ProgressBar, RichLog, Static
 
 
 class InstallingScreen(Screen):
@@ -24,6 +24,7 @@ class InstallingScreen(Screen):
 
     @work
     async def install(self) -> None:
+        from dxrk.models import Selection
         from dxrk.pipeline import run_install_pipeline
         from dxrk.tui.shared import STATE
 
@@ -34,11 +35,25 @@ class InstallingScreen(Screen):
             log_widget.write(msg)
             progress.progress = pct
 
+        selection = Selection(
+            agents=list(STATE.selected_agents),
+            components=list(STATE.selected_components),
+            skills=list(STATE.selected_skills),
+            persona=STATE.persona,
+            preset=STATE.preset,
+            sdd_mode=STATE.sdd_mode,
+            strict_tdd=STATE.strict_tdd,
+            model_assignments=dict(STATE.model_assignments),
+        )
         success = await run_install_pipeline(
-            selection=STATE,
+            selection=selection,
             on_progress=on_progress,
         )
-        log_widget.write("[green]Installation complete![/]" if success else "[red]Installation failed![/]")
+        log_widget.write(
+            "[green]Installation complete![/]"
+            if success
+            else "[red]Installation failed![/]"
+        )
         progress.progress = 100
         await asyncio.sleep(1)
         self.app.push_screen("complete")

@@ -6,12 +6,10 @@ Context7 + MemPalace MCP server injection.
 
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass, field
 
 from dxrk.components import filemerge
 from dxrk.models import AgentID, MCPStrategy
-
 
 # ─── MemPalace JSON payloads ───────────────────────────────────────────────
 

@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: MIT
 import os
-from pathlib import Path
 from typing import NamedTuple
 
 from dxrk.agents.registry import Registry

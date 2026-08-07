@@ -7,7 +7,7 @@ Config, install, runtime file management.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from dxrk.components import filemerge
 from dxrk.components.assets import read as assets_read

@@ -2,10 +2,8 @@
 """Install state persistence (mirrors internal/state/state.go)."""
 
 import json
-import os
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Optional
 
 STATE_DIR = ".dxrk"
 STATE_FILE = "state.json"
@@ -20,9 +18,9 @@ class ModelAssignmentState:
 @dataclass
 class InstallState:
     installed_agents: list[str] = field(default_factory=list)
-    claude_model_assignments: Optional[dict[str, str]] = None
-    kiro_model_assignments: Optional[dict[str, str]] = None
-    model_assignments: Optional[dict[str, ModelAssignmentState]] = None
+    claude_model_assignments: dict[str, str] | None = None
+    kiro_model_assignments: dict[str, str] | None = None
+    model_assignments: dict[str, ModelAssignmentState] | None = None
 
 
 def state_path(home_dir: str | Path) -> Path:

@@ -1,11 +1,12 @@
 # SPDX-License-Identifier: MIT
-from textual import on
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
-from textual.widgets import Button, Footer, Static
+from textual.visual import Visual
+from textual.widget import Widget
+from textual.widgets import Footer, Static
 
 from dxrk.tui.shared import STATE
 
@@ -29,13 +30,13 @@ class DetectionScreen(Screen):
     def on_mount(self) -> None:
         self._render()
 
-    def _render(self) -> None:
+    def _render(self) -> Visual:
         scroll = self.query_one("#detection-results", VerticalScroll)
         scroll.remove_children()
         d = STATE.detection
         if not d:
             scroll.mount(Static("[red]Detection failed or not run yet.[/]"))
-            return
+            return Widget._render(self)
 
         sys = d.system
         supported = "[green]Yes[/]" if sys.supported else "[red]No[/]"
@@ -48,7 +49,9 @@ class DetectionScreen(Screen):
         if d.tools:
             scroll.mount(Static("[bold]Tools[/]"))
             for name, status in sorted(d.tools.items()):
-                indicator = "[green]found[/]" if status.installed else "[red]not found[/]"
+                indicator = (
+                    "[green]found[/]" if status.installed else "[red]not found[/]"
+                )
                 scroll.mount(Static(f"  {name}: {indicator}"))
             scroll.mount(Static(""))
 
@@ -64,7 +67,11 @@ class DetectionScreen(Screen):
                 suffix = " [dim](optional)[/]" if not dep.required else ""
                 scroll.mount(Static(f"  {dep.name}: {indicator}{suffix}"))
             if d.dependencies.missing_required:
-                scroll.mount(Static(f"[yellow]Missing required: {', '.join(d.dependencies.missing_required)}[/]"))
+                scroll.mount(
+                    Static(
+                        f"[yellow]Missing required: {', '.join(d.dependencies.missing_required)}[/]"
+                    )
+                )
             scroll.mount(Static(""))
 
         if d.configs:
@@ -83,6 +90,8 @@ class DetectionScreen(Screen):
             scroll.mount(s)
 
         scroll.mount(Static("[dim]j/k: navigate • enter: select • esc: back[/]"))
+
+        return Widget._render(self)
 
     def _update_actions(self) -> None:
         if not hasattr(self, "_action_statics"):

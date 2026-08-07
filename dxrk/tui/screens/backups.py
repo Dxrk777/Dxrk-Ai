@@ -4,6 +4,8 @@ from textual.binding import Binding
 from textual.containers import Container, VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
+from textual.visual import Visual
+from textual.widget import Widget
 from textual.widgets import Footer, Static
 
 from dxrk.tui.shared import STATE
@@ -21,7 +23,7 @@ class BackupsScreen(Screen):
     ]
 
     cursor = reactive(0)
-    scroll_offset = reactive(0)
+    list_offset = reactive(0)
     MAX_VISIBLE = 10
 
     def compose(self) -> ComposeResult:
@@ -30,13 +32,15 @@ class BackupsScreen(Screen):
             with VerticalScroll(id="backup-list"):
                 yield Static("")
             yield Static("")
-            yield Static("[dim]j/k: navigate • enter: restore • r: rename • d: delete • p: pin/unpin • esc: back[/]")
+            yield Static(
+                "[dim]j/k: navigate • enter: restore • r: rename • d: delete • p: pin/unpin • esc: back[/]"
+            )
         yield Footer()
 
     def on_mount(self) -> None:
         self._render()
 
-    def _render(self) -> None:
+    def _render(self) -> Visual:
         scroll = self.query_one("#backup-list", VerticalScroll)
         scroll.remove_children()
 
@@ -45,17 +49,16 @@ class BackupsScreen(Screen):
             scroll.mount(Static("[yellow]No backups found yet.[/]"))
             scroll.mount(Static(""))
             scroll.mount(Static("  Back"))
-            return
+            return Widget._render(self)
 
-        end = self.scroll_offset + self.MAX_VISIBLE
-        if end > len(backups):
-            end = len(backups)
+        end = self.list_offset + self.MAX_VISIBLE
+        end = min(end, len(backups))
 
-        if self.scroll_offset > 0:
+        if self.list_offset > 0:
             scroll.mount(Static("[dim]  ↑ more[/]"))
 
         self._backup_statics = []
-        for i in range(self.scroll_offset, end):
+        for i in range(self.list_offset, end):
             snap = backups[i]
             label = snap.get("display_label", snap.get("id", "unknown"))
             if snap.get("created_by_version"):
@@ -74,15 +77,16 @@ class BackupsScreen(Screen):
         scroll.mount(Static(""))
         scroll.mount(Static("  Back"))
 
+        return Widget._render(self)
+
     def _update_list(self) -> None:
         if not hasattr(self, "_backup_statics"):
             return
         backups = STATE.backups
-        end = self.scroll_offset + self.MAX_VISIBLE
-        if end > len(backups):
-            end = len(backups)
+        end = self.list_offset + self.MAX_VISIBLE
+        end = min(end, len(backups))
         for idx, s in enumerate(self._backup_statics):
-            i = self.scroll_offset + idx
+            i = self.list_offset + idx
             if i >= len(backups):
                 break
             snap = backups[i]
@@ -97,11 +101,11 @@ class BackupsScreen(Screen):
 
     def watch_cursor(self, old: int, new: int) -> None:
         backups = STATE.backups
-        if new < self.scroll_offset:
-            self.scroll_offset = new
+        if new < self.list_offset:
+            self.list_offset = new
             self._render()
-        elif new >= self.scroll_offset + self.MAX_VISIBLE:
-            self.scroll_offset = new - self.MAX_VISIBLE + 1
+        elif new >= self.list_offset + self.MAX_VISIBLE:
+            self.list_offset = new - self.MAX_VISIBLE + 1
             self._render()
         else:
             self._update_list()
@@ -176,8 +180,8 @@ class RestoreConfirmScreen(Screen):
     def on_mount(self) -> None:
         self._render()
 
-    def _render(self) -> None:
-        pass
+    def _render(self) -> Visual:
+        return Widget._render(self)
 
     def action_cursor_up(self) -> None:
         if self.cursor > 0:
@@ -215,7 +219,9 @@ class DeleteConfirmScreen(Screen):
             yield Static(f"[bold]Backup:[/] {snap.get('id', 'unknown')}")
             yield Static(f"[dim]{snap.get('display_label', '')}[/]")
             yield Static("")
-            yield Static("[yellow]Are you sure you want to permanently delete this backup?[/]")
+            yield Static(
+                "[yellow]Are you sure you want to permanently delete this backup?[/]"
+            )
             yield Static("[yellow]This action cannot be undone.[/]")
             yield Static("")
             yield Static("  ▸ Delete")

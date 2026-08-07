@@ -1,20 +1,20 @@
 # SPDX-License-Identifier: MIT
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Callable, Optional
 
 __all__ = [
-    "CheckStatus",
     "Check",
     "CheckResult",
-    "run_checks",
+    "CheckStatus",
+    "PostInstallVerifier",
     "Report",
+    "VerificationScenario",
     "build_report",
     "render_report",
-    "VerificationScenario",
-    "PostInstallVerifier",
+    "run_checks",
 ]
 
 
@@ -29,7 +29,7 @@ class CheckStatus(str, Enum):
 class Check:
     id: str = ""
     description: str = ""
-    run: Optional[Callable[[], Optional[str]]] = None
+    run: Callable[[], str | None] | None = None
     soft: bool = False
 
 
@@ -127,7 +127,7 @@ def render_report(report: Report) -> str:
 
 
 class VerificationScenario:
-    def __init__(self, name: str = "", checks: Optional[list[Check]] = None) -> None:
+    def __init__(self, name: str = "", checks: list[Check] | None = None) -> None:
         self.name = name
         self.checks = list(checks) if checks else []
 
@@ -136,7 +136,7 @@ class VerificationScenario:
 
 
 class PostInstallVerifier:
-    def __init__(self, scenarios: Optional[list[VerificationScenario]] = None) -> None:
+    def __init__(self, scenarios: list[VerificationScenario] | None = None) -> None:
         self.scenarios = list(scenarios) if scenarios else []
 
     def add_scenario(self, scenario: VerificationScenario) -> None:

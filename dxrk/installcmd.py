@@ -5,19 +5,19 @@ import os
 import shutil
 import subprocess
 import tempfile
-from typing import Optional, Protocol
+from typing import Protocol
 
 from dxrk.models import AgentID, ComponentID
 from dxrk.system import PlatformProfile
 
 __all__ = [
-    "InstallError",
     "CommandSequence",
-    "Resolver",
+    "InstallError",
     "ProfileResolver",
+    "Resolver",
+    "git_bash_path",
     "new_resolver",
     "validate_agent_install_preflight",
-    "git_bash_path",
 ]
 
 # Package-level vars for testability (mirrors Go's cmdLookPath, osStat, osGetenv, cmdGoVersion)

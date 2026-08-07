@@ -8,12 +8,9 @@ from __future__ import annotations
 
 import json
 import os
-import re
-import shutil
 import tempfile
-from dataclasses import dataclass, field
-from typing import Any
-
+from dataclasses import dataclass
+from typing import Any, cast
 
 # ─── Writer ────────────────────────────────────────────────────────────────
 
@@ -334,12 +331,12 @@ def _unmarshal_json_object(raw: bytes) -> dict[str, Any] | None:
     if not raw.strip():
         return {}
     try:
-        return json.loads(raw)
+        return cast(dict[str, Any], json.loads(raw))
     except json.JSONDecodeError:
         pass
     normalized = _normalize_json(raw)
     try:
-        return json.loads(normalized)
+        return cast(dict[str, Any], json.loads(normalized))
     except json.JSONDecodeError:
         return None
 

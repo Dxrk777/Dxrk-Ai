@@ -544,7 +544,7 @@ class TestServiceExecutePlan:
 class TestServiceGetAdapter:
     def test_get_adapter_returns_non_none(self, monkeypatch):
         class FakeReg:
-            def resolve(self, aid):
+            def get(self, aid):
                 return FakeAdapter()
 
         monkeypatch.setattr("dxrk.agents.registry.Registry", lambda: FakeReg())

@@ -11,12 +11,14 @@ import logging
 import os
 import subprocess
 import sys
-import time
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
+
+from dxrk.models import Selection
 
 log = logging.getLogger(__name__)
 
@@ -196,9 +198,9 @@ class Runner:
                 )
             )
 
-            started = datetime.now(timezone.utc).isoformat()
+            started = datetime.now(UTC).isoformat()
             err = step.run()
-            finished = datetime.now(timezone.utc).isoformat()
+            finished = datetime.now(UTC).isoformat()
 
             step_result = StepResult(
                 step_id=step.id(),
@@ -333,12 +335,12 @@ def execute_command(name: str, *args: str) -> str | None:
                 return f"command {cmd!r} exited with code {proc.returncode}"
             return None
         else:
-            proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
-            if proc.returncode != 0:
-                out = proc.stdout.strip() + proc.stderr.strip()
+            captured = subprocess.run(cmd, capture_output=True, text=True, check=False)
+            if captured.returncode != 0:
+                out = captured.stdout.strip() + captured.stderr.strip()
                 if out:
                     return f"command {cmd!r} failed:\n{out}"
-                return f"command {cmd!r} exited with code {proc.returncode}"
+                return f"command {cmd!r} exited with code {captured.returncode}"
             return None
     except FileNotFoundError:
         return f"command {name!r} not found in PATH"
@@ -415,10 +417,9 @@ async def run_install_pipeline(
     selection: Selection,
     on_progress=None,
 ) -> bool:
-    import os
-    from dxrk.system import detect
-    from dxrk.cli.install import resolve_install_profile, InstallRuntime
+    from dxrk.cli.install import InstallFlags, InstallRuntime, resolve_install_profile
     from dxrk.planner import new_resolver, platform_decision_from_profile
+    from dxrk.system import detect
 
     detection = detect()
     if not detection.system.supported:
@@ -433,16 +434,18 @@ async def run_install_pipeline(
     if on_progress:
         await on_progress("Building stage plan...", 5)
 
-    from dxrk.cli.install import normalize_install_flags, build_stage_plan
+    from dxrk.cli.install import build_stage_plan, normalize_install_flags
 
-    class _DummyFlags:
-        dry_run = False
-        agents = [a.value for a in selection.agents]
-        components = [c.value for c in selection.components]
-        persona = selection.persona.value if selection.persona else "gentleman"
-        preset = selection.preset.value if selection.preset else "full-gentleman"
-
-    input_data = normalize_install_flags(_DummyFlags(), detection)
+    input_data = normalize_install_flags(
+        InstallFlags(
+            dry_run=False,
+            agents=[a.value for a in selection.agents],
+            components=[c.value for c in selection.components],
+            persona=selection.persona.value if selection.persona else "gentleman",
+            preset=selection.preset.value if selection.preset else "full-gentleman",
+        ),
+        detection,
+    )
     stage_plan = build_stage_plan(input_data.selection, resolved)
 
     if on_progress:
@@ -465,14 +468,16 @@ async def run_install_pipeline(
     total = len(stage_plan.prepare) + len(stage_plan.apply) or 1
     completed = [0]
 
-    def cb(msg, _pct):
+    def cb(event: ProgressEvent) -> None:
         completed[0] += 1
         if on_progress:
             import asyncio
 
-            asyncio.ensure_future(on_progress(msg, 10 + 70 * completed[0] / total))
+            asyncio.ensure_future(
+                on_progress(event.step_id, 10 + 70 * completed[0] / total)
+            )
 
-    from dxrk.pipeline import new_orchestrator, default_rollback_policy
+    from dxrk.pipeline import default_rollback_policy, new_orchestrator
 
     orch = new_orchestrator(default_rollback_policy())
     orch.runner.on_progress = cb

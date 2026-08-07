@@ -9,21 +9,19 @@ from __future__ import annotations
 import json
 import os
 import shutil
-import struct
 import tarfile
 import tempfile
-import time
 import zipfile
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from io import BytesIO
-from typing import Any, Callable
+from typing import Any
 from urllib.request import Request, urlopen
 
 from dxrk.components import filemerge
-from dxrk.components.assets import must_read, read
+from dxrk.components.assets import must_read
 from dxrk.models import AgentID
 from dxrk.system import PlatformProfile
-
 
 # ─── Config / Setup ────────────────────────────────────────────────────────
 
@@ -121,7 +119,7 @@ def _DXRK_MEMORY_server_json_with_cmd(cmd: str) -> bytes:
 
 def _DXRK_MEMORY_overlay_json(agent_id: AgentID, cmd: str) -> bytes:
     if agent_id in (AgentID.OPENCODE, AgentID.KILOCODE):
-        cfg = {
+        cfg: dict[str, Any] = {
             "mcp": {
                 "DXRK_MEMORY": {
                     "__replace__": {
@@ -340,7 +338,9 @@ def _stable_DXRK_MEMORY_command_for_merged_config(path: str, agent_id: AgentID) 
     return cmd
 
 
-def _stable_DXRK_MEMORY_command_for_existing(cmd: str, agent_id: AgentID) -> str:
+def _stable_DXRK_MEMORY_command_for_existing(
+    cmd: str, agent_id: AgentID | None = None
+) -> str:
     if _is_versioned_homebrew_cellar_path(cmd):
         stable = _preferred_stable_DXRK_MEMORY_command()
         return stable or "DXRK_MEMORY"
@@ -419,7 +419,7 @@ def _build_separate_mcp_content(mcp_path: str, default_content: bytes) -> bytes:
     cmd, ok = _executable_from_command_value(existing.get("command"))
     if not ok or not _is_DXRK_MEMORY_command(cmd):
         return default_content
-    cmd = _stable_DXRK_MEMORY_command_for_existing(cmd, "")
+    cmd = _stable_DXRK_MEMORY_command_for_existing(cmd, None)
     rebuilt = {"command": cmd, "args": ["mcp", "--tools=agent"]}
     return (json.dumps(rebuilt, indent=2) + "\n").encode("utf-8")
 
@@ -609,7 +609,7 @@ def _write_executable(data: bytes, out_path: str) -> None:
         with os.fdopen(fd, "wb") as tmp:
             tmp.write(data)
             tmp.flush()
-            os.fsync(tmp.fd)
+            os.fsync(fd)
         os.chmod(tmp_path, 0o755)
         os.replace(tmp_path, out_path)
     except BaseException:
@@ -652,8 +652,8 @@ def verify_version() -> str | None:
 
 
 def verify_health(base_url: str = "http://127.0.0.1:7437") -> str | None:
-    import urllib.request as req
     import urllib.error
+    import urllib.request as req
 
     try:
         with req.urlopen(f"{base_url.rstrip('/')}/health", timeout=2) as resp:

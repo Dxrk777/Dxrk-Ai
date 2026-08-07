@@ -4,14 +4,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Callable, Optional
 
 from dxrk.models import (
     AgentID,
     ComponentID,
     PersonaID,
     PresetID,
-    SDDModeID,
     Selection,
     SkillID,
 )
@@ -19,7 +17,8 @@ from dxrk.system import PlatformProfile
 
 
 class Resolver:
-    def resolve(self, selection: Selection) -> ResolvedPlan: ...
+    def resolve(self, selection: Selection) -> ResolvedPlan:
+        raise NotImplementedError
 
 
 @dataclass
@@ -115,7 +114,7 @@ SOFT_ORDERING_PAIRS: list[tuple[ComponentID, ComponentID]] = []
 
 
 def _init_soft_pairs():
-    from dxrk.models import ComponentPersona, ComponentEngram, ComponentSDD
+    from dxrk.models import ComponentEngram, ComponentPersona, ComponentSDD
 
     global SOFT_ORDERING_PAIRS
     SOFT_ORDERING_PAIRS = [

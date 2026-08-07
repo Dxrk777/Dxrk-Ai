@@ -5,10 +5,10 @@ from textual.containers import Container, VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Footer, Static
+from typing import cast
 
 from dxrk.models import AgentID
 from dxrk.tui.shared import STATE
-
 
 AGENT_OPTIONS: list[tuple[AgentID, str, str]] = [
     (AgentID.CLAUDE_CODE, "Claude Code", "Anthropic's CLI agent"),
@@ -66,7 +66,7 @@ class AgentsScreen(Screen):
             aid, name, _ = AGENT_OPTIONS[i]
             checked = "✓" if aid in STATE.selected_agents else " "
             prefix = "▸" if i == self.cursor else " "
-            child.update(f"{prefix}[{checked}] {name}")
+            cast(Static, child).update(f"{prefix}[{checked}] {name}")
             child.set_class(i == self.cursor, "focused")
 
     def watch_cursor(self, old: int, new: int) -> None:
@@ -81,7 +81,7 @@ class AgentsScreen(Screen):
         if self.cursor < total - 1:
             self.cursor += 1
 
-    def action_toggle(self) -> None:
+    async def action_toggle(self, attribute_name: str = "") -> None:
         if self.cursor < self._action_offset:
             aid = AGENT_OPTIONS[self.cursor][0]
             if aid in STATE.selected_agents:
@@ -90,13 +90,13 @@ class AgentsScreen(Screen):
                 STATE.selected_agents.append(aid)
             self._update_list()
 
-    def action_continue(self) -> None:
+    async def action_continue(self) -> None:
         if self.cursor == self._action_offset and STATE.selected_agents:
             self.app.push_screen("persona")
         elif self.cursor == self._action_offset + 1:
             self.app.push_screen("detection")
         elif self.cursor < self._action_offset:
-            self.action_toggle()
+            await self.action_toggle()
 
     def action_back(self) -> None:
         self.app.push_screen("detection")

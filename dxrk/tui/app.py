@@ -3,27 +3,26 @@
 Textual TUI app for Dxrk — ported from Go/Bubbletea.
 """
 
-import asyncio
 import logging
+
+from typing import cast
 
 from textual import on, work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, Vertical, VerticalScroll
 from textual.reactive import reactive
-from textual.screen import Screen, ModalScreen
+from textual.screen import ModalScreen, Screen
 from textual.widgets import (
     Button,
     Footer,
+    Label,
     LoadingIndicator,
-    ProgressBar,
-    RichLog,
     Static,
 )
 
 from dxrk.models import (
     AgentID,
-    ComponentID,
     ModelAssignment,
     PersonaID,
     PresetID,
@@ -31,20 +30,15 @@ from dxrk.models import (
     UninstallMode,
 )
 from dxrk.system import detect
-from dxrk.tui.shared import STATE, go_next, go_back
-
-from dxrk.tui.screens.detection import DetectionScreen
-from dxrk.tui.screens.agents import AgentsScreen
-from dxrk.tui.screens.complete import CompleteScreen
 from dxrk.tui.screens.backups import (
-    BackupsScreen,
-    RestoreConfirmScreen,
     DeleteConfirmScreen,
     RenameBackupScreen,
+    RestoreConfirmScreen,
 )
+from dxrk.tui.screens.dependency_tree import DependencyTreeScreen
 from dxrk.tui.screens.installing import InstallingScreen
 from dxrk.tui.screens.review import ReviewScreen
-from dxrk.tui.screens.dependency_tree import DependencyTreeScreen
+from dxrk.tui.shared import STATE
 
 log = logging.getLogger(__name__)
 
@@ -170,7 +164,9 @@ class PlaceholderScreen(Screen):
 
     def compose(self) -> ComposeResult:
         with Container():
-            yield Static(f"[bold]{self.name.replace('_', ' ').title()}[/]")
+            yield Static(
+                f"[bold]{(self.name or 'screen').replace('_', ' ').title()}[/]"
+            )
             yield Static("")
             yield Static("Coming soon")
         yield Footer()
@@ -207,11 +203,11 @@ class DetectionScreen(Screen):
             "Detecting OS, tools, and dependencies..."
         )
         STATE.detection = detect()
-        self.call_from_thread(self._show_results)
+        self.app.call_from_thread(self._show_results)
 
     def _show_results(self) -> None:
         spinner = self.query_one("#detection-spinner", LoadingIndicator)
-        spinner.remove()
+        spinner.display = False
         container = self.query_one("#detection-container", Container)
 
         d = STATE.detection
@@ -230,7 +226,7 @@ class DetectionScreen(Screen):
         items.mount(Static("[bold]Tools:[/]"))
         for name, status in d.tools.items():
             c = "green" if status.installed else "red"
-            v = f" {status.version}" if status.version else ""
+            v = f"  ({status.path})" if status.installed else ""
             items.mount(
                 Static(f"  [{c}]{'✅' if status.installed else '❌'} {name}{v}[/]")
             )
@@ -238,35 +234,6 @@ class DetectionScreen(Screen):
         items.mount(Static("[bold]Configs Found:[/]"))
         for cfg in d.configs:
             items.mount(Static(f"  📄 {cfg.path}"))
-        items.mount(Static(""))
-        items.mount(Button("Continue", variant="primary", id="detection-continue"))
-        self.query_one("#detection-status", Static).update(
-            "Detection complete. Press Enter or click Continue."
-        )
-        items = VerticalScroll(id="detection-results")
-        results = self.query_one("#detection-container", Container)
-        results.mount(items)
-
-        sys = STATE.detection.system
-        items.mount(Static(f"OS: [green]{sys.os}[/] / [green]{sys.arch}[/]"))
-        items.mount(Static(f"Shell: [green]{sys.shell}[/]"))
-        items.mount(Static(f"Package Manager: [green]{sys.profile.package_manager}[/]"))
-        items.mount(Static(""))
-        items.mount(Static("[bold]Tools:[/]"))
-        for name, status in STATE.detection.tools.items():
-            color = "green" if status.installed else "red"
-            ver = f" {status.version}" if status.version else ""
-            items.mount(
-                Static(
-                    f"  [{color}]{'✅' if status.installed else '❌'} {name}{ver}[/]"
-                )
-            )
-
-        items.mount(Static(""))
-        items.mount(Static("[bold]Configs Found:[/]"))
-        for cfg in STATE.detection.configs:
-            items.mount(Static(f"  📄 {cfg.path}"))
-
         items.mount(Static(""))
         items.mount(Button("Continue", variant="primary", id="detection-continue"))
         self.query_one("#detection-status", Static).update(
@@ -337,7 +304,7 @@ class AgentsScreen(Screen):
             aid, name, _ = AGENT_OPTIONS[i]
             checked = "✓" if aid in STATE.selected_agents else " "
             prefix = "▸" if i == self.cursor else " "
-            child.update(f"{prefix}[{checked}] {name}")
+            cast(Static, child).update(f"{prefix}[{checked}] {name}")
             child.set_class(i == self.cursor, "focused")
 
     def action_cursor_up(self) -> None:
@@ -348,7 +315,7 @@ class AgentsScreen(Screen):
         if self.cursor < len(AGENT_OPTIONS) - 1:
             self.cursor += 1
 
-    def action_toggle(self) -> None:
+    async def action_toggle(self, attribute_name: str = "") -> None:
         aid = AGENT_OPTIONS[self.cursor][0]
         if aid in STATE.selected_agents:
             STATE.selected_agents.remove(aid)
@@ -757,7 +724,7 @@ class ModelPickerScreen(Screen):
     def action_edit(self) -> None:
         if self.cursor < len(SDD_PHASES):
             phase = SDD_PHASES[self.cursor]
-            self.app.push_screen("model_select", phase)
+            self.app.push_screen(ModelSelectScreen(phase))
 
     def action_done(self) -> None:
         self.app.push_screen("dependency_tree")
@@ -776,6 +743,10 @@ class ModelSelectScreen(ModalScreen[str]):
 
     cursor = reactive(0)
     phase: str = ""
+
+    def __init__(self, phase: str = ""):
+        super().__init__()
+        self.phase = phase
 
     def compose(self) -> ComposeResult:
         with Container():

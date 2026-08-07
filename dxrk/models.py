@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MIT
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 
 class AgentID(str, Enum):
@@ -231,12 +231,12 @@ class Selection:
 
 @dataclass
 class SyncOverrides:
-    model_assignments: Optional[dict[str, ModelAssignment]] = None
-    claude_model_assignments: Optional[dict[str, str]] = None
-    kiro_model_assignments: Optional[dict[str, str]] = None
-    sdd_mode: Optional[SDDModeID] = None
-    sdd_profile_strategy: Optional[SDDProfileStrategyID] = None
-    strict_tdd: Optional[bool] = None
+    model_assignments: dict[str, ModelAssignment] | None = None
+    claude_model_assignments: dict[str, str] | None = None
+    kiro_model_assignments: dict[str, str] | None = None
+    sdd_mode: SDDModeID | None = None
+    sdd_profile_strategy: SDDProfileStrategyID | None = None
+    strict_tdd: bool | None = None
     profiles: list[Profile] = field(default_factory=list)
 
 

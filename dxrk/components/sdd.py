@@ -9,26 +9,26 @@ from __future__ import annotations
 import json
 import os
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any
 
 from dxrk.components import filemerge
 from dxrk.components.assets import (
     must_read as _must_read,
-    read as _read,
+)
+from dxrk.components.assets import (
     sdd_commands_asset_dir,
 )
 from dxrk.models import (
     AgentID,
     ClaudeModelAlias,
     ModelAssignment,
-    PersonaID,
     Profile,
     SDDModeID,
     SDDProfileStrategyID,
     SystemPromptStrategy,
 )
-
 
 _PROFILE_NAME_RE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?$")
 
@@ -584,11 +584,22 @@ def _overlay_asset_path(sdd_mode: SDDModeID) -> str:
 
 
 def inject(
-    home_dir: str, adapter, sdd_mode: SDDModeID, **options: Any
+    home_dir: str,
+    adapter,
+    sdd_mode: SDDModeID,
+    options: InjectOptions | None = None,
+    **extra: Any,
 ) -> InjectionResult:
-    opts = InjectOptions(
-        **{k: v for k, v in options.items() if k in InjectOptions.__dataclass_fields__}
-    )
+    if options is None:
+        opts = InjectOptions(
+            **{
+                k: v
+                for k, v in extra.items()
+                if k in InjectOptions.__dataclass_fields__
+            }
+        )
+    else:
+        opts = options
 
     if not adapter.supports_system_prompt:
         return InjectionResult()
@@ -993,12 +1004,12 @@ def _inject_claude_model_assignments(content: str, assignments: dict[str, str]) 
 
     from dxrk.models import claude_model_preset_balanced
 
-    merged = claude_model_preset_balanced()
+    merged = {k: v.value for k, v in claude_model_preset_balanced().items()}
     for key, alias in assignments.items():
         try:
             a = ClaudeModelAlias(alias)
             if a.valid():
-                merged[key] = a
+                merged[key] = a.value
         except ValueError:
             pass
 
@@ -1027,7 +1038,7 @@ def _resolve_claude_model_alias(
     return ClaudeModelAlias.SONNET
 
 
-def _render_claude_model_assignments_section(assignments: dict[str, str]) -> str:
+def _render_claude_model_assignments_section(assignments: Mapping[str, str]) -> str:
     lines = ["## Model Assignments\n"]
     lines.append(
         "Read this table at session start (or before first delegation), cache it "

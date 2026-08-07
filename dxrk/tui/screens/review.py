@@ -4,10 +4,12 @@ from textual.binding import Binding
 from textual.containers import Container, VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
+from textual.visual import Visual
+from textual.widget import Widget
 from textual.widgets import Footer, Static
+from typing import cast
 
-from dxrk.models import ComponentSDD
-from dxrk.planner import build_review_payload
+from dxrk.planner import ResolvedPlan, build_review_payload
 from dxrk.tui.shared import STATE
 
 
@@ -33,15 +35,19 @@ class ReviewScreen(Screen):
     def on_mount(self) -> None:
         self._render()
 
-    def _render(self) -> None:
+    def _render(self) -> Visual:
         scroll = self.query_one("#review-content", VerticalScroll)
         scroll.remove_children()
 
         plan = STATE.plan
-        payload = build_review_payload(
-            selection=None,
-            resolved=plan,
-        ) if plan and plan.selection else None
+        payload = (
+            build_review_payload(
+                selection=plan.selection,
+                resolved=cast("ResolvedPlan", plan),
+            )
+            if plan and plan.selection
+            else None
+        )
 
         agents = STATE.selected_agents
         components = STATE.selected_components
@@ -59,7 +65,9 @@ class ReviewScreen(Screen):
             parts.append("[bold]Components[/]")
             for c in components:
                 is_auto = payload and c in payload.added_dependencies
-                badge = "[dim]selected[/]" if not is_auto else "[yellow]auto-dependency[/]"
+                badge = (
+                    "[dim]selected[/]" if not is_auto else "[yellow]auto-dependency[/]"
+                )
                 parts.append(f"  {c.value} {badge}")
 
             if skills:
@@ -77,6 +85,7 @@ class ReviewScreen(Screen):
         unsupported = []
         if agents:
             from dxrk.catalog import is_supported_agent
+
             for a in agents:
                 if not is_supported_agent(a):
                     unsupported.append(a.value)
@@ -89,10 +98,13 @@ class ReviewScreen(Screen):
 
         scroll.mount(Static("  ▸ Install"))
         scroll.mount(Static("   Back"))
+        items = scroll.children
         self._action_statics = [
-            scroll.children[-2],
-            scroll.children[-1],
+            cast(Static, items[-2]),
+            cast(Static, items[-1]),
         ]
+
+        return Widget._render(self)
 
     def action_cursor_up(self) -> None:
         if self.cursor > 0:
