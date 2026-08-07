@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
 )
 
 type jsonPath []string

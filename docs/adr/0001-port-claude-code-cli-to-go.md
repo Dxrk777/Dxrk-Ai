@@ -5,7 +5,7 @@
 
 ## Context
 
-Dxrk-Ai originally shipped as a Python-based ecosystem (see `/dxrk`, `pyproject.toml`).
+Dxrk originally shipped as a Python-based ecosystem (see `/dxrk`, `pyproject.toml`).
 The Claude Code CLI reference implementation (`/home/dxrk/Documentos/anthropic-ai-claude-code-cli-map-main`)
 documents a feature set (hooks, HTTP client with retries/proxy/TLS, image format
 detection, swarm/event-bus coordination, TUI screens, CLI commands) that the product
@@ -34,7 +34,7 @@ self-contained binary (`cmd/dxrk`) with a strict package layout under `internal/
 ## Decision
 
 Port the tracked Claude Code surface to Go 1.25 under module
-`github.com/Dxrk777/Dxrk-Ai`, with packages organized as `internal/agents`,
+`github.com/Dxrk777/Dxrk`, with packages organized as `internal/agents`,
 `internal/cli`, `internal/commands`, `internal/components`, `internal/tui`, and
 `internal/utils/{hooks,http,image,swarm,session,...}`. CLI entrypoint lives at
 `cmd/dxrk`. Python trees remain for adapter/ecosystem features that are not part

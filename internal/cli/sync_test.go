@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/state"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/state"
 )
 
 // ─── Phase 1: ParseSyncFlags ───────────────────────────────────────────────

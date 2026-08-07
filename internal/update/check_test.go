@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/system"
 )
 
 // --- TestDetectInstalledVersion ---
@@ -411,7 +411,7 @@ func TestCheckAll(t *testing.T) {
 		case contains(path, "dxrk-memory"):
 			release = githubRelease{TagName: "v0.4.0", HTMLURL: "https://github.com/Dxrk777/dxrk-memory/releases/tag/v0.4.0"}
 		case contains(path, "dxrk"):
-			release = githubRelease{TagName: "v1.5.0", HTMLURL: "https://github.com/Dxrk777/Dxrk-Ai/releases/tag/v1.5.0"}
+			release = githubRelease{TagName: "v1.5.0", HTMLURL: "https://github.com/Dxrk777/Dxrk/releases/tag/v1.5.0"}
 		}
 		_ = json.NewEncoder(w).Encode(release)
 	}))

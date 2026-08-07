@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/tools"
 )
 
 func RegisterAll(reg *tools.Registry) error {

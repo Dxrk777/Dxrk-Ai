@@ -4,7 +4,7 @@ package pipeline
 import (
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 type StepStatus string

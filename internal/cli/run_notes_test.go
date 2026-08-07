@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/planner"
-	"github.com/Dxrk777/Dxrk-Ai/internal/verify"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/planner"
+	"github.com/Dxrk777/Dxrk/internal/verify"
 )
 
 func TestWithPostInstallNotesAddsGGANextSteps(t *testing.T) {

@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/rag"
-	"github.com/Dxrk777/Dxrk-Ai/internal/vault"
+	"github.com/Dxrk777/Dxrk/internal/rag"
+	"github.com/Dxrk777/Dxrk/internal/vault"
 )
 
 type MemoryType int

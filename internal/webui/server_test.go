@@ -7,9 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/config"
-	"github.com/Dxrk777/Dxrk-Ai/internal/router"
-	"github.com/Dxrk777/Dxrk-Ai/internal/version"
+	"github.com/Dxrk777/Dxrk/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/router"
+	"github.com/Dxrk777/Dxrk/internal/version"
 )
 
 func TestNewServer(t *testing.T) {

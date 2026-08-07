@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/tui/styles"
 )
 
 // RenderProfiles renders the OpenCode SDD Profiles list screen.

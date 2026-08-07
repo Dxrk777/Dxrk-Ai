@@ -10,10 +10,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/assets"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // profileNameRegex matches valid profile name slugs: lowercase alphanumeric + hyphens,

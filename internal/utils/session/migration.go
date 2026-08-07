@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // MigrationFunc transforms session JSON from one version to the next.

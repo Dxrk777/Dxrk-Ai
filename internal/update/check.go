@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/system"
 )
 
 // CheckAll runs update checks for all registered tools concurrently.

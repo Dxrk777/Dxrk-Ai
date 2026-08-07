@@ -10,10 +10,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/config"
-	"github.com/Dxrk777/Dxrk-Ai/internal/memory"
-	"github.com/Dxrk777/Dxrk-Ai/internal/rag"
-	"github.com/Dxrk777/Dxrk-Ai/internal/vault"
+	"github.com/Dxrk777/Dxrk/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/memory"
+	"github.com/Dxrk777/Dxrk/internal/rag"
+	"github.com/Dxrk777/Dxrk/internal/vault"
 )
 
 type Project struct {

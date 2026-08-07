@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/catalog"
-	componentuninstall "github.com/Dxrk777/Dxrk-Ai/internal/components/uninstall"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
+	"github.com/Dxrk777/Dxrk/internal/catalog"
+	componentuninstall "github.com/Dxrk777/Dxrk/internal/components/uninstall"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/tui/styles"
 )
 
 type UninstallModeOption struct {

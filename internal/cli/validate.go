@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/catalog"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/catalog"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/system"
 )
 
 type InstallInput struct {

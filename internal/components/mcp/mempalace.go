@@ -4,9 +4,9 @@ package mcp
 import (
 	"fmt"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 var defaultMemPalaceServerJSON = []byte("{\n  \"command\": \"mempalace-mcp\",\n  \"args\": []\n}\n")

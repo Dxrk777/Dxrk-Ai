@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/config"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // RegisterConfigCommand registers the `dxrk config` command with subcommands`dxrk config` command with subcommands
@@ -19,7 +19,7 @@ func RegisterConfigCommand(reg *Registry) {
 	cmd := &cobra.Command{
 		Use:   "config",
 		Short: "View and manage configuration",
-		Long:  "View, edit, and manage Dxrk-Ai configuration across all scopes.",
+		Long:  "View, edit, and manage Dxrk configuration across all scopes.",
 	}
 
 	cmd.AddCommand(

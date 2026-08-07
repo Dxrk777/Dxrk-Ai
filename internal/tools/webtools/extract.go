@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 	"golang.org/x/net/html"
 )
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package planner
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/model"
+import "github.com/Dxrk777/Dxrk/internal/model"
 
 type Graph struct {
 	dependencies map[model.ComponentID][]model.ComponentID

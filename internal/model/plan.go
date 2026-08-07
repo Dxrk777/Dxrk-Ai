@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package model
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+import "github.com/Dxrk777/Dxrk/internal/strconst"
 
 type PlanStatus string
 

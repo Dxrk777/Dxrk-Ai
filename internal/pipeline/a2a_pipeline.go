@@ -8,10 +8,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/a2a"
-	"github.com/Dxrk777/Dxrk-Ai/internal/query"
-	"github.com/Dxrk777/Dxrk-Ai/internal/router"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/a2a"
+	"github.com/Dxrk777/Dxrk/internal/query"
+	"github.com/Dxrk777/Dxrk/internal/router"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 const PipelineVersion = "1.0"

@@ -12,16 +12,16 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/checker"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/permissions"
-	"github.com/Dxrk777/Dxrk-Ai/internal/log"
-	"github.com/Dxrk777/Dxrk-Ai/internal/mcp"
-	"github.com/Dxrk777/Dxrk-Ai/internal/task"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
-	dxrktools "github.com/Dxrk777/Dxrk-Ai/internal/tools/dxrk"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools/filetools"
-	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/components/checker"
+	"github.com/Dxrk777/Dxrk/internal/components/permissions"
+	"github.com/Dxrk777/Dxrk/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/mcp"
+	"github.com/Dxrk777/Dxrk/internal/task"
+	"github.com/Dxrk777/Dxrk/internal/tools"
+	dxrktools "github.com/Dxrk777/Dxrk/internal/tools/dxrk"
+	"github.com/Dxrk777/Dxrk/internal/tools/filetools"
+	"github.com/Dxrk777/Dxrk/internal/trace"
 )
 
 const (

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package update
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+import "github.com/Dxrk777/Dxrk/internal/strconst"
 
 // UpdateStatus represents the outcome of a single tool version check.
 type UpdateStatus string

@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // PluginStatus represents the current state of a plugin.

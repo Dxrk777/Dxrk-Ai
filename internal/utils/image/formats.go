@@ -9,7 +9,7 @@ import (
 	"image/png"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // Format represents an image format type.

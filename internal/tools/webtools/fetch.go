@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 	"golang.org/x/net/html"
 )
 
@@ -20,7 +20,7 @@ import (
 const (
 	defaultTimeout      = 30 * time.Second
 	defaultMaxRedirects = 10
-	defaultUserAgent    = "Dxrk-Ai/1.0 WebFetcher"
+	defaultUserAgent    = "Dxrk/1.0 WebFetcher"
 	defaultMaxRPS       = 5
 )
 

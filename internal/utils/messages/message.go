@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // Role represents the sender of a message.

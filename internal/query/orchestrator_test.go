@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/tools"
 )
 
 func TestNewOrchestrator_Valid(t *testing.T) {

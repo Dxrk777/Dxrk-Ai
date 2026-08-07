@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/query"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
-	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
+	"github.com/Dxrk777/Dxrk/internal/query"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/trace"
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"

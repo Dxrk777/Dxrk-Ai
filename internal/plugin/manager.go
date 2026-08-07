@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/tools"
 )
 
 // Plugin defines an external tool provider.

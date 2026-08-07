@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/log"
 )
 
 func TestWorkerPool_ProcessesTasks(t *testing.T) {

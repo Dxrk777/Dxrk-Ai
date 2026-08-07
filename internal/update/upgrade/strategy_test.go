@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
-	"github.com/Dxrk777/Dxrk-Ai/internal/update"
+	"github.com/Dxrk777/Dxrk/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/update"
 )
 
 // --- TestRunStrategy_BrewUpgrade ---
@@ -201,7 +201,7 @@ func TestRunStrategy_BinaryWindowsSelfUpdateSkipped(t *testing.T) {
 			InstallMethod: update.InstallBinary,
 		},
 		LatestVersion: "1.5.0",
-		ReleaseURL:    "https://github.com/Dxrk777/Dxrk-Ai/releases/tag/v1.5.0",
+		ReleaseURL:    "https://github.com/Dxrk777/Dxrk/releases/tag/v1.5.0",
 	}
 	profile := system.PlatformProfile{OS: "windows", PackageManager: "winget"}
 
@@ -569,7 +569,7 @@ func TestManualFallbackHint(t *testing.T) {
 			InstallMethod: update.InstallBinary,
 		},
 		LatestVersion: "1.5.0",
-		UpdateHint:    "See https://github.com/Dxrk777/Dxrk-Ai/releases",
+		UpdateHint:    "See https://github.com/Dxrk777/Dxrk/releases",
 	}
 	profile := system.PlatformProfile{OS: "windows", PackageManager: "winget"}
 

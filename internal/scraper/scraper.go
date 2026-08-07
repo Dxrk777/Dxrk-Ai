@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 	"github.com/gocolly/colly/v2"
 )
 

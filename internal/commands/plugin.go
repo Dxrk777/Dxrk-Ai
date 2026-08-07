@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"text/tabwriter"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/plugin"
+	"github.com/Dxrk777/Dxrk/internal/plugin"
 	"github.com/spf13/cobra"
 )
 

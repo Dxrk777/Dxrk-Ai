@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/assets"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
 )
 
 // RuntimeLibDir returns the runtime lib path used by dxrk-guardian.

@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Dxrk777/Dxrk-Ai"
+Homepage = "https://github.com/Dxrk777/Dxrk"
 
 [project.scripts]
 dxrk = "dxrk.__main__:main"

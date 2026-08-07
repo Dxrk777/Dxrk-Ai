@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/tui/styles"
 )
 
 type ProgressItem struct {

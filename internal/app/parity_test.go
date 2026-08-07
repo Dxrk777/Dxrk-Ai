@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/cli"
-	"github.com/Dxrk777/Dxrk-Ai/internal/planner"
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui"
+	"github.com/Dxrk777/Dxrk/internal/cli"
+	"github.com/Dxrk777/Dxrk/internal/planner"
+	"github.com/Dxrk777/Dxrk/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/tui"
 )
 
 func TestInstallDefaultsMatchTUIModelDefaults(t *testing.T) {

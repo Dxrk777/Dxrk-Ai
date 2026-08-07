@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
+	"github.com/Dxrk777/Dxrk/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/tui/styles"
 )
 
 // BackupMaxVisible is the maximum number of backup items shown at once.

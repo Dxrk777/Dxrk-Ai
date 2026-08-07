@@ -12,8 +12,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/utils/session"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/utils/session"
 )
 
 // RegisterSessionCommand registers the `dxrk session` command with subcommands`dxrk session` command with subcommands

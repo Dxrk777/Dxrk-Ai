@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/utils/session"
+	"github.com/Dxrk777/Dxrk/internal/utils/session"
 )
 
 // RegisterRewindCommand registers the `dxrk rewind` command for reverting`dxrk rewind` command for reverting

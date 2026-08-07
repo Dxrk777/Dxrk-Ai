@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
 )
 
 // UserHomeDirFn is the function used to resolve the user's home directory.

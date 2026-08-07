@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/compress"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/compress"
+	"github.com/Dxrk777/Dxrk/internal/tools"
 )
 
 // mockProvider simulates an LLM for testing.

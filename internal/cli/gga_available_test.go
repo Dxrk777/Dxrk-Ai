@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/system"
 )
 
 // TestGGAAvailableDetectsViaLookPath verifies that dxrkGuardianAvailable returns true

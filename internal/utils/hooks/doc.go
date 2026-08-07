@@ -1,4 +1,4 @@
-// Package hooks provides a flexible, extensible hook system for Dxrk-Ai.
+// Package hooks provides a flexible, extensible hook system for Dxrk.
 //
 // It implements the Claude Code hooks specification with support for:
 //   - Pre/Post tool use hooks

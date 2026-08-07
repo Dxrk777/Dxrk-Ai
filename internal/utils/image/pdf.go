@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 var (

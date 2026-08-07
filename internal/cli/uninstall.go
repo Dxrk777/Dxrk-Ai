@@ -11,9 +11,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/catalog"
-	componentuninstall "github.com/Dxrk777/Dxrk-Ai/internal/components/uninstall"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/catalog"
+	componentuninstall "github.com/Dxrk777/Dxrk/internal/components/uninstall"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 type UninstallFlags struct {

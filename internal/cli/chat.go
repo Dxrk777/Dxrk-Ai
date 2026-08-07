@@ -8,9 +8,9 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/trace"
+	"github.com/Dxrk777/Dxrk/internal/tui"
 )
 
 func RunChat(apiKey, model string) error {

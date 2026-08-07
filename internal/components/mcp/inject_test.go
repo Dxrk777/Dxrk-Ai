@@ -7,13 +7,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/claude"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/codex"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/kimi"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/openclaw"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/opencode"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/vscode"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/agents/claude"
+	"github.com/Dxrk777/Dxrk/internal/agents/codex"
+	"github.com/Dxrk777/Dxrk/internal/agents/kimi"
+	"github.com/Dxrk777/Dxrk/internal/agents/openclaw"
+	"github.com/Dxrk777/Dxrk/internal/agents/opencode"
+	"github.com/Dxrk777/Dxrk/internal/agents/vscode"
 )
 
 func cursorAdapter(t *testing.T) agents.Adapter {

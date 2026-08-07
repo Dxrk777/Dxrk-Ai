@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/app"
+	"github.com/Dxrk777/Dxrk/internal/app"
 )
 
 // version is set by GoReleaser via ldflags at build time.

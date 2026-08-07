@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // TaskOutput holds the captured output from a task execution.

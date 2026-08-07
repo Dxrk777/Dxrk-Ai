@@ -12,13 +12,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/kimi"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/opencode"
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
-	"github.com/Dxrk777/Dxrk-Ai/internal/installcmd"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
-	"github.com/Dxrk777/Dxrk-Ai/internal/versions"
+	"github.com/Dxrk777/Dxrk/internal/agents/kimi"
+	"github.com/Dxrk777/Dxrk/internal/agents/opencode"
+	"github.com/Dxrk777/Dxrk/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/installcmd"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/versions"
 )
 
 // missingBinaryLookPath simulates all installable binaries (dxrk-memory, dxrk-guardian) as

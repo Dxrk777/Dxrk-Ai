@@ -4,7 +4,7 @@ package catalog
 import (
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 func TestAllAgentsIncludesPi(t *testing.T) {

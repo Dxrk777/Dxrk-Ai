@@ -1,5 +1,5 @@
 // Package session provides session persistence, serialization, restore, and
-// management utilities for Dxrk-Ai.
+// management utilities for Dxrk.
 //
 // It defines a canonical session model and a pluggable storage backend for
 // saving, loading, and querying sessions. Sessions can be serialized to JSON,

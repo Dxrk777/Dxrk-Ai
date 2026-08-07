@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/config"
 )
 
 var validThemes = []string{"default", "dark", "light", "solarized", "monokai", "dracula", "nord"}

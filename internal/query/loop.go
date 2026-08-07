@@ -13,11 +13,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/permissions"
-	"github.com/Dxrk777/Dxrk-Ai/internal/compress"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
-	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
+	"github.com/Dxrk777/Dxrk/internal/components/permissions"
+	"github.com/Dxrk777/Dxrk/internal/compress"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/trace"
 
 	"go.opentelemetry.io/otel/attribute"
 	oteltrace "go.opentelemetry.io/otel/trace"

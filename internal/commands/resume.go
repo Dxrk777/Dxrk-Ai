@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/utils/session"
+	"github.com/Dxrk777/Dxrk/internal/utils/session"
 )
 
 // RegisterResumeCommand registers the `dxrk resume` command for resuming`dxrk resume` command for resuming

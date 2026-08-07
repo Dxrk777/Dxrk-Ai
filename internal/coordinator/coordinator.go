@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // CoordinatorMode represents the operating mode for multi-agent orchestration.

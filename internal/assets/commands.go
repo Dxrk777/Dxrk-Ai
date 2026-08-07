@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package assets
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/model"
+import "github.com/Dxrk777/Dxrk/internal/model"
 
 // SDDCommandsAssetDir returns the embedded slash-command asset directory for an
 // agent. Claude uses Claude-native frontmatter under claude/commands; agents

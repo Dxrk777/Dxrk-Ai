@@ -21,16 +21,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/dxrkguardian"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/sdd"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/skills"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/state"
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
-	"github.com/Dxrk777/Dxrk-Ai/internal/update"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/assets"
+	"github.com/Dxrk777/Dxrk/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/components/dxrkguardian"
+	"github.com/Dxrk777/Dxrk/internal/components/sdd"
+	"github.com/Dxrk777/Dxrk/internal/components/skills"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/state"
+	"github.com/Dxrk777/Dxrk/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/update"
 )
 
 // Package-level vars for testability — same pattern as internal/update/detect.go.

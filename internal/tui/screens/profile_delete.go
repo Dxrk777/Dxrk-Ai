@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/sdd"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
+	"github.com/Dxrk777/Dxrk/internal/components/sdd"
+	"github.com/Dxrk777/Dxrk/internal/tui/styles"
 )
 
 // RenderProfileDelete renders the profile delete confirmation screen.

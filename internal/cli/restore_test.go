@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/backup"
 )
 
 // setupRestoreHome creates a temporary home dir with N backup manifests.

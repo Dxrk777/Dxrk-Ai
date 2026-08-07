@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package catalog
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/model"
+import "github.com/Dxrk777/Dxrk/internal/model"
 
 type Component struct {
 	ID          model.ComponentID

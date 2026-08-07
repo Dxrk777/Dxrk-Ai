@@ -4,7 +4,7 @@ package mcp
 import (
 	"fmt"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/versions"
+	"github.com/Dxrk777/Dxrk/internal/versions"
 )
 
 var defaultContext7ServerJSON = []byte(fmt.Sprintf("{\n  \"command\": \"npx\",\n  \"args\": [\n    \"-y\",\n    \"--package=@upstash/context7-mcp@%s\",\n    \"--\",\n    \"context7-mcp\"\n  ]\n}\n", versions.Context7MCP))

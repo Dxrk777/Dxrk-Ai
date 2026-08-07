@@ -9,10 +9,10 @@ import (
 	"path/filepath"
 	"sync"
 
-	dxrklog "github.com/Dxrk777/Dxrk-Ai/internal/log"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
-	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
+	dxrklog "github.com/Dxrk777/Dxrk/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/trace"
 
 	"go.opentelemetry.io/otel/attribute"
 )

@@ -4,7 +4,7 @@ package sdd
 import (
 	"path/filepath"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
 )
 
 // SharedPromptDir returns the directory where shared SDD prompt files are stored.

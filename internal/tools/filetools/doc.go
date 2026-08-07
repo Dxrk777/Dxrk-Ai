@@ -1,6 +1,6 @@
 package filetools
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/tools"
+import "github.com/Dxrk777/Dxrk/internal/tools"
 
 func RegisterAll(reg *tools.Registry) error {
 	for _, fn := range []func(*tools.Registry) error{

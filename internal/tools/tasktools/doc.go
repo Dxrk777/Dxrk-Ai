@@ -1,11 +1,11 @@
 // Package tasktools provides background task management, output retrieval,
-// and lifecycle control tools for the Dxrk-Ai agent system.
+// and lifecycle control tools for the Dxrk agent system.
 //
 // It extends the coordinator package with persistent task tracking, structured
 // output capture, scheduling, dependency resolution, and event-driven monitoring.
 package tasktools
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/tools"
+import "github.com/Dxrk777/Dxrk/internal/tools"
 
 // RegisterAll registers all task management tools into the given registry.
 func RegisterAll(reg *tools.Registry) error {

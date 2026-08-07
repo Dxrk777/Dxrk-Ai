@@ -12,7 +12,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // ── JSON-RPC 2.0 wire types ──────────────────────────────────────────────────
@@ -125,7 +125,7 @@ func (c *LSPClient) Initialize(rootURI string) error {
 			},
 		},
 		"clientInfo": map[string]any{
-			"name":              "Dxrk-Ai",
+			"name":              "Dxrk",
 			strconst.StrVersion: "1.0.0",
 		},
 	}

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/query"
-	"github.com/Dxrk777/Dxrk-Ai/internal/router"
+	"github.com/Dxrk777/Dxrk/internal/query"
+	"github.com/Dxrk777/Dxrk/internal/router"
 )
 
 type mockProvider struct {

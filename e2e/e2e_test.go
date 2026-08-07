@@ -13,13 +13,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/config"
-	"github.com/Dxrk777/Dxrk-Ai/internal/pipeline"
-	"github.com/Dxrk777/Dxrk-Ai/internal/query"
-	"github.com/Dxrk777/Dxrk-Ai/internal/rag"
-	"github.com/Dxrk777/Dxrk-Ai/internal/router"
-	"github.com/Dxrk777/Dxrk-Ai/internal/vault"
-	"github.com/Dxrk777/Dxrk-Ai/internal/webui"
+	"github.com/Dxrk777/Dxrk/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/pipeline"
+	"github.com/Dxrk777/Dxrk/internal/query"
+	"github.com/Dxrk777/Dxrk/internal/rag"
+	"github.com/Dxrk777/Dxrk/internal/router"
+	"github.com/Dxrk777/Dxrk/internal/vault"
+	"github.com/Dxrk777/Dxrk/internal/webui"
 )
 
 type mockProvider struct {

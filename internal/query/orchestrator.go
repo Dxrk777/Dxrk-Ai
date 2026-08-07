@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/log"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/tools"
 )
 
 // Orchestrator executes tool_use blocks from the LLM,

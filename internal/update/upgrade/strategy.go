@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/dxrkmemory"
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
-	"github.com/Dxrk777/Dxrk-Ai/internal/update"
+	"github.com/Dxrk777/Dxrk/internal/components/dxrkmemory"
+	"github.com/Dxrk777/Dxrk/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/update"
 )
 
 // dxrkMemoryDownloadFn is the function used to download the dxrk-memory binary.

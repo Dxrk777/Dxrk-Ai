@@ -16,13 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dxrk777/Dxrk-Ai.git"
+    "url": "git+https://github.com/Dxrk777/Dxrk.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Dxrk777/Dxrk-Ai/issues"
+    "url": "https://github.com/Dxrk777/Dxrk/issues"
   },
-  "homepage": "https://github.com/Dxrk777/Dxrk-Ai#readme"
+  "homepage": "https://github.com/Dxrk777/Dxrk#readme"
 }

@@ -10,14 +10,14 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/compress"
-	"github.com/Dxrk777/Dxrk-Ai/internal/query"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
-	dxrktools "github.com/Dxrk777/Dxrk-Ai/internal/tools/dxrk"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools/filetools"
-	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/compress"
+	"github.com/Dxrk777/Dxrk/internal/query"
+	"github.com/Dxrk777/Dxrk/internal/tools"
+	dxrktools "github.com/Dxrk777/Dxrk/internal/tools/dxrk"
+	"github.com/Dxrk777/Dxrk/internal/tools/filetools"
+	"github.com/Dxrk777/Dxrk/internal/trace"
+	"github.com/Dxrk777/Dxrk/internal/tui/styles"
 )
 
 const roleAssistant = "assistant"

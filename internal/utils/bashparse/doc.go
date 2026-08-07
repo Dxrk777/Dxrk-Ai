@@ -1,5 +1,5 @@
 // Package bashparse provides bash command parsing, AST representation,
-// and danger analysis utilities for Dxrk-Ai.
+// and danger analysis utilities for Dxrk.
 //
 // The package implements a recursive-descent parser that converts bash command
 // strings into a structured abstract syntax tree (AST). The AST captures the

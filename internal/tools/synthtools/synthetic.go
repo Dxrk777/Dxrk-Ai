@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // OutputType describes the format of a synthetic output.

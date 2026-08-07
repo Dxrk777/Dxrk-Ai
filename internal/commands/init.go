@@ -23,8 +23,8 @@ type DxrkConfig struct {
 func RegisterInitCommand(reg *Registry) {
 	reg.AddCommand(&cobra.Command{
 		Use:   "init",
-		Short: "Initialize Dxrk-Ai in the current project",
-		Long:  "Create .dxrk/ directory and default configuration for Dxrk-Ai.",
+		Short: "Initialize Dxrk in the current project",
+		Long:  "Create .dxrk/ directory and default configuration for Dxrk.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			projectName := ""
 			if len(args) > 0 {
@@ -48,7 +48,7 @@ func runInit(projectName string) error {
 
 	configPath := filepath.Join(dxrkdir, "config.json")
 	if _, err := os.Stat(configPath); err == nil {
-		fmt.Fprintf(os.Stderr, "Dxrk-Ai already initialized in this directory.\n")
+		fmt.Fprintf(os.Stderr, "Dxrk already initialized in this directory.\n")
 		fmt.Fprintf(os.Stderr, "Config: %s\n", configPath)
 		return nil
 	}
@@ -78,7 +78,7 @@ func runInit(projectName string) error {
 		return fmt.Errorf("create memory directory: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "Initialized Dxrk-Ai in %s\n", dxrkdir)
+	fmt.Fprintf(os.Stderr, "Initialized Dxrk in %s\n", dxrkdir)
 	fmt.Fprintf(os.Stderr, "  Config:    %s\n", configPath)
 	fmt.Fprintf(os.Stderr, "  Memory:    %s\n", memoryDir)
 	fmt.Fprintf(os.Stderr, "  Project:   %s\n", projectName)

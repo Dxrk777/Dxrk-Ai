@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package skills
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/model"
+import "github.com/Dxrk777/Dxrk/internal/model"
 
 // sddSkills are the SDD orchestrator skills — always included.
 var sddSkills = []model.SkillID{

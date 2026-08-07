@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/system"
 )
 
 const (

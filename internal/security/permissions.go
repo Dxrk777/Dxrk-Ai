@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // ---- Permission Rule Sources (5-layer hierarchy) ----

@@ -6,7 +6,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/version"
+	"github.com/Dxrk777/Dxrk/internal/version"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"

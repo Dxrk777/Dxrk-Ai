@@ -1,5 +1,5 @@
 // Package auth provides OAuth 2.0 authentication, secure token storage,
-// API key management, and HTTP middleware for the Dxrk-Ai platform.
+// API key management, and HTTP middleware for the Dxrk platform.
 //
 // Key features:
 //   - OAuth 2.0 authorization code flow with PKCE

@@ -4,7 +4,7 @@ package kiro
 import (
 	"fmt"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 // AgentNotInstallableError is returned when Kiro IDE cannot be installed automatically.

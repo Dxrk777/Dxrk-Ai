@@ -79,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Install scripts (bash + PowerShell) with checksum verification
 
 ### Changed
-- Module path: `github.com/Dxrk777/Dxrk-Ai`
+- Module path: `github.com/Dxrk777/Dxrk`
 - Go 1.25.12 minimum
 - Python >=3.13 required
 

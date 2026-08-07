@@ -48,8 +48,8 @@ brews:
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     directory: Formula
     name: dxrk
-    homepage: "https://github.com/Dxrk777/Dxrk-Ai"
-    description: "Dxrk-Ai — Ecosystem, Frameworks, Workflows for AI coding agents."
+    homepage: "https://github.com/Dxrk777/Dxrk"
+    description: "Dxrk — Ecosystem, Frameworks, Workflows for AI coding agents."
     license: "MIT"
     commit_msg_template: "chore: update dxrk formula to {{ .Tag }}"
 
@@ -59,7 +59,7 @@ scoops:
       name: scoop-bucket
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     name: dxrk
-    homepage: "https://github.com/Dxrk777/Dxrk-Ai"
-    description: "Dxrk-Ai — Ecosystem, Frameworks, Workflows for AI coding agents."
+    homepage: "https://github.com/Dxrk777/Dxrk"
+    description: "Dxrk — Ecosystem, Frameworks, Workflows for AI coding agents."
     license: MIT
     commit_msg_template: "chore: update dxrk to {{ .Tag }}"

@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/config"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 // RegisterModelCommand registers the `dxrk model` command for selecting`dxrk model` command for selecting

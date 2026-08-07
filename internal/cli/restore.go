@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/backup"
 )
 
 // RestoreFunc is the function signature for restoring a backup from its manifest.

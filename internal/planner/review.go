@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package planner
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/model"
+import "github.com/Dxrk777/Dxrk/internal/model"
 
 func BuildReviewPayload(selection model.Selection, resolved ResolvedPlan) ReviewPayload {
 	autoAdded := make(map[model.ComponentID]struct{}, len(resolved.AddedDependencies))

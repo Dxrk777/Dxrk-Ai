@@ -6,16 +6,16 @@ set -euo pipefail
 # Ecosystem, Frameworks, Workflows for AI coding agents.
 #
 # Usage:
-#   curl -sL https://raw.githubusercontent.com/Dxrk777/Dxrk-Ai/main/scripts/install.sh | bash
+#   curl -sL https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.sh | bash
 #
 # Or download and run:
-#   curl -sLO https://raw.githubusercontent.com/Dxrk777/Dxrk-Ai/main/scripts/install.sh
+#   curl -sLO https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.sh
 #   chmod +x install.sh
 #   ./install.sh
 # ============================================================================
 
 GITHUB_OWNER="Dxrk777"
-GITHUB_REPO="Dxrk-Ai"
+GITHUB_REPO="Dxrk"
 BINARY_NAME="dxrk"
 BREW_TAP="Dxrk777/homebrew-tap"
 

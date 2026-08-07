@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 const (

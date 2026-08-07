@@ -11,12 +11,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/autonomy"
-	"github.com/Dxrk777/Dxrk-Ai/internal/config"
-	"github.com/Dxrk777/Dxrk-Ai/internal/rag"
-	"github.com/Dxrk777/Dxrk-Ai/internal/router"
-	"github.com/Dxrk777/Dxrk-Ai/internal/vault"
-	"github.com/Dxrk777/Dxrk-Ai/internal/version"
+	"github.com/Dxrk777/Dxrk/internal/autonomy"
+	"github.com/Dxrk777/Dxrk/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/rag"
+	"github.com/Dxrk777/Dxrk/internal/router"
+	"github.com/Dxrk777/Dxrk/internal/vault"
+	"github.com/Dxrk777/Dxrk/internal/version"
 
 	"golang.org/x/net/websocket"
 )

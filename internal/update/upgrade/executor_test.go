@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
-	"github.com/Dxrk777/Dxrk-Ai/internal/update"
+	"github.com/Dxrk777/Dxrk/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/update"
 )
 
 // --- helpers ---
@@ -531,7 +531,7 @@ func TestExecute_ManualFallbackSurfacedAsSkippedNotFailed(t *testing.T) {
 	results := []update.UpdateResult{
 		makeResult("dxrk", update.UpdateAvailable, "1.0.0", "1.5.0", update.InstallBinary),
 	}
-	results[0].UpdateHint = "See https://github.com/Dxrk777/Dxrk-Ai/releases"
+	results[0].UpdateHint = "See https://github.com/Dxrk777/Dxrk/releases"
 
 	report := Execute(context.Background(), results, windowsProfile, t.TempDir(), false)
 
@@ -1263,7 +1263,7 @@ func TestExecute_SkippedUpgradeDoesNotRenderFailureMarker(t *testing.T) {
 	results := []update.UpdateResult{
 		makeResult("dxrk", update.UpdateAvailable, "1.0.0", "1.5.0", update.InstallBinary),
 	}
-	results[0].UpdateHint = "See https://github.com/Dxrk777/Dxrk-Ai/releases"
+	results[0].UpdateHint = "See https://github.com/Dxrk777/Dxrk/releases"
 
 	// Capture the progress output written to the progress writer.
 	var progressBuf bytes.Buffer

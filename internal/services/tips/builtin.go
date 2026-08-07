@@ -1,15 +1,15 @@
 package tips
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+import "github.com/Dxrk777/Dxrk/internal/strconst"
 
-// DefaultTips returns the default set of tips for Dxrk-Ai.
+// DefaultTips returns the default set of tips for Dxrk.
 func DefaultTips() []Tip {
 	return []Tip{
 		{
 			ID:        "getting-started",
 			Category:  "getting-started",
-			Title:     "Welcome to Dxrk-Ai",
-			Content:   "Dxrk-Ai is a powerful AI coding assistant. Use /help to see all available commands.",
+			Title:     "Welcome to Dxrk",
+			Content:   "Dxrk is a powerful AI coding assistant. Use /help to see all available commands.",
 			Trigger:   TriggerOnStart,
 			Frequency: FrequencyOnce,
 			Priority:  100,
@@ -89,7 +89,7 @@ func DefaultTips() []Tip {
 			ID:        "memory-system",
 			Category:  "features",
 			Title:     "Memory System",
-			Content:   "Dxrk-Ai remembers context across sessions. Important decisions are saved automatically.",
+			Content:   "Dxrk remembers context across sessions. Important decisions are saved automatically.",
 			Trigger:   TriggerOnStart,
 			Frequency: FrequencyWeekly,
 			Priority:  55,

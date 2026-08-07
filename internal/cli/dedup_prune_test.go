@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/backup"
+	"github.com/Dxrk777/Dxrk/internal/backup"
 )
 
 // TestPrepareBackupStep_SkipsDuplicateBackup verifies that when the new checksum

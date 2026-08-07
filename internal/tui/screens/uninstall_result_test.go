@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	componentuninstall "github.com/Dxrk777/Dxrk-Ai/internal/components/uninstall"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	componentuninstall "github.com/Dxrk777/Dxrk/internal/components/uninstall"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 func TestRenderUninstallResultIncludesManualCleanup(t *testing.T) {

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/update/upgrade"
+	"github.com/Dxrk777/Dxrk/internal/update/upgrade"
 )
 
 // renderUpgradeReportForTest is a test helper that wraps upgrade.RenderUpgradeReport.
@@ -188,7 +188,7 @@ func TestRenderUpgradeReport_PerToolSemantics_Deterministic(t *testing.T) {
 					OldVersion: "1.0.0",
 					NewVersion: "1.5.0",
 					Status:     upgrade.UpgradeSkipped,
-					ManualHint: "Download from https://github.com/Dxrk777/Dxrk-Ai/releases",
+					ManualHint: "Download from https://github.com/Dxrk777/Dxrk/releases",
 				},
 			},
 			wantContains:   []string{"dxrk", "manual update required", "github.com", "[--]"},

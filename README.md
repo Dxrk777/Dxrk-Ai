@@ -6,8 +6,8 @@
 
 **Ecosistema, Frameworks y Workflows para agentes de IA.**
 
-[![Release](https://img.shields.io/github/v/release/Dxrk777/Dxrk-Ai)](https://github.com/Dxrk777/Dxrk-Ai/releases)
-[![CI](https://github.com/Dxrk777/Dxrk-Ai/actions/workflows/ci.yml/badge.svg)](https://github.com/Dxrk777/Dxrk-Ai/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Dxrk777/Dxrk)](https://github.com/Dxrk777/Dxrk/releases)
+[![CI](https://github.com/Dxrk777/Dxrk/actions/workflows/ci.yml/badge.svg)](https://github.com/Dxrk777/Dxrk/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/Licencia-MIT-blue.svg)](LICENSE)
 ![Go 1.25+](https://img.shields.io/badge/Go-1.25+-00ADD8?logo=go&logoColor=white)
 ![Platform](https://img.shields.io/badge/plataforma-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)
@@ -64,7 +64,7 @@ Dxrk potencia cualquier agente de IA con memoria persistente, workflows de Spec-
 ### macOS / Linux
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Dxrk777/Dxrk-Ai/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.sh | bash
 ```
 
 ### Windows
@@ -77,14 +77,14 @@ scoop install dxrk
 ### Go install
 
 ```bash
-go install github.com/Dxrk777/Dxrk-Ai/cmd/dxrk@latest
+go install github.com/Dxrk777/Dxrk/cmd/dxrk@latest
 ```
 
 ### Build from source
 
 ```bash
-git clone https://github.com/Dxrk777/Dxrk-Ai.git
-cd Dxrk-Ai
+git clone https://github.com/Dxrk777/Dxrk.git
+cd Dxrk
 go build -o dxrk ./cmd/dxrk
 ./dxrk --version
 ```

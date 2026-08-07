@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-// Package remote provides remote session management for Dxrk-Ai.
+// Package remote provides remote session management for Dxrk.
 //
-// The package enables connecting to and controlling remote Dxrk-Ai instances
+// The package enables connecting to and controlling remote Dxrk instances
 // over a network. It supports:
 //
 //   - RemoteConfig: connection settings with TLS, auth, and timeout configuration

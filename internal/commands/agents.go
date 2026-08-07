@@ -6,7 +6,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/coordinator"
+	"github.com/Dxrk777/Dxrk/internal/coordinator"
 	"github.com/spf13/cobra"
 )
 

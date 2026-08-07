@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/assets"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 func TestResolveProfileStrategy_ExplicitWins(t *testing.T) {

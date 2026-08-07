@@ -4,7 +4,7 @@ package ml
 import (
 	"fmt"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/pipeline"
+	"github.com/Dxrk777/Dxrk/internal/pipeline"
 )
 
 // BuildPipeline constructs a StagePlan from a TrainConfig.

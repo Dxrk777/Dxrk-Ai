@@ -18,6 +18,6 @@ ENTRYPOINT ["dumb-init", "dxrk"]
 CMD ["serve"]
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget -qO- http://localhost:8080/api/health || exit 1
-LABEL org.opencontainers.image.source="https://github.com/Dxrk777/Dxrk-Ai"
+LABEL org.opencontainers.image.source="https://github.com/Dxrk777/Dxrk"
 LABEL org.opencontainers.image.description="Dxrk.ai — Autonomous Agent Core"
 LABEL org.opencontainers.image.licenses="MIT"

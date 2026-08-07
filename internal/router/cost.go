@@ -4,7 +4,7 @@ package router
 import (
 	"sync"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 type CostConfig struct {

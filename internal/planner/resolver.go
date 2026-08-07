@@ -4,8 +4,8 @@ package planner
 import (
 	"fmt"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/catalog"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/catalog"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 type dependencyResolver struct {

@@ -2,9 +2,9 @@
 package dxrkguardian
 
 import (
-	"github.com/Dxrk777/Dxrk-Ai/internal/installcmd"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/installcmd"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/system"
 )
 
 func InstallCommand(profile system.PlatformProfile) ([][]string, error) {

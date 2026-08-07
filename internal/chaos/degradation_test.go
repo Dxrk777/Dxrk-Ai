@@ -12,13 +12,13 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/log"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/mcp"
-	"github.com/Dxrk777/Dxrk-Ai/internal/query"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools/dxrk"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/mcp"
+	"github.com/Dxrk777/Dxrk/internal/query"
+	"github.com/Dxrk777/Dxrk/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/tools/dxrk"
 )
 
 func TestGracefulDegradation(t *testing.T) {

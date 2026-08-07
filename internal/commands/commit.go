@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/cli"
-	"github.com/Dxrk777/Dxrk-Ai/internal/git"
+	"github.com/Dxrk777/Dxrk/internal/cli"
+	"github.com/Dxrk777/Dxrk/internal/git"
 )
 
 func RegisterCommitCommand() {

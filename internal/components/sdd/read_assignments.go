@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/opencode"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/opencode"
 )
 
 // sddPhaseSet is the set of valid base SDD agent names that may appear in

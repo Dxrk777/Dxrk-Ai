@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/planner"
-	"github.com/Dxrk777/Dxrk-Ai/internal/versions"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/planner"
+	"github.com/Dxrk777/Dxrk/internal/versions"
 )
 
 func TestRenderDependencyTreePiOnlyEngramPlanShowsComponentAndPiInstallCopy(t *testing.T) {

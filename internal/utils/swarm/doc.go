@@ -1,4 +1,4 @@
-// Package swarm provides multi-backend coordination utilities for Dxrk-Ai.
+// Package swarm provides multi-backend coordination utilities for Dxrk.
 // It implements leader election, task distribution, health monitoring,
 // backend registration, capacity management, work stealing, and load balancing.
 //

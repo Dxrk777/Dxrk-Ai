@@ -13,12 +13,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/log"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/task"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
-	"github.com/Dxrk777/Dxrk-Ai/internal/trace"
-	"github.com/Dxrk777/Dxrk-Ai/internal/version"
+	"github.com/Dxrk777/Dxrk/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/task"
+	"github.com/Dxrk777/Dxrk/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/trace"
+	"github.com/Dxrk777/Dxrk/internal/version"
 
 	"go.opentelemetry.io/otel/attribute"
 )

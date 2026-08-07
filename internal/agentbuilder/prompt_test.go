@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 func TestComposePrompt_StandaloneMode_NoSDDContext(t *testing.T) {

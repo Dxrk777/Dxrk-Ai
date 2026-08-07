@@ -1,5 +1,5 @@
 // Package messages provides message normalization, context management,
-// and conversation utilities for the Dxrk-Ai conversation system.
+// and conversation utilities for the Dxrk conversation system.
 //
 // The package defines a rich message model that supports multi-modal content
 // (text, images, tool uses, tool results) and offers tools for normalizing,

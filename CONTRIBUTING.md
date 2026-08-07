@@ -25,7 +25,7 @@ Before you dive in, please read this guide fully. We have a structured workflow 
 
 This project follows a strict issue-first workflow:
 
-1. **Open an issue** using the appropriate template ([Bug Report](https://github.com/Dxrk777/Dxrk-Ai/issues/new?template=bug_report.yml) or [Feature Request](https://github.com/Dxrk777/Dxrk-Ai/issues/new?template=feature_request.yml))
+1. **Open an issue** using the appropriate template ([Bug Report](https://github.com/Dxrk777/Dxrk/issues/new?template=bug_report.yml) or [Feature Request](https://github.com/Dxrk777/Dxrk/issues/new?template=feature_request.yml))
 2. **Wait for approval** — a maintainer will add the `status:approved` label when the issue is ready to be worked on
 3. **Comment on the issue** to let others know you're working on it
 4. **Open a PR** referencing the approved issue
@@ -88,8 +88,8 @@ PRs that are not linked to an approved issue will be **automatically rejected** 
 ### Clone and Build
 
 ```bash
-git clone https://github.com/Dxrk777/Dxrk-Ai.git
-cd Dxrk-Ai
+git clone https://github.com/Dxrk777/Dxrk.git
+cd Dxrk
 go build -o dxrk .
 ```
 
@@ -366,4 +366,4 @@ Violations may result in removal from the project.
 
 ## Questions?
 
-Use [GitHub Discussions](https://github.com/Dxrk777/Dxrk-Ai/discussions) — not issues — for questions, ideas, and general conversation.
+Use [GitHub Discussions](https://github.com/Dxrk777/Dxrk/discussions) — not issues — for questions, ideas, and general conversation.

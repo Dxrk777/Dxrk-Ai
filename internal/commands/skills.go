@@ -9,7 +9,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/skillregistry"
+	"github.com/Dxrk777/Dxrk/internal/skillregistry"
 	"github.com/spf13/cobra"
 )
 

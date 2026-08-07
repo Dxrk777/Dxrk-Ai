@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/log"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tools"
+	"github.com/Dxrk777/Dxrk/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/tools"
 )
 
 func newMockTransport_GT(t *testing.T, defs []ToolDefinition) *mockTransport {

@@ -9,16 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/antigravity"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/claude"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/codex"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/gemini"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/openclaw"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/opencode"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/pi"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/qwen"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/vscode"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/agents/antigravity"
+	"github.com/Dxrk777/Dxrk/internal/agents/claude"
+	"github.com/Dxrk777/Dxrk/internal/agents/codex"
+	"github.com/Dxrk777/Dxrk/internal/agents/gemini"
+	"github.com/Dxrk777/Dxrk/internal/agents/openclaw"
+	"github.com/Dxrk777/Dxrk/internal/agents/opencode"
+	"github.com/Dxrk777/Dxrk/internal/agents/pi"
+	"github.com/Dxrk777/Dxrk/internal/agents/qwen"
+	"github.com/Dxrk777/Dxrk/internal/agents/vscode"
 )
 
 func claudeAdapter() agents.Adapter   { return claude.NewAdapter() }

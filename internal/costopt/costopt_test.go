@@ -5,7 +5,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/router"
+	"github.com/Dxrk777/Dxrk/internal/router"
 )
 
 func TestNewCostOptimizer(t *testing.T) {

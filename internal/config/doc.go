@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Package config provides a comprehensive hierarchical configuration system for Dxrk-Ai.
+// Package config provides a comprehensive hierarchical configuration system for Dxrk.
 //
 // Configuration is loaded from multiple sources with the following priority
 // (highest to lowest):

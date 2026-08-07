@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/log"
+	"github.com/Dxrk777/Dxrk/internal/log"
 )
 
 type Timer struct {

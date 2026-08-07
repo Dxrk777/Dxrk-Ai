@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/claude"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/opencode"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/agents/claude"
+	"github.com/Dxrk777/Dxrk/internal/agents/opencode"
 )
 
 func claudeAdapter() agents.Adapter   { return claude.NewAdapter() }

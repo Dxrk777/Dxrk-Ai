@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Package security provides defense-in-depth security for Dxrk-Ai tool execution.
+// Package security provides defense-in-depth security for Dxrk tool execution.
 //
 // Architecture ported from Claude Code CLI's security subsystem:
 //   - Fail-closed AST parsing for shell commands

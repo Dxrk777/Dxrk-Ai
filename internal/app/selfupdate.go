@@ -11,9 +11,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
-	"github.com/Dxrk777/Dxrk-Ai/internal/update"
-	"github.com/Dxrk777/Dxrk-Ai/internal/update/upgrade"
+	"github.com/Dxrk777/Dxrk/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/update"
+	"github.com/Dxrk777/Dxrk/internal/update/upgrade"
 )
 
 // lookPathFn is a package-level var for testability.

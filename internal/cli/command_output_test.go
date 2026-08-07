@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	componentuninstall "github.com/Dxrk777/Dxrk-Ai/internal/components/uninstall"
+	componentuninstall "github.com/Dxrk777/Dxrk/internal/components/uninstall"
 )
 
 func TestExecuteCommandQuietModeIncludesCapturedOutputOnFailure(t *testing.T) {

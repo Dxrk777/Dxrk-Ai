@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/claude"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/kilocode"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/kimi"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/openclaw"
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents/opencode"
-	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/agents/claude"
+	"github.com/Dxrk777/Dxrk/internal/agents/kilocode"
+	"github.com/Dxrk777/Dxrk/internal/agents/kimi"
+	"github.com/Dxrk777/Dxrk/internal/agents/openclaw"
+	"github.com/Dxrk777/Dxrk/internal/agents/opencode"
+	"github.com/Dxrk777/Dxrk/internal/assets"
+	"github.com/Dxrk777/Dxrk/internal/model"
 )
 
 func claudeAdapter() agents.Adapter   { return claude.NewAdapter() }

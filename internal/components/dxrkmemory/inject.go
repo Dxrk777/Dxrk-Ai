@@ -10,11 +10,11 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/agents"
-	"github.com/Dxrk777/Dxrk-Ai/internal/assets"
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/filemerge"
-	"github.com/Dxrk777/Dxrk-Ai/internal/model"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/agents"
+	"github.com/Dxrk777/Dxrk/internal/assets"
+	"github.com/Dxrk777/Dxrk/internal/components/filemerge"
+	"github.com/Dxrk777/Dxrk/internal/model"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 )
 
 type InjectionResult struct {
@@ -193,7 +193,7 @@ func inject(configHomeDir, promptDir string, adapter agents.Adapter) (InjectionR
 		// `dxrk-memory setup <agent>` is invoked. dxrk's Inject() runs after
 		// dxrk-memory setup, so we must preserve any absolute command path already
 		// present instead of silently overwriting it with the relative "dxrk-memory".
-		// See: https://github.com/Dxrk777/Dxrk-Ai/issues (dxrk-memory absolute path regression)
+		// See: https://github.com/Dxrk777/Dxrk/issues (dxrk-memory absolute path regression)
 		mcpPath := adapter.MCPConfigPath(configHomeDir, "dxrk-memory")
 		cmd := stableEngramCommandForMergedConfig(mcpPath, adapter.Agent())
 		content := buildSeparateMCPContent(mcpPath, dxrkMemoryServerJSONWithCmd(cmd))

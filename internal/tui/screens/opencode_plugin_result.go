@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/components/opencodeplugin"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/styles"
+	"github.com/Dxrk777/Dxrk/internal/components/opencodeplugin"
+	"github.com/Dxrk777/Dxrk/internal/tui/styles"
 )
 
 func RenderOpenCodePluginResult(results []opencodeplugin.Result, err error) string {

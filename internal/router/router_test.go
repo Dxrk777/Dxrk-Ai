@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/query"
+	"github.com/Dxrk777/Dxrk/internal/query"
 )
 
 type mockProvider struct {

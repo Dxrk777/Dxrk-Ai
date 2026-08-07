@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 // Package permissions provides comprehensive permission management, policy
-// evaluation, and access control utilities for Dxrk-Ai.
+// evaluation, and access control utilities for Dxrk.
 //
 // The package implements a multi-layered permission system inspired by the
 // Claude Code architecture, supporting enterprise-grade access control with

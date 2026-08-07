@@ -1,4 +1,4 @@
-// Package advanced provides the extended bridge infrastructure for Dxrk-Ai,
+// Package advanced provides the extended bridge infrastructure for Dxrk,
 // implementing transport abstractions, session management, permission
 // delegation, event routing, health checks, and middleware for multi-node
 // bridge topologies.

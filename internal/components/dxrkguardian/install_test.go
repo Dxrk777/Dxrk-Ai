@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/system"
+	"github.com/Dxrk777/Dxrk/internal/system"
 )
 
 // resolveGitBashForTest derives the Git Bash path the same way the installcmd

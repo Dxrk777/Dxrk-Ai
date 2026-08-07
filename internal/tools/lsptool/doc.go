@@ -11,12 +11,12 @@
 //   - manager.go  — Multi-language manager that auto-detects file types and
 //     maintains one client per language
 //   - register.go — Tool definitions that expose LSP operations through the
-//     Dxrk-Ai tool registry
+//     Dxrk tool registry
 //
 // All communication uses stdlib only; no external LSP libraries are imported.
 package lsptool
 
-import "github.com/Dxrk777/Dxrk-Ai/internal/tools"
+import "github.com/Dxrk777/Dxrk/internal/tools"
 
 // RegisterAll registers every LSP tool in the given registry.
 func RegisterAll(reg *tools.Registry) error {

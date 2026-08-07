@@ -10,10 +10,10 @@
 
 .EXAMPLE
     # Run directly:
-    irm https://raw.githubusercontent.com/Dxrk777/Dxrk-Aimain/scripts/install.ps1 | iex
+    irm https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.ps1 | iex
 
     # Or download and run:
-    Invoke-WebRequest -Uri https://raw.githubusercontent.com/Dxrk777/Dxrk-Aimain/scripts/install.ps1 -OutFile install.ps1
+    Invoke-WebRequest -Uri https://raw.githubusercontent.com/Dxrk777/Dxrk/main/scripts/install.ps1 -OutFile install.ps1
     .\install.ps1
 
     # Force a specific method:
@@ -37,7 +37,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $GITHUB_OWNER = "Dxrk777"
-$GITHUB_REPO = "Dxrk-Ai"
+$GITHUB_REPO = "Dxrk"
 $BINARY_NAME = "dxrk"
 
 # ============================================================================

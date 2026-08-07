@@ -4,9 +4,9 @@ package tui
 import (
 	"fmt"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/pipeline"
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
-	"github.com/Dxrk777/Dxrk-Ai/internal/tui/screens"
+	"github.com/Dxrk777/Dxrk/internal/pipeline"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/tui/screens"
 )
 
 type ProgressItem struct {

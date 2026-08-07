@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Dxrk777/Dxrk-Ai/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/strconst"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +16,7 @@ func RegisterDoctorCommand(reg *Registry) {
 	reg.AddCommand(&cobra.Command{
 		Use:   "doctor",
 		Short: "Run system diagnostics",
-		Long:  "Check Go, git, dependencies, permissions, and config for Dxrk-Ai.",
+		Long:  "Check Go, git, dependencies, permissions, and config for Dxrk.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runDoctor()
 		},
