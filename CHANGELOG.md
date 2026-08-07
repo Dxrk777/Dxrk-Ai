@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2026-08-07
+
+### Added
+- Scholar search domain with citation formatting and MCP tools (`internal/scholar/`)
+- Web UI: pipeline status page, `/api/tools` endpoint, permission checks
+
+### Changed
+- Branding: `Dxrk-Ai` renamed to `Dxrk`
+
+### Fixed
+- Python audit bugs and mypy errors (`Registry.get`)
+- Web UI: TypeScript pinned to `^6`, `useWebSocket` ref, Tailwind v4 migration
+
+### CI
+- Mypy enforced in CI
+- New web-build job
+
+## [4.1.1] - 2026-08-06
+
+### Fixed
+- Release brew and scoop publishing re-enabled
+
+### Changed
+- Changelog note for ratelimit fix and disabled brew/scoop publishing
+
 ## [4.1.0] - 2026-08-05
 
 ### Added
