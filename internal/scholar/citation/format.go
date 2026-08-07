@@ -4,6 +4,7 @@ package citation
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -26,7 +27,7 @@ func FormatBibTeX(p Paper) string {
 		last := lastName(p.Authors[0])
 		key = normalizeKey(last)
 		if p.Year > 0 {
-			key = key + fmt.Sprintf("%d", p.Year)
+			key += strconv.Itoa(p.Year)
 		}
 	}
 
@@ -39,7 +40,7 @@ func FormatBibTeX(p Paper) string {
 		b.WriteString("\tauthor = {" + formatBibTeXAuthors(p.Authors) + "},\n")
 	}
 	if p.Year > 0 {
-		b.WriteString(fmt.Sprintf("\tyear = {%d},\n", p.Year))
+		fmt.Fprintf(&b, "\tyear = {%d},\n", p.Year)
 	}
 	if p.DOI != "" {
 		b.WriteString("\tdoi = {" + p.DOI + "},\n")
@@ -72,7 +73,7 @@ func FormatAPA(p Paper) string {
 	}
 	b.WriteString(". ")
 	if p.Year > 0 {
-		b.WriteString(fmt.Sprintf("(%d). ", p.Year))
+		fmt.Fprintf(&b, "(%d). ", p.Year)
 	} else {
 		b.WriteString("(n.d.). ")
 	}
@@ -102,7 +103,7 @@ func FormatMLA(p Paper) string {
 	if p.Title != "" {
 		b.WriteString(p.Title)
 		if p.Year > 0 {
-			b.WriteString(fmt.Sprintf(". %d. ", p.Year))
+			fmt.Fprintf(&b, ". %d. ", p.Year)
 		} else {
 			b.WriteString(". n.d. ")
 		}

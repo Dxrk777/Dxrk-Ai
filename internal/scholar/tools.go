@@ -96,16 +96,7 @@ func RegisterTools(reg *tools.Registry) error {
 					if source != "" && !strings.EqualFold(p.Source, source) {
 						continue
 					}
-					items = append(items, resultItem{
-						Title:    p.Title,
-						Authors:  p.Authors,
-						DOI:      p.DOI,
-						Abstract: p.Abstract,
-						URL:      p.URL,
-						PDFURL:   p.PDFURL,
-						Year:     p.Year,
-						Source:   p.Source,
-					})
+					items = append(items, resultItem(p))
 				}
 
 				return map[string]any{

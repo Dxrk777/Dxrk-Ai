@@ -11,7 +11,10 @@ import (
 	"time"
 )
 
-const crossrefAPI = "https://api.crossref.org/works"
+const (
+	crossrefAPI    = "https://api.crossref.org/works"
+	sourceCrossref = "crossref"
+)
 
 // CrossrefProvider searches the Crossref REST API.
 type CrossrefProvider struct {
@@ -24,7 +27,7 @@ func NewCrossrefProvider() *CrossrefProvider {
 }
 
 // Name implements Provider.
-func (*CrossrefProvider) Name() string { return "crossref" }
+func (*CrossrefProvider) Name() string { return sourceCrossref }
 
 type crossrefResponse struct {
 	Message struct {
@@ -62,7 +65,7 @@ func (p *CrossrefProvider) Search(ctx context.Context, query string, limit int) 
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("crossref: status %d", resp.StatusCode)
 	}
@@ -102,7 +105,7 @@ func (p *CrossrefProvider) Search(ctx context.Context, query string, limit int) 
 			URL:      it.URL,
 			PDFURL:   pdfURL,
 			Year:     year,
-			Source:   "crossref",
+			Source:   sourceCrossref,
 		})
 	}
 	return papers, nil
@@ -119,7 +122,7 @@ func (p *CrossrefProvider) FetchByDOI(ctx context.Context, doi string) (*Paper, 
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("crossref: status %d", resp.StatusCode)
 	}
@@ -164,6 +167,6 @@ func (p *CrossrefProvider) FetchByDOI(ctx context.Context, doi string) (*Paper, 
 		Abstract: strings.TrimSpace(m.Abstract),
 		URL:      m.URL,
 		Year:     year,
-		Source:   "crossref",
+		Source:   sourceCrossref,
 	}, nil
 }

@@ -56,7 +56,7 @@ func (p *ArxivProvider) Search(ctx context.Context, query string, limit int) ([]
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("arxiv: status %d", resp.StatusCode)
 	}
@@ -72,7 +72,7 @@ func (p *ArxivProvider) Search(ctx context.Context, query string, limit int) ([]
 		}
 		year := 0
 		if len(e.Published) >= 4 {
-			fmt.Sscanf(e.Published[:4], "%d", &year)
+			_, _ = fmt.Sscanf(e.Published[:4], "%d", &year)
 		}
 		papers = append(papers, Paper{
 			Title:    e.Title,

@@ -95,10 +95,10 @@ func (p *SemanticScholarProvider) get(ctx context.Context, endpoint string) ([]b
 	if err != nil {
 		return nil, fmt.Errorf("semantic_scholar: request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		io.Copy(io.Discard, resp.Body)
+		_, _ = io.Copy(io.Discard, resp.Body)
 		if resp.StatusCode == http.StatusNotFound || resp.StatusCode == http.StatusTooManyRequests {
 			return nil, nil
 		}
