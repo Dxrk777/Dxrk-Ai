@@ -5,12 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
 
 	"github.com/Dxrk777/Dxrk/internal/config"
+	"github.com/Dxrk777/Dxrk/internal/log"
 	"github.com/Dxrk777/Dxrk/internal/memory"
 	"github.com/Dxrk777/Dxrk/internal/rag"
 	"github.com/Dxrk777/Dxrk/internal/vault"
@@ -43,7 +45,9 @@ func NewManager(rootDir string) *Manager {
 		projects: make(map[string]*Project),
 		rootDir:  rootDir,
 	}
-	_ = m.load()
+	if err := m.load(); err != nil {
+		log.NewSlog(slog.Default()).Warn("multitenant state load failed, starting fresh", "err", err)
+	}
 	return m
 }
 

@@ -139,6 +139,10 @@
     "chunkhound": {
       "command": "/home/dxrk/.local/bin/chunkhound-mcp",
       "args": ["--transport", "stdio"]
+    },
+    "paper-search": {
+      "command": "npx",
+      "args": ["-y", "paper-search-mcp"]
     }
   }
 }

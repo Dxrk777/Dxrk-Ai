@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Build Docker image
-        run: docker build -t dxrk-scan:latest .
+        run: docker build --build-arg VERSION="$(git describe --tags --always 2>/dev/null || echo dev)" -t dxrk-scan:latest .
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: dxrk-scan:latest
