@@ -1,8 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-cyber-black: #0a0a0f;
+  --color-cyber-dark: #12101a;
+  --color-cyber-deeper: #08060e;
+  --color-cyber-card: #1a1625;
+  --color-cyber-border: #2a2438;
+  --color-cyber-accent: #6c3bff;
+  --color-cyber-cyan: #00f0ff;
+  --color-cyber-magenta: #ff2d95;
+  --color-cyber-green: #00ff88;
+  --color-cyber-red: #ff0040;
+  --color-cyber-amber: #ffaa00;
+  --color-cyber-text: #c8c0d8;
+  --color-cyber-dim: #7a7290;
+
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'RulesCompressed', sans-serif;
+
+  --animate-pulse-glow: pulseGlow 2s ease-in-out infinite;
+  --animate-pulse_glow: pulseGlow 2s ease-in-out infinite;
+
+  --shadow-neon: 0 0 10px rgba(108, 59, 255, 0.5), 0 0 40px rgba(108, 59, 255, 0.2);
+  --shadow-cyan: 0 0 10px rgba(0, 240, 255, 0.4), 0 0 30px rgba(0, 240, 255, 0.1);
+  --shadow-magenta: 0 0 10px rgba(255, 45, 149, 0.4), 0 0 30px rgba(255, 45, 149, 0.1);
+
+  @keyframes pulseGlow {
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
 
 @font-face {
   font-family: 'RulesCompressed';
