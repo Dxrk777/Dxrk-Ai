@@ -17,6 +17,7 @@ import (
 	"github.com/Dxrk777/Dxrk/internal/rag"
 	"github.com/Dxrk777/Dxrk/internal/router"
 	"github.com/Dxrk777/Dxrk/internal/strconst"
+	"github.com/Dxrk777/Dxrk/internal/tools"
 	"github.com/Dxrk777/Dxrk/internal/vault"
 	"github.com/Dxrk777/Dxrk/internal/version"
 
@@ -25,6 +26,11 @@ import (
 
 const statusRunning = strconst.StrRunning
 
+// serverPipeline is the minimal pipeline surface consumed by the webui.
+type serverPipeline interface {
+	LastResult() pipeline.PipelineResult
+}
+
 type Server struct {
 	config   *config.WebUIConfig
 	router   *router.Router
@@ -32,6 +38,11 @@ type Server struct {
 	rag      *rag.RAG
 	vault    *vault.Vault
 	cache    *router.SemanticCache
+	pipeline serverPipeline
+
+	tools   *tools.Registry
+	checker tools.PermissionChecker
+	audit   tools.PermissionAudit
 
 	hub *WebSocketHub
 
@@ -144,9 +155,7 @@ func NewServer(
 	ragInstance *rag.RAG,
 	vaultInstance *vault.Vault,
 	cacheInstance *router.SemanticCache,
-	pipelineInstance interface {
-		LastResult() pipeline.PipelineResult
-	},
+	pipelineInstance serverPipeline,
 	hub *WebSocketHub,
 ) *Server {
 	if hub == nil {
@@ -159,9 +168,24 @@ func NewServer(
 		rag:      ragInstance,
 		vault:    vaultInstance,
 		cache:    cacheInstance,
+		pipeline: pipelineInstance,
 		hub:      hub,
 	}
 	s.stats.startedAt = time.Now()
+	return s
+}
+
+// WithTools attaches a tools.Registry so the /api/tools endpoint can be served.
+func (s *Server) WithTools(reg *tools.Registry) *Server {
+	s.tools = reg
+	return s
+}
+
+// WithPermissions attaches a permission checker and optional audit logger.
+// When set, config/settings endpoints enforce read/write grants.
+func (s *Server) WithPermissions(checker tools.PermissionChecker, audit tools.PermissionAudit) *Server {
+	s.checker = checker
+	s.audit = audit
 	return s
 }
 
@@ -175,6 +199,7 @@ func (s *Server) Start() error {
 	mux.HandleFunc("/api/config", s.HandleConfig)
 	mux.HandleFunc("/api/providers", s.HandleProviders)
 	mux.HandleFunc("/api/settings", s.HandleSettings)
+	mux.HandleFunc("/api/tools", s.HandleTools)
 	mux.Handle("/ws", websocket.Handler(s.handleWebSocket))
 
 	webDist := findWebDist()
@@ -271,6 +296,16 @@ func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	if s.pipeline != nil {
+		res := s.pipeline.LastResult()
+		resp.Pipeline = &pipelineStatus{
+			Running:    false,
+			LastRun:    res.TaskID,
+			Iterations: res.Iterations,
+			Success:    res.Success,
+		}
+	}
+
 	writeJSON(w, resp)
 }
 
@@ -279,6 +314,9 @@ func (s *Server) HandleHealth(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleConfig(w http.ResponseWriter, r *http.Request) {
+	if !s.authorize(w, r, "config.read") {
+		return
+	}
 	writeJSON(w, s.config)
 }
 
@@ -301,14 +339,71 @@ func (s *Server) HandleProviders(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, providers)
 }
 
+type toolInfo struct {
+	Name        string         `json:"name"`
+	Description string         `json:"description"`
+	Enabled     bool           `json:"enabled"`
+	ReadOnly    bool           `json:"read_only"`
+	InputSchema map[string]any `json:"input_schema,omitempty"`
+}
+
+// HandleTools exposes the enabled tools registered in the attached registry.
+func (s *Server) HandleTools(w http.ResponseWriter, r *http.Request) {
+	if !s.authorize(w, r, "tools.list") {
+		return
+	}
+	if s.tools == nil {
+		writeJSON(w, []toolInfo{})
+		return
+	}
+	list := s.tools.ListEnabled()
+	infos := make([]toolInfo, 0, len(list))
+	for _, t := range list {
+		infos = append(infos, toolInfo{
+			Name:        t.Name(),
+			Description: t.Description(),
+			Enabled:     t.IsEnabled(),
+			ReadOnly:    t.IsReadOnly(),
+			InputSchema: t.InputSchema(),
+		})
+	}
+	writeJSON(w, infos)
+}
+
+// authorize enforces the attached permission checker and records the decision.
+// With no checker attached the request is always allowed (backwards compatible).
+func (s *Server) authorize(w http.ResponseWriter, r *http.Request, action string) bool {
+	if s.checker == nil {
+		return true
+	}
+	target := r.URL.Path
+	allowed, reason := s.checker.Check(action, target)
+	if s.audit != nil {
+		s.audit.Record(action, target, allowed, reason)
+	}
+	if !allowed {
+		w.WriteHeader(http.StatusForbidden)
+		writeJSON(w, map[string]string{"error": reason})
+		return false
+	}
+	return true
+}
+
 func (s *Server) HandleSettings(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
+		if !s.authorize(w, r, "config.read") {
+			return
+		}
 		writeJSON(w, s.config)
 		return
 	}
 
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"method not allowed"}`, http.StatusMethodNotAllowed)
+		return
+	}
+
+	if !s.authorize(w, r, "config.write") {
 		return
 	}
 
