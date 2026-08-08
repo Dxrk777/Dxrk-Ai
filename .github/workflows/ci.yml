@@ -32,6 +32,10 @@ jobs:
           go-version-file: go.mod
       - name: Run unit tests (short, no Docker)
         run: go test -race -count=1 -shuffle=on -short ./...
+      - name: Verify module integrity
+        run: |
+          go mod verify
+          go mod tidy -diff
       - name: Run go vet
         run: go vet ./...
       - name: Generate coverage report

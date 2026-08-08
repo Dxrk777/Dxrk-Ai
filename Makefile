@@ -5,7 +5,7 @@ CMD=./cmd/dxrk
 VERSION=$(shell git describe --tags --always 2>/dev/null || echo "dev")
 LDFLAGS=-ldflags="-s -w -X main.version=$(VERSION)"
 
-all: lint test build
+all: fmt tidy lint vet test build
 
 build:
 	go build $(LDFLAGS) -o $(BINARY) $(CMD)
@@ -30,7 +30,7 @@ bench-compare:
 	@go test -bench=. -benchtime=100ms -count=1 ./internal/observe/... 2>&1 | grep "Benchmark"
 
 lint:
-	golangci-lint run ./... 2>&1 || true
+	golangci-lint run ./...
 
 vet:
 	go vet ./...
