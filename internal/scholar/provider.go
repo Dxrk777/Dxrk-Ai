@@ -15,7 +15,7 @@ type Paper struct {
 	Source   string   `json:"source"`
 }
 
-// Provider abstracts a scholarly search backend (arXiv, Crossref, Semantic Scholar).
+// Provider abstracts a scholarly search backend (arXiv, Crossref, Semantic Scholar, OpenAlex, PubMed).
 type Provider interface {
 	Name() string
 	Search(ctx context.Context, query string, limit int) ([]Paper, error)

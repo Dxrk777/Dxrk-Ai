@@ -24,7 +24,7 @@ func RegisterTools(reg *tools.Registry) error {
 	toolDefs := []tools.ToolDef{
 		{
 			Name:        "scholar_search",
-			Description: "Busca papers académicos (arXiv, Crossref, Semantic Scholar) y retorna título, autores, DOI, abstract y URLs.",
+			Description: "Busca papers académicos (arXiv, Crossref, Semantic Scholar, OpenAlex, PubMed) y retorna título, autores, DOI, abstract y URLs.",
 			InputSchema: map[string]any{
 				"type": strconst.StrObject,
 				strconst.StrProperties: map[string]any{
@@ -38,7 +38,7 @@ func RegisterTools(reg *tools.Registry) error {
 					},
 					"source": map[string]any{
 						"type":         strconst.StrString,
-						keyDescription: "Proveedor específico: arxiv, crossref, semantic_scholar (default: todos)",
+						keyDescription: "Proveedor específico: arxiv, crossref, semantic_scholar, openalex, pubmed (default: todos)",
 					},
 				},
 				strconst.StrRequired: []string{strconst.StrQuery},
